@@ -65,12 +65,12 @@ export default function TextInput({
 
 const styles = StyleSheet.create({
   wrapper: { gap: spacing.xs },
-  label: { ...typography.label, color: colors.textSecondary },
+  label: { ...typography.label, color: colors.textSecondary, fontSize: 10 },
   inputRow: {
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1.5,
-    borderRadius: radii.md,
+    borderRadius: radii.none,
     backgroundColor: colors.surface,
     minHeight: 52,
     paddingHorizontal: spacing.md,

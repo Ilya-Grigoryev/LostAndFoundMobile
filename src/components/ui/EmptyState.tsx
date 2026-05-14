@@ -8,37 +8,6 @@ interface EmptyStateProps {
   color?: string;
 }
 
-function SearchIcon({ color }: { color: string }) {
-  return (
-    <View style={iconStyles.wrap}>
-      <View style={[iconStyles.circle, { borderColor: color }]} />
-      <View style={[iconStyles.handle, { backgroundColor: color }]} />
-    </View>
-  );
-}
-
-const iconStyles = StyleSheet.create({
-  wrap: { width: 52, height: 52 },
-  circle: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: 38,
-    height: 38,
-    borderRadius: 19,
-    borderWidth: 2.5,
-  },
-  handle: {
-    position: 'absolute',
-    bottom: 2,
-    right: 2,
-    width: 2.5,
-    height: 18,
-    borderRadius: 2,
-    transform: [{ rotate: '-45deg' }],
-  },
-});
-
 export default function EmptyState({
   message = 'Nichts gefunden.',
   hint,
@@ -46,7 +15,11 @@ export default function EmptyState({
 }: EmptyStateProps) {
   return (
     <View style={styles.container}>
-      <SearchIcon color={color} />
+      {/* Bauhaus empty mark: outlined square with a circle inside (empty container) */}
+      <View style={styles.iconWrap}>
+        <View style={[styles.box, { borderColor: color }]} />
+        <View style={[styles.dot, { backgroundColor: color }]} />
+      </View>
       <Text style={styles.message}>{message}</Text>
       {hint && <Text style={styles.hint}>{hint}</Text>}
     </View>
@@ -60,6 +33,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: spacing.xl,
     gap: spacing.md,
+  },
+  iconWrap: {
+    width: 56,
+    height: 56,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  box: {
+    width: 56,
+    height: 56,
+    borderWidth: 2,
+    position: 'absolute',
+  },
+  dot: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
   },
   message: { ...typography.h3, color: colors.textPrimary, textAlign: 'center' },
   hint: { ...typography.body, color: colors.textSecondary, textAlign: 'center' },

@@ -6,3 +6,4 @@ export { default as ErrorState } from './ErrorState';
 export { default as LoadingSpinner } from './LoadingSpinner';
 export { default as ScreenHeader } from './ScreenHeader';
 export { default as TextInput } from './TextInput';
+export { GeoCircle, GeoSquare, GeoSemicircle, GeoBar, GeoDotRow } from './Geo';

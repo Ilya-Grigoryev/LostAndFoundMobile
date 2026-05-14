@@ -15,7 +15,7 @@ export default function ScreenHeader({
   rightAction,
   accentColor,
 }: ScreenHeaderProps) {
-  const chevronColor = accentColor ?? colors.loserPrimary;
+  const dotColor = accentColor ?? colors.loserPrimary;
 
   return (
     <View style={styles.header}>
@@ -28,17 +28,17 @@ export default function ScreenHeader({
             accessibilityLabel="Zurück"
             hitSlop={12}
           >
-            <View style={styles.chevronWrap}>
-              <View style={[styles.chevronLine, styles.chevronTop, { backgroundColor: chevronColor }]} />
-              <View style={[styles.chevronLine, styles.chevronBottom, { backgroundColor: chevronColor }]} />
-            </View>
+            <Text style={styles.backArrow}>←</Text>
           </Pressable>
         )}
       </View>
 
-      <Text style={styles.title} numberOfLines={1}>
-        {title}
-      </Text>
+      <View style={styles.titleWrap}>
+        <View style={[styles.titleDot, { backgroundColor: dotColor }]} />
+        <Text style={styles.title} numberOfLines={1}>
+          {title}
+        </Text>
+      </View>
 
       <View style={[styles.side, styles.sideRight]}>{rightAction ?? null}</View>
     </View>
@@ -52,28 +52,34 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: spacing.screenMargin,
     backgroundColor: colors.surface,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.divider,
+    borderBottomWidth: 1.5,
+    borderBottomColor: colors.border,
   },
   side: { width: 44, alignItems: 'flex-start', justifyContent: 'center' },
   sideRight: { alignItems: 'flex-end' },
-  title: {
+  titleWrap: {
     flex: 1,
-    textAlign: 'center',
-    ...typography.label,
-    fontSize: 12,
-    letterSpacing: 2,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: spacing.sm,
+  },
+  titleDot: { width: 8, height: 8, borderRadius: 4 },
+  title: {
+    ...typography.h3,
+    fontSize: 16,
+    letterSpacing: -0.3,
     color: colors.textPrimary,
   },
-  backBtn: { width: 32, height: 32, alignItems: 'center', justifyContent: 'center' },
-  chevronWrap: { width: 10, height: 16, position: 'relative' },
-  chevronLine: {
-    position: 'absolute',
-    width: 9,
-    height: 1.5,
-    borderRadius: 1,
-    left: 0,
+  backBtn: {
+    width: 32,
+    height: 32,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  chevronTop: { top: 5, transform: [{ rotate: '-45deg' }, { translateX: 2 }] },
-  chevronBottom: { bottom: 5, transform: [{ rotate: '45deg' }, { translateX: 2 }] },
+  backArrow: {
+    fontFamily: typography.button.fontFamily,
+    fontSize: 22,
+    color: colors.textPrimary,
+  },
 });

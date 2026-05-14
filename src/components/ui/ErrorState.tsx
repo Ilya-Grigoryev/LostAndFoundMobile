@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { colors, radii, spacing, typography } from '../../theme';
+import { colors, spacing, typography } from '../../theme';
 import Button from './Button';
 
 interface ErrorStateProps {
@@ -14,7 +14,8 @@ export default function ErrorState({
 }: ErrorStateProps) {
   return (
     <View style={styles.container}>
-      <View style={styles.iconCircle}>
+      {/* Bauhaus error mark: filled error square with white exclamation */}
+      <View style={styles.iconBox}>
         <View style={styles.exclamationBar} />
         <View style={styles.exclamationDot} />
       </View>
@@ -26,6 +27,7 @@ export default function ErrorState({
           variant="secondary"
           color={colors.error}
           fullWidth={false}
+          withArrow={false}
         />
       )}
     </View>
@@ -40,27 +42,15 @@ const styles = StyleSheet.create({
     padding: spacing.xl,
     gap: spacing.lg,
   },
-  iconCircle: {
+  iconBox: {
     width: 56,
     height: 56,
-    borderRadius: 28,
-    borderWidth: 2,
-    borderColor: colors.error,
+    backgroundColor: colors.error,
     alignItems: 'center',
     justifyContent: 'center',
     gap: 4,
   },
-  exclamationBar: {
-    width: 2,
-    height: 20,
-    backgroundColor: colors.error,
-    borderRadius: radii.sm,
-  },
-  exclamationDot: {
-    width: 4,
-    height: 4,
-    borderRadius: 2,
-    backgroundColor: colors.error,
-  },
-  message: { ...typography.body, color: colors.textSecondary, textAlign: 'center' },
+  exclamationBar: { width: 4, height: 22, backgroundColor: colors.surface },
+  exclamationDot: { width: 4, height: 4, backgroundColor: colors.surface },
+  message: { ...typography.bodyBold, color: colors.textPrimary, textAlign: 'center' },
 });

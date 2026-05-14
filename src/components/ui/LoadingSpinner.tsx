@@ -7,7 +7,7 @@ interface LoadingSpinnerProps {
   fullScreen?: boolean;
 }
 
-function Dot({ color, delay }: { color: string; delay: number }) {
+function Square({ color, delay }: { color: string; delay: number }) {
   const anim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -28,7 +28,7 @@ function Dot({ color, delay }: { color: string; delay: number }) {
 
   return (
     <Animated.View
-      style={[styles.dot, { backgroundColor: color, transform: [{ scale }], opacity }]}
+      style={[styles.square, { backgroundColor: color, transform: [{ scale }], opacity }]}
     />
   );
 }
@@ -40,9 +40,9 @@ export default function LoadingSpinner({
   return (
     <View style={[styles.container, fullScreen && styles.fullScreen]}>
       <View style={styles.row}>
-        <Dot color={color} delay={0} />
-        <Dot color={color} delay={160} />
-        <Dot color={color} delay={320} />
+        <Square color={color} delay={0} />
+        <Square color={color} delay={160} />
+        <Square color={color} delay={320} />
       </View>
     </View>
   );
@@ -52,5 +52,5 @@ const styles = StyleSheet.create({
   container: { alignItems: 'center', justifyContent: 'center', padding: 24 },
   fullScreen: { flex: 1 },
   row: { flexDirection: 'row', gap: 10, alignItems: 'center' },
-  dot: { width: 12, height: 12, borderRadius: 6 },
+  square: { width: 14, height: 14 },
 });
