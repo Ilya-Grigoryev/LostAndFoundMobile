@@ -1,20 +1,32 @@
+import { useFonts, ArchivoBlack_400Regular } from '@expo-google-fonts/archivo-black';
+import {
+  Manrope_400Regular,
+  Manrope_500Medium,
+  Manrope_700Bold,
+  Manrope_800ExtraBold,
+} from '@expo-google-fonts/manrope';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { View } from 'react-native';
+import ComponentsShowcase from './src/screens/dev/ComponentsShowcase';
+import { colors } from './src/theme';
 
 export default function App() {
+  const [fontsLoaded] = useFonts({
+    ArchivoBlack_400Regular,
+    Manrope_400Regular,
+    Manrope_500Medium,
+    Manrope_700Bold,
+    Manrope_800ExtraBold,
+  });
+
+  if (!fontsLoaded) {
+    return <View style={{ flex: 1, backgroundColor: colors.background }} />;
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <>
+      <StatusBar style="dark" />
+      <ComponentsShowcase />
+    </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
