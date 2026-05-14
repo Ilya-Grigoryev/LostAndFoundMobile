@@ -23,11 +23,12 @@
 **Визуальный язык:**
 
 - **Палитра двойного назначения:**
-  - Loser-флоу (стресс, тревога): тёплый тёмно-синий `#1B4F7B` — ассоциируется с порядком и надёжностью
-  - Finder-флоу (спешка, нет времени): насыщенный бирюзовый `#2A9D8F` — ощущение завершения, "всё окей"
-  - Фон: `#F8F9FA`, поверхности: `#FFFFFF`, текст: `#1D2B3A`, ошибки: `#E63946`
-- **Типографика:** системный шрифт платформы (Roboto на Android) — не подгружать доп. шрифты
-- **Формы:** скругления 12dp на карточках, 8dp на инпутах, 24dp на основных CTA-кнопках
+  - Loser-флоу (стресс, тревога): тёплый коричневый `#C8654B` — ассоциируется с земельностью и надёжностью
+  - Finder-флоу (спешка, нет времени): золотистый `#D4A02C` — ощущение завершения, "всё окей"
+  - Фон: `#F5F1E8`, поверхности: `#FFFFFF`, текст: `#14130F`, ошибки: `#C0392B`, успех: `#5C7A4B`
+  - Accent: `#16263D` (для элементов управления), Sage: `#A5BC8E` (вспомогательный зелёный)
+- **Типографика:** Archivo Black (заголовки h1/hero) + Manrope 400–800 (body → label → button); загружается через `expo-google-fonts`
+- **Формы:** скругления 12dp на карточках, 8dp на инпутах, 24dp на основных CTA-кнопках, острые углы на Card с `bordered` вариантом
 - **Grid:** 16dp screen margins везде, 8dp между элементами внутри блока
 
 **Чего избегать:** мелкий текст, сложные анимации, больше 2-х действий на экране.
@@ -40,7 +41,7 @@
 
 | Разработчик | Ветка | Флоу | Phases |
 | --- | --- | --- | --- |
-| **Ilia** | `feature/foundation` | Foundation + Fundbox (P1) | 0 ✅, 1, 2, 4, 7, 10 |
+| **Ilia** | `feature/foundation` | Foundation + Fundbox (P1) | 1 ✅, 2 ✅, 4 ✅, 7, 10 |
 | **Denis** | `feature/onboarding` | Onboarding + Matching (P4 + P8) | 3, 8 |
 | **Arseniy** | `feature/finder-flow` | Quick Finder (P2) | 5 |
 | **Ivan** | `feature/loser-flow` | Loser + Location (P3) | 6 |
@@ -86,8 +87,7 @@ src/
 │   ├── api.ts            ← Ilia (dummyjson wrapper, shared)
 │   ├── matchingService.ts ← Denis
 │   └── locationService.ts ← Ivan
-├── constants/
-│   └── theme.ts          ← Ilia only
+├── theme/               ← Ilia only (colors, typography, spacing, radii)
 └── navigation/
     ├── RootNavigator.tsx      ← Ilia
     ├── OnboardingNavigator.tsx ← Denis
@@ -108,8 +108,8 @@ src/
 
 После merge `feature/foundation` каждый получает:
 
-- `src/components/ui/` — Button, Card, Input, Chip, ErrorState, LoadingSpinner готовы к использованию
-- `src/constants/theme.ts` — все цвета и отступы (только через токены, не менять без PR)
+- `src/components/ui/` — Button, Card, Input, Chip, ErrorState, LoadingSpinner, ScreenHeader, Geo готовы к использованию
+- `src/theme/` — все цвета, типографика и отступы (только через токены, не менять без PR)
 - `src/services/api.ts` — обёртка над dummyjson.com
 - `RootNavigator.tsx` — со stub-экранами `<View>` на месте каждого флоу; каждый заменяет свой stub своим navigator
 
@@ -371,17 +371,16 @@ M3_Gruppe3_LostAndFound.zip
 ## Dependency DAG
 
 ```text
-Phase 0 ✅
-  └─> Phase 1 (Design System — Ilia)
-        └─> Phase 2 (Navigation — Ilia)
-              └─> Phase 4 (Home — Ilia)
-                    ├─> Phase 3 (Onboarding — Denis)    ┐
-                    ├─> Phase 5 (Finder — Arseniy)       │ параллельно
-                    ├─> Phase 6 (Loser — Ivan)           │
-                    └─> Phase 7 (Fundbox — Ilia)        ┘
-                          └─> Phase 8 (Matching — Denis)
-                                └─> Phase 9 (Polish — все)
-                                      └─> Phase 10 (Submission — Ilia)
+Phase 1 ✅ (Design System — Ilia)
+  └─> Phase 2 ✅ (Navigation — Ilia)
+        └─> Phase 4 ✅ (Home — Ilia)
+              ├─> Phase 3 (Onboarding — Denis)    ┐
+              ├─> Phase 5 (Finder — Arseniy)       │ параллельно
+              ├─> Phase 6 (Loser — Ivan)           │
+              └─> Phase 7 (Fundbox — Ilia)        ┘
+                    └─> Phase 8 (Matching — Denis)
+                          └─> Phase 9 (Polish — все)
+                                └─> Phase 10 (Submission — Ilia)
 ```
 
 ---
@@ -400,5 +399,3 @@ Phase 0 ✅
 | `expo-notifications` | Push для matching | 8 |
 
 ---
-
-Следующий шаг: **Phase 1** — расширить design system и создать базовые UI компоненты.
