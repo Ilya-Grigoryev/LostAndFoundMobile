@@ -126,63 +126,38 @@ src/
 
 ---
 
-## Phase 1 — Design System
+## Phase 1 — Design System ✅ (выполнено)
 
-**Цель:** все дизайн-токены и базовые компоненты ДО написания экранов.
+**Что сделано:**
 
-**Deliverables:**
-
-- Расширить `src/constants/theme.ts`: добавить `loserPrimary`, `finderPrimary`
-- Базовые компоненты в `src/components/ui/`:
-  - `Button` — варианты: `primary` / `secondary` / `ghost`; `minHeight: 48`
-  - `Card` — elevation 2, padding 16, radius 12
-  - `TextInput` — с `label`, `error`, `leftIcon`
-  - `Chip` — для категорий
-  - `LoadingSpinner`, `ErrorState` (сообщение + retry), `EmptyState`
-  - `ScreenHeader` — back-кнопка, title, правый action
-- Тестовый экран `src/screens/dev/ComponentsShowcase.tsx` (удалить перед сдачей)
-
-**Acceptance criteria:**
-
-- Ни один цвет и ни один отступ не прописан напрямую — только через токены
-- Все компоненты рендерятся на ComponentsShowcase без крашей
-
-**Зависимости:** Phase 0
+- `src/theme/` — токены разбиты по файлам: `colors.ts`, `typography.ts`, `spacing.ts`, `radii.ts`; экспортируются через `index.ts`
+- Палитра: `loserPrimary` (#C8654B), `finderPrimary` (#D4A02C), фон `#F5F1E8`, все состояния (pressed, light, error, success, disabled)
+- Типографика: Archivo Black (hero/h1) + Manrope 400–800 (body → label → button); загружается через `expo-google-fonts`
+- `Button` — варианты `primary` / `secondary` / `ghost`, spring-анимация нажатия, arrow-slot, `loading` и `disabled` состояния
+- `Card` — Bauhaus: острые углы, `bordered` вариант
+- `TextInput` — `label`, `error`, `leftIcon`, анимированная граница при фокусе
+- `Chip` — для категорий
+- `LoadingSpinner`, `ErrorState` (сообщение + retry), `EmptyState`
+- `ScreenHeader` — back-кнопка, title, правый action, цветная точка
+- `Geo` — геометрические примитивы (Circle, Square, Semicircle, Bar, DotRow) для визуального языка
+- `src/screens/dev/ComponentsShowcase.tsx` — тестовый экран (удалить перед Phase 10)
+- Ни один цвет/отступ не прописан inline — только через токены
 
 ---
 
-## Phase 2 — Navigation & App Shell
+## Phase 2 — Navigation & App Shell ✅ (выполнено)
 
-**Цель:** маршрутизация между всеми флоу + разделение onboarding / main app.
+**Что сделано:**
 
-**Deliverables:**
-
-- Установить `@react-navigation/native` + `@react-navigation/native-stack` + `react-native-screens` + `react-native-safe-area-context`
-- Структура навигации:
-
-```text
-RootNavigator (Stack)
-├── OnboardingNavigator   ← только при первом запуске
-│   ├── LanguagePickerScreen
-│   └── GuestRegistrationScreen
-└── MainNavigator (Stack)
-    ├── HomeScreen
-    ├── FinderNavigator   ← stub → Arseniy заменит
-    ├── LoserNavigator    ← stub → Ivan заменит
-    └── FundboxNavigator  ← stub → Ilia (feature/fundbox-flow) заменит
-```
-
-- AsyncStorage-флаг `@onboarding_complete` — пропустить onboarding при повторном запуске
-
-**Acceptance criteria:**
-
-- Навигация между флоу работает без крашей
-- Повторный запуск пропускает onboarding
-- Back-кнопка Android корректна на всех экранах
-
-**Зависимости:** Phase 1
-
-**Пакеты:** `@react-navigation/native`, `@react-navigation/native-stack`, `react-native-screens`, `react-native-safe-area-context`, `@react-native-async-storage/async-storage`
+- Установлены пакеты: `@react-navigation/native`, `@react-navigation/native-stack`, `react-native-screens`, `react-native-safe-area-context`, `@react-native-async-storage/async-storage`
+- `src/navigation/types.ts` — типы `RootStackParamList`, `OnboardingStackParamList`, `MainStackParamList`
+- `RootNavigator` — читает флаг `@onboarding_complete` из AsyncStorage, роутит на `OnboardingNavigator` или `MainNavigator`; показывает `LoadingSpinner` во время проверки
+- `OnboardingNavigator` — stack с `LanguagePickerScreen` → `GuestRegistrationScreen` (stub, Denis заменит в Phase 3)
+- `MainNavigator` — stack с `HomeScreen` + три слота для флоу
+- `FinderNavigator`, `LoserNavigator`, `FundboxNavigator` — stubs (Arseniy / Ivan / Ilia заменят в своих ветках)
+- `GuestRegistrationScreen` устанавливает флаг и сбрасывает стек на `Main`
+- `App.tsx` обёрнут в `SafeAreaProvider` → `NavigationContainer` → `RootNavigator`
+- `npx tsc --noEmit` — 0 ошибок
 
 ---
 
