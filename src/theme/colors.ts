@@ -1,26 +1,34 @@
 export const colors = {
-  background: '#F0EFEA',
+  background: '#F5F1E8',
   surface: '#FFFFFF',
-  overlay: 'rgba(29,43,58,0.5)',
+  overlay: 'rgba(20,19,15,0.55)',
 
-  loserPrimary: '#1B4F7B',
-  loserPressed: '#143E63',
-  loserLight: '#EBF1F7',
+  loserPrimary: '#C8654B',
+  loserPressed: '#A85138',
+  loserLight: '#F3DCD3',
 
-  finderPrimary: '#2A9D8F',
-  finderPressed: '#22806F',
-  finderLight: '#E8F5F3',
+  finderPrimary: '#D4A02C',
+  finderPressed: '#A8801F',
+  finderLight: '#F4E4B8',
 
-  textPrimary: '#1D2B3A',
-  textSecondary: '#8A877E',
+  accent: '#16263D',
+  accentLight: '#D6DCE3',
+
+  sage: '#A5BC8E',
+  sageSoft: '#D8E0C8',
+
+  textPrimary: '#14130F',
+  textSecondary: '#5A5751',
+  textOnLoser: '#FFFFFF',
+  textOnFinder: '#14130F',
   textOnPrimary: '#FFFFFF',
 
-  border: '#DDDBD4',
-  borderSubtle: '#ECEAE4',
-  divider: '#ECEAE4',
+  border: '#14130F',
+  borderSubtle: '#D8D4CB',
+  divider: '#D8D4CB',
 
   error: '#C0392B',
-  errorLight: '#FAF0EE',
-  success: '#2A9D8F',
-  disabled: '#C5C3BD',
+  errorLight: '#F4D5D0',
+  success: '#5C7A4B',
+  disabled: '#A8A39A',
 } as const;

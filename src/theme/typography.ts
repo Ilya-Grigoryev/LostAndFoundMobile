@@ -1,17 +1,68 @@
-// System font (Roboto on Android). No custom fonts loaded — see PROJECT_PLAN.md.
-// textTransform на label baked in, чтобы не звать .toUpperCase() из компонентов.
+// Bauhaus Wien typography stack.
+// Archivo Black — display-only, used for huge poster-style headlines.
+// Manrope — body & UI; 400/500/700/800 weights cover the full range.
+// Fonts are loaded in App.tsx via expo-google-fonts (see useFonts hook).
+
+export const fontFamily = {
+  display: 'ArchivoBlack_400Regular',
+  body: 'Manrope_400Regular',
+  bodyMedium: 'Manrope_500Medium',
+  bodyBold: 'Manrope_700Bold',
+  bodyBlack: 'Manrope_800ExtraBold',
+} as const;
 
 export const typography = {
-  h1: { fontSize: 32, fontWeight: '700' as const, letterSpacing: -0.5, lineHeight: 38 },
-  h2: { fontSize: 24, fontWeight: '700' as const, letterSpacing: -0.3, lineHeight: 30 },
-  h3: { fontSize: 18, fontWeight: '600' as const, letterSpacing: -0.2, lineHeight: 24 },
-  body: { fontSize: 16, fontWeight: '400' as const, lineHeight: 24 },
-  bodySm: { fontSize: 14, fontWeight: '400' as const, lineHeight: 20 },
-  caption: { fontSize: 13, fontWeight: '400' as const, lineHeight: 18 },
+  // Hero — Archivo Black, tight tracking, geometric poster impact
+  hero: {
+    fontFamily: fontFamily.display,
+    fontSize: 56,
+    letterSpacing: -2.5,
+    lineHeight: 58,
+  },
+  h1: {
+    fontFamily: fontFamily.display,
+    fontSize: 44,
+    letterSpacing: -2,
+    lineHeight: 46,
+  },
+  h2: {
+    fontFamily: fontFamily.bodyBlack,
+    fontSize: 30,
+    letterSpacing: -1.2,
+    lineHeight: 34,
+  },
+  h3: {
+    fontFamily: fontFamily.bodyBlack,
+    fontSize: 22,
+    letterSpacing: -0.6,
+    lineHeight: 28,
+  },
+  body: {
+    fontFamily: fontFamily.body,
+    fontSize: 16,
+    lineHeight: 24,
+  },
+  bodyBold: {
+    fontFamily: fontFamily.bodyBold,
+    fontSize: 16,
+    lineHeight: 24,
+  },
+  caption: {
+    fontFamily: fontFamily.body,
+    fontSize: 13,
+    lineHeight: 18,
+  },
+  // Eyebrow/kicker — uppercase tracked, for category labels
   label: {
+    fontFamily: fontFamily.bodyBlack,
     fontSize: 11,
-    fontWeight: '700' as const,
-    letterSpacing: 1.4,
+    letterSpacing: 2.8,
     textTransform: 'uppercase' as const,
+  },
+  // Button label — bold mixed-case, NOT uppercased
+  button: {
+    fontFamily: fontFamily.bodyBlack,
+    fontSize: 14,
+    letterSpacing: -0.2,
   },
 } as const;
