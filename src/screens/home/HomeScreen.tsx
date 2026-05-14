@@ -1,19 +1,184 @@
-import { StyleSheet, Text, View } from 'react-native';
-import { colors, typography } from '../../theme';
+import React, { useRef } from 'react';
+import {
+  Animated,
+  Pressable,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { colors, fontFamily, spacing, typography } from '../../theme';
+import { GeoCircle, GeoDotRow, GeoSquare } from '../../components/ui/Geo';
+import { MainStackParamList } from '../../navigation/types';
+
+type HomeNavProp = NativeStackNavigationProp<MainStackParamList, 'Home'>;
+
+interface BlockProps {
+  symbol: string;
+  heading: string;
+  hint: string;
+  bgColor: string;
+  textColor: string;
+  geoAccent: React.ReactNode;
+  onPress: () => void;
+}
+
+function ActionBlock({ symbol, heading, hint, bgColor, textColor, geoAccent, onPress }: BlockProps) {
+  const scale = useRef(new Animated.Value(1)).current;
+
+  const pressIn = () =>
+    Animated.spring(scale, { toValue: 0.97, useNativeDriver: true, speed: 50, bounciness: 0 }).start();
+  const pressOut = () =>
+    Animated.spring(scale, { toValue: 1, useNativeDriver: true, speed: 40, bounciness: 0 }).start();
+
+  return (
+    <Animated.View style={[styles.blockWrap, { transform: [{ scale }] }]}>
+      <Pressable
+        style={[styles.block, { backgroundColor: bgColor }]}
+        onPress={onPress}
+        onPressIn={pressIn}
+        onPressOut={pressOut}
+        accessibilityRole="button"
+        accessibilityLabel={heading}
+      >
+        <View style={styles.geoAccent}>{geoAccent}</View>
+
+        <View style={styles.blockContent}>
+          <Text style={[styles.symbol, { color: textColor }]}>{symbol}</Text>
+          <Text style={[typography.h2, styles.heading, { color: textColor }]}>{heading}</Text>
+          <Text style={[typography.caption, { color: textColor, opacity: 0.72 }]}>{hint}</Text>
+        </View>
+
+        <View style={[styles.arrowBox, { borderColor: textColor + '40' }]}>
+          <Text style={[styles.arrowText, { color: textColor }]}>→</Text>
+        </View>
+      </Pressable>
+    </Animated.View>
+  );
+}
 
 export default function HomeScreen() {
+  const nav = useNavigation<HomeNavProp>();
+  const insets = useSafeAreaInsets();
+
   return (
-    <View style={styles.container}>
-      <Text style={[typography.h2, { color: colors.textPrimary }]}>Home</Text>
+    <View style={styles.root}>
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
+
+      {/* Header */}
+      <View style={[styles.header, { paddingTop: insets.top + spacing.xs }]}>
+        <GeoDotRow size={8} gap={5} />
+        <Text style={[typography.label, styles.appName]}>Wien Fundus</Text>
+        <View style={styles.langPill}>
+          <Text style={[typography.label, styles.langText]}>DE</Text>
+        </View>
+      </View>
+
+      {/* Two full-bleed CTA blocks */}
+      <View style={styles.blocks}>
+        <ActionBlock
+          symbol="?"
+          heading={"Ich habe etwas\nverloren."}
+          hint="Verlust melden — auch ohne genaue Adresse"
+          bgColor={colors.loserPrimary}
+          textColor={colors.textOnLoser}
+          geoAccent={<GeoCircle size={60} color="rgba(255,255,255,0.16)" />}
+          onPress={() => nav.navigate('Loser')}
+        />
+
+        <View style={styles.divider} />
+
+        <ActionBlock
+          symbol="!"
+          heading={"Ich habe etwas\ngefunden."}
+          hint="Fundort in unter 30 Sekunden markieren"
+          bgColor={colors.finderPrimary}
+          textColor={colors.textOnFinder}
+          geoAccent={<GeoSquare size={48} color="rgba(20,19,15,0.10)" />}
+          onPress={() => nav.navigate('Finder')}
+        />
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  root: {
+    flex: 1,
+    backgroundColor: colors.background,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: spacing.screenMargin,
+    paddingBottom: spacing.sm,
+    gap: spacing.sm,
+    backgroundColor: colors.background,
+  },
+  appName: {
+    flex: 1,
+    color: colors.textPrimary,
+    marginLeft: spacing.xs,
+  },
+  langPill: {
+    borderWidth: 1.5,
+    borderColor: colors.border,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: 3,
+  },
+  langText: {
+    color: colors.textPrimary,
+  },
+  blocks: {
+    flex: 1,
+  },
+  blockWrap: {
+    flex: 1,
+  },
+  block: {
+    flex: 1,
+    padding: spacing.screenMargin,
+    overflow: 'hidden',
+  },
+  geoAccent: {
+    position: 'absolute',
+    top: spacing.lg,
+    right: spacing.lg,
+  },
+  blockContent: {
     flex: 1,
     justifyContent: 'center',
+    gap: spacing.sm,
+  },
+  symbol: {
+    fontFamily: fontFamily.display,
+    fontSize: 88,
+    lineHeight: 88,
+    letterSpacing: -4,
+    marginBottom: spacing.xs,
+  },
+  heading: {
+    marginBottom: spacing.xs,
+  },
+  arrowBox: {
+    position: 'absolute',
+    bottom: spacing.md,
+    right: spacing.md,
+    width: 44,
+    height: 44,
+    borderWidth: 1.5,
     alignItems: 'center',
-    backgroundColor: colors.background,
+    justifyContent: 'center',
+  },
+  arrowText: {
+    fontFamily: fontFamily.body,
+    fontSize: 20,
+  },
+  divider: {
+    height: 1.5,
+    backgroundColor: colors.border,
   },
 });
