@@ -9,6 +9,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { LocalizationProvider } from './src/contexts/LocalizationContext';
 import RootNavigator from './src/navigation/RootNavigator';
 import { colors } from './src/theme';
 
@@ -28,9 +29,11 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <StatusBar style="dark" />
-      <NavigationContainer>
-        <RootNavigator />
-      </NavigationContainer>
+      <LocalizationProvider>
+        <NavigationContainer>
+          <RootNavigator />
+        </NavigationContainer>
+      </LocalizationProvider>
     </SafeAreaProvider>
   );
 }
