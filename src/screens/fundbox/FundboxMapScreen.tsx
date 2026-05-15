@@ -9,7 +9,7 @@ import FundboxMarkerView from '../../components/fundbox/FundboxMarkerView';
 import ProgressDots from '../../components/fundbox/ProgressDots';
 import { Fundbox, fundboxes, mockUserPosition } from '../../constants/fundboxes';
 import { useLocalization } from '../../contexts/LocalizationContext';
-import { distanceMeters, findNearest, walkingMinutes } from '../../services/fundboxService';
+import { distanceMeters, findNearest } from '../../services/fundboxService';
 import { FundboxStackParamList } from '../../navigation/types';
 import { colors, fontFamily, spacing, typography } from '../../theme';
 
@@ -22,9 +22,16 @@ export default function FundboxMapScreen() {
   const nearest = useMemo(() => findNearest(mockUserPosition), []);
   const [selectedId, setSelectedId] = useState<string>(nearest.id);
 
+  // Sort: recommended first, then by distance.
+  const sortedBoxes = useMemo(() => {
+    return [...fundboxes].sort((a, b) => {
+      if (a.id === nearest.id) return -1;
+      if (b.id === nearest.id) return 1;
+      return distanceMeters(mockUserPosition, a) - distanceMeters(mockUserPosition, b);
+    });
+  }, [nearest.id]);
+
   const selected = fundboxes.find(f => f.id === selectedId) ?? nearest;
-  const selectedDistance = distanceMeters(mockUserPosition, selected);
-  const isRecommended = selected.id === nearest.id;
 
   return (
     <View style={styles.root}>
@@ -59,7 +66,7 @@ export default function FundboxMapScreen() {
               coordinate={{ latitude: f.latitude, longitude: f.longitude }}
               onPress={() => setSelectedId(f.id)}
               anchor={{ x: 0.5, y: 0.5 }}
-              tracksViewChanges={f.id === nearest.id}
+              tracksViewChanges
             >
               <FundboxMarkerView active={f.id === selectedId} />
             </Marker>
@@ -72,35 +79,23 @@ export default function FundboxMapScreen() {
       </View>
 
       <View style={styles.sheet}>
-        <View style={styles.sheetHeader}>
-          {isRecommended ? (
-            <Text style={[typography.label, styles.eyebrowRecommended]}>
-              {t('fundbox.map.recommended')} · {formatDistance(selectedDistance)}
-            </Text>
-          ) : (
-            <Text style={[typography.label, styles.eyebrow]}>
-              {formatDistance(selectedDistance)} · {walkingMinutes(selectedDistance)} {t('fundbox.route.timeUnit')}
-            </Text>
-          )}
-          <Text style={[typography.h3, styles.name]} numberOfLines={1}>
-            {selected.name}
-          </Text>
-          <Text style={[typography.caption, styles.meta]}>
-            {selected.address} · {selected.hours}
-          </Text>
-        </View>
-
-        <Text style={[typography.label, styles.othersLabel]}>{t('fundbox.map.otherOptions')}</Text>
+        <Text style={[typography.label, styles.listLabel]}>{t('fundbox.map.allBoxes')}</Text>
         <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.chipRow}
+          style={styles.list}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.listContent}
         >
-          {fundboxes
-            .filter(f => f.id !== selectedId)
-            .map(f => (
-              <AltChip key={f.id} fundbox={f} onPress={() => setSelectedId(f.id)} />
-            ))}
+          {sortedBoxes.map(f => (
+            <FundboxRow
+              key={f.id}
+              fundbox={f}
+              selected={f.id === selectedId}
+              recommended={f.id === nearest.id}
+              distance={distanceMeters(mockUserPosition, f)}
+              onPress={() => setSelectedId(f.id)}
+              recommendedLabel={t('fundbox.map.recommended')}
+            />
+          ))}
         </ScrollView>
 
         <Button
@@ -113,16 +108,46 @@ export default function FundboxMapScreen() {
   );
 }
 
-function AltChip({ fundbox, onPress }: { fundbox: Fundbox; onPress: () => void }) {
+interface FundboxRowProps {
+  fundbox: Fundbox;
+  selected: boolean;
+  recommended: boolean;
+  distance: number;
+  recommendedLabel: string;
+  onPress: () => void;
+}
+
+function FundboxRow({
+  fundbox,
+  selected,
+  recommended,
+  distance,
+  recommendedLabel,
+  onPress,
+}: FundboxRowProps) {
   return (
     <Pressable
       onPress={onPress}
-      style={({ pressed }) => [styles.altChip, pressed && { opacity: 0.6 }]}
+      style={({ pressed }) => [
+        styles.row,
+        selected && styles.rowSelected,
+        pressed && !selected && { backgroundColor: colors.background },
+      ]}
+      accessibilityRole="button"
+      accessibilityState={{ selected }}
+      accessibilityLabel={fundbox.name}
     >
-      <Text style={[typography.caption, styles.altChipDistrict]}>{fundbox.district}</Text>
-      <Text style={[styles.altChipName]} numberOfLines={1}>
-        {fundbox.name.split(' · ')[0]}
-      </Text>
+      <View style={[styles.rowIndicator, selected && styles.rowIndicatorSelected]} />
+      <View style={styles.rowInfo}>
+        <Text style={[styles.rowName, selected && styles.rowNameSelected]} numberOfLines={1}>
+          {fundbox.name}
+        </Text>
+        <Text style={[typography.caption, styles.rowMeta]} numberOfLines={1}>
+          {fundbox.district} · {formatDistance(distance)}
+          {recommended ? ` · ${recommendedLabel}` : ''}
+        </Text>
+      </View>
+      {selected && <Text style={styles.rowCheck}>✓</Text>}
     </Pressable>
   );
 }
@@ -158,48 +183,64 @@ const styles = StyleSheet.create({
   sheet: {
     backgroundColor: colors.surface,
     paddingHorizontal: spacing.screenMargin,
-    paddingTop: spacing.lg,
+    paddingTop: spacing.md,
     paddingBottom: spacing.lg,
     borderTopWidth: 1.5,
     borderTopColor: colors.border,
-    gap: spacing.md,
-  },
-  sheetHeader: {
-    gap: spacing.xs,
-  },
-  eyebrow: {
-    color: colors.textSecondary,
-  },
-  eyebrowRecommended: {
-    color: colors.finderPressed,
-  },
-  name: {
-    color: colors.textPrimary,
-  },
-  meta: {
-    color: colors.textSecondary,
-  },
-  othersLabel: {
-    color: colors.textSecondary,
-  },
-  chipRow: {
     gap: spacing.sm,
-    paddingRight: spacing.md,
+    maxHeight: '52%',
   },
-  altChip: {
-    borderWidth: 1.5,
-    borderColor: colors.border,
-    paddingHorizontal: spacing.md,
+  listLabel: {
+    color: colors.textSecondary,
+  },
+  list: {
+    maxHeight: 240,
+  },
+  listContent: {
+    gap: spacing.xs,
+    paddingBottom: spacing.sm,
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingVertical: spacing.sm,
-    minWidth: 140,
+    paddingHorizontal: spacing.sm,
+    gap: spacing.sm,
+    backgroundColor: colors.surface,
+    borderWidth: 1.5,
+    borderColor: colors.borderSubtle,
+  },
+  rowSelected: {
+    backgroundColor: colors.finderLight,
+    borderColor: colors.accent,
+  },
+  rowIndicator: {
+    width: 6,
+    height: 32,
+    backgroundColor: colors.borderSubtle,
+  },
+  rowIndicatorSelected: {
+    backgroundColor: colors.finderPrimary,
+  },
+  rowInfo: {
+    flex: 1,
     gap: 2,
   },
-  altChipDistrict: {
+  rowName: {
+    fontFamily: fontFamily.bodyBold,
+    fontSize: 15,
+    color: colors.textPrimary,
+  },
+  rowNameSelected: {
+    color: colors.textPrimary,
+  },
+  rowMeta: {
     color: colors.textSecondary,
   },
-  altChipName: {
-    fontFamily: fontFamily.bodyBold,
-    fontSize: 14,
-    color: colors.textPrimary,
+  rowCheck: {
+    fontFamily: fontFamily.bodyBlack,
+    fontSize: 18,
+    color: colors.accent,
+    paddingHorizontal: spacing.xs,
   },
 });

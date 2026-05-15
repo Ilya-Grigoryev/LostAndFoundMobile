@@ -6,8 +6,11 @@ interface FundboxMarkerViewProps {
   active: boolean;
 }
 
+const HIT_AREA = 48;
+
 // Geometric Bauhaus marker. Active marker pulses to draw the eye —
 // inactive boxes stay quiet so the recommendation is unambiguous.
+// A transparent 48×48 wrapper guarantees a consistent tap target.
 export default function FundboxMarkerView({ active }: FundboxMarkerViewProps) {
   const pulse = useRef(new Animated.Value(0)).current;
 
@@ -25,12 +28,13 @@ export default function FundboxMarkerView({ active }: FundboxMarkerViewProps) {
 
   const ringScale = pulse.interpolate({ inputRange: [0, 1], outputRange: [1, 2.2] });
   const ringOpacity = pulse.interpolate({ inputRange: [0, 1], outputRange: [0.55, 0] });
-  const size = active ? 32 : 22;
+  const size = active ? 32 : 24;
 
   return (
     <View style={styles.wrap}>
       {active && (
         <Animated.View
+          pointerEvents="none"
           style={[
             styles.pulseRing,
             {
@@ -67,6 +71,8 @@ export default function FundboxMarkerView({ active }: FundboxMarkerViewProps) {
 
 const styles = StyleSheet.create({
   wrap: {
+    width: HIT_AREA,
+    height: HIT_AREA,
     alignItems: 'center',
     justifyContent: 'center',
   },
