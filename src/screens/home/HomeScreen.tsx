@@ -101,6 +101,22 @@ export default function HomeScreen() {
           onPress={() => nav.navigate('Finder')}
         />
       </View>
+
+      {/* Dev-only entry — remove in Phase 9 */}
+      {__DEV__ && (
+        <Pressable
+          onPress={() => nav.navigate('Fundbox')}
+          style={({ pressed }) => [
+            styles.devEntry,
+            { paddingBottom: insets.bottom + spacing.sm },
+            pressed && { opacity: 0.5 },
+          ]}
+          accessibilityRole="button"
+          accessibilityLabel="Fundbox demo"
+        >
+          <Text style={[typography.label, styles.devEntryText]}>Dev · Fundbox-Flow</Text>
+        </Pressable>
+      )}
     </View>
   );
 }
@@ -180,5 +196,16 @@ const styles = StyleSheet.create({
   divider: {
     height: 1.5,
     backgroundColor: colors.border,
+  },
+  devEntry: {
+    paddingTop: spacing.sm,
+    paddingHorizontal: spacing.screenMargin,
+    alignItems: 'center',
+    backgroundColor: colors.background,
+    borderTopWidth: 1.5,
+    borderTopColor: colors.border,
+  },
+  devEntryText: {
+    color: colors.textSecondary,
   },
 });
