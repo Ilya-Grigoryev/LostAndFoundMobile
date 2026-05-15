@@ -1,3 +1,5 @@
+import { NavigatorScreenParams } from '@react-navigation/native';
+
 export type RootStackParamList = {
   Onboarding: undefined;
   Main: undefined;
@@ -12,7 +14,7 @@ export type MainStackParamList = {
   Home: undefined;
   Finder: undefined;
   Loser: undefined;
-  Fundbox: undefined;
+  Fundbox: NavigatorScreenParams<FundboxStackParamList> | undefined;
 };
 
 export type FundboxStackParamList = {
