@@ -42,7 +42,7 @@
 | Разработчик | Ветка | Флоу | Phases |
 | --- | --- | --- | --- |
 | **Ilia** | `feature/foundation` | Foundation + Fundbox (P1) | 1 ✅, 2 ✅, 4 ✅, 7 ✅, 10 |
-| **Denis** | `feature/onboarding` | Onboarding + Matching (P4 + P8) | 3, 8 |
+| **Denis** | `feature/onboarding` | Onboarding + Matching (P4 + P8) | 3 ✅, 8 |
 | **Arseniy** | `feature/finder-flow` | Quick Finder (P2) | 5 |
 | **Ivan** | `feature/loser-flow` | Loser + Location (P3) | 6 |
 
@@ -183,21 +183,17 @@ src/
 
 ---
 
-## Phase 3 — Onboarding Flow (P4) — Denis
+## Phase 3 — Onboarding Flow (P4) ✅ (выполнено)
 
-**Цель:** первый запуск — выбор языка и минимальная регистрация.
+**Что сделано:**
 
-**Deliverables:**
-
-- `LanguagePickerScreen`: English / Deutsch, большие tap-таргеты, сохранить в AsyncStorage
-- `GuestRegistrationScreen`: только `name` + `email`, кнопка "Weiter als Gast", валидация email
-- `LocalizationContext` — React Context + `src/constants/strings.ts` (EN + DE), ключи по namespace `onboarding.*`
-- После завершения: сохранить `@onboarding_complete`, перейти на HomeScreen
-
-**Acceptance criteria:**
-
-- Выбор языка сразу меняет текст на следующем экране
-- После перезапуска приложение стартует с HomeScreen (onboarding пропущен)
+- `src/constants/strings.ts` — словари EN + DE, ключи по namespace `onboarding.language.*` и `onboarding.guest.*`; типы `Language` и `StringKey`
+- `src/contexts/LocalizationContext.tsx` — React Context: `language`, `setLanguage`, `t(key)`, `loading`; язык по умолчанию `de`, читается/пишется в AsyncStorage (`@app_language`)
+- `LanguagePickerScreen` — два больших tap-таргета (English / Deutsch), сохранение выбора в AsyncStorage через `setLanguage`, переход на `GuestRegistration`; ошибка сохранения показывается через `ErrorState`
+- `GuestRegistrationScreen` — поля `name` + `email` с валидацией (непустое имя + базовая email-regex), CTA "Als Gast starten"; при submit ставит `@onboarding_complete` и сбрасывает стек на `Main`
+- `OnboardingNavigator` обёрнут в `LocalizationProvider` (позже поднят в `App.tsx` в Phase 7, чтобы Fundbox-экраны тоже видели контекст)
+- Тексты обоих экранов используют только `t()` — никаких inline-строк
+- `npx tsc --noEmit` — 0 ошибок
 
 **Зависимости:** Phase 2 (foundation merged)
 
@@ -375,7 +371,7 @@ M3_Gruppe3_LostAndFound.zip
 Phase 1 ✅ (Design System — Ilia)
   └─> Phase 2 ✅ (Navigation — Ilia)
         └─> Phase 4 ✅ (Home — Ilia)
-              ├─> Phase 3 (Onboarding — Denis)    ┐
+              ├─> Phase 3 ✅ (Onboarding — Denis) ┐
               ├─> Phase 5 (Finder — Arseniy)       │ параллельно
               ├─> Phase 6 (Loser — Ivan)           │
               └─> Phase 7 ✅ (Fundbox — Ilia)     ┘
