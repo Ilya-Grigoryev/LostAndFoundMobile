@@ -1,5 +1,6 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors, spacing, typography } from '../../theme';
 
 interface ScreenHeaderProps {
@@ -15,10 +16,11 @@ export default function ScreenHeader({
   rightAction,
   accentColor,
 }: ScreenHeaderProps) {
+  const insets = useSafeAreaInsets();
   const dotColor = accentColor ?? colors.loserPrimary;
 
   return (
-    <View style={styles.header}>
+    <View style={[styles.header, { paddingTop: insets.top }]}>
       <View style={styles.side}>
         {onBack && (
           <Pressable
@@ -47,10 +49,11 @@ export default function ScreenHeader({
 
 const styles = StyleSheet.create({
   header: {
-    height: 56,
+    minHeight: 56,
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: spacing.screenMargin,
+    paddingBottom: spacing.xs,
     backgroundColor: colors.surface,
     borderBottomWidth: 1.5,
     borderBottomColor: colors.border,

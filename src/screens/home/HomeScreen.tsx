@@ -101,6 +101,29 @@ export default function HomeScreen() {
           onPress={() => nav.navigate('Finder')}
         />
       </View>
+
+      {/* Dev-only entry — remove in Phase 9 */}
+      {__DEV__ && (
+        <View style={[styles.devRow, { paddingBottom: insets.bottom + spacing.sm }]}>
+          <Pressable
+            onPress={() => nav.navigate('Fundbox')}
+            style={({ pressed }) => [styles.devCell, pressed && { opacity: 0.5 }]}
+            accessibilityRole="button"
+            accessibilityLabel="Fundbox flow demo"
+          >
+            <Text style={[typography.label, styles.devEntryText]}>Dev · Fundbox</Text>
+          </Pressable>
+          <View style={styles.devDivider} />
+          <Pressable
+            onPress={() => nav.navigate('Fundbox', { screen: 'Claim' })}
+            style={({ pressed }) => [styles.devCell, pressed && { opacity: 0.5 }]}
+            accessibilityRole="button"
+            accessibilityLabel="Claim flow demo"
+          >
+            <Text style={[typography.label, styles.devEntryText]}>Dev · Claim</Text>
+          </Pressable>
+        </View>
+      )}
     </View>
   );
 }
@@ -180,5 +203,24 @@ const styles = StyleSheet.create({
   divider: {
     height: 1.5,
     backgroundColor: colors.border,
+  },
+  devRow: {
+    flexDirection: 'row',
+    paddingTop: spacing.sm,
+    backgroundColor: colors.background,
+    borderTopWidth: 1.5,
+    borderTopColor: colors.border,
+  },
+  devCell: {
+    flex: 1,
+    alignItems: 'center',
+    paddingVertical: spacing.xs,
+  },
+  devDivider: {
+    width: 1.5,
+    backgroundColor: colors.border,
+  },
+  devEntryText: {
+    color: colors.textSecondary,
   },
 });

@@ -41,7 +41,7 @@
 
 | Разработчик | Ветка | Флоу | Phases |
 | --- | --- | --- | --- |
-| **Ilia** | `feature/foundation` | Foundation + Fundbox (P1) | 1 ✅, 2 ✅, 4 ✅, 7, 10 |
+| **Ilia** | `feature/foundation` | Foundation + Fundbox (P1) | 1 ✅, 2 ✅, 4 ✅, 7 ✅, 10 |
 | **Denis** | `feature/onboarding` | Onboarding + Matching (P4 + P8) | 3, 8 |
 | **Arseniy** | `feature/finder-flow` | Quick Finder (P2) | 5 |
 | **Ivan** | `feature/loser-flow` | Loser + Location (P3) | 6 |
@@ -252,25 +252,26 @@ src/
 
 ---
 
-## Phase 7 — Smart Fundbox Flow (P1) — Ilia
+## Phase 7 — Smart Fundbox Flow (P1) ✅ (выполнено)
 
-**Цель:** finder приносит вещь к Fundbox — полный цикл до верификации.
+**Что сделано:**
 
-**Deliverables:**
-
-- `FundboxMapScreen`: карта с 5 mock-Fundbox точками (hardcoded Vienna координаты); ближайшая выделена; callout с адресом
-- `FundboxRouteScreen`: mock polyline маршрута + расчётное время пешком; кнопка "Ich bin angekommen"
-- `DropOffConfirmScreen`: чекбоксы "Item gelegt" + "Box geschlossen"; кнопка "Bestätigen"
-- `VerificationCodeScreen`: random 6-значный код; кнопка "Fertig" → Home
-- `ClaimScreen` (для loser): фото найденного + данные Fundbox + поле ввода кода; любые 6 цифр → "Match bestätigt!"
-
-**Acceptance criteria:**
-
-- Ближайшая Fundbox выделена при открытии FundboxMapScreen
-- Код отличается при каждом drop-off
-- P1-флоу проходим от начала до "Match bestätigt"
-
-**Зависимости:** Phase 5 (react-native-maps уже подключён)
+- Установлен `react-native-maps@1.20.1` (Phase 5 ещё не смержена, поставили в feature/fundbox-flow)
+- `src/constants/fundboxes.ts` — 5 mock-точек Вены (Karlsplatz, Stephansplatz, Westbahnhof, Praterstern, Naschmarkt) + mockUserPosition (Stephansplatz region)
+- `src/services/fundboxService.ts` — haversine-расчёт ближайшей, walking-time (≈83 m/min), 6-значный код, AsyncStorage helpers (`@fundbox_codes`)
+- `FundboxStackParamList` + типизированный nested-навигатор внутри `MainStackParamList`
+- `ProgressDots` (1..4 step indicator), `FundboxMarkerView` (Bauhaus-квадрат с pulse-ring у активного), `RouteStat` (3-блочный stat-bar), `CodeBoxes` (6 input-ячеек с auto-advance focus), `UserPositionMarker` (halo + пульсирующее accent-кольцо)
+- `FundboxMapScreen` — Google Maps с 5 маркерами; bottom-sheet со списком всех Fundbox (рекомендованная сверху, выделение через `finderLight` фон); все маркеры с одинаковой 48×48 hit-area
+- `FundboxRouteScreen` — карта с пунктирной polyline (`accent`, `lineDashPattern={[6,4]}`), top stat-bar с расстоянием/временем/районом, CTA "Ich bin angekommen"
+- `DropOffConfirmScreen` — recap (sage-soft фон) + 2 чекбокс-блока с spring-анимацией; CTA disabled пока не оба ☑; при confirm код генерируется и пишется в AsyncStorage
+- `DropOffSuccessScreen` — hero «GESCHAFFT» на круге `finderPrimary` с back-easing анимацией, auto-return на Home через 2.8 сек (код финдеру НЕ показывается — он уйдёт loser-у через push в Phase 8)
+- `ClaimScreen` — переключение визуального регистра на `loserPrimary`; match-card + 6 ячеек ввода кода с auto-advance; принимает любые 6 цифр (Phase 8 заменит логику на реальный матч)
+- `ClaimSuccessScreen` — hero «TREFFER BESTÄTIGT!» на sage-круге, auto-return через 2.8 сек
+- `ScreenHeader` доработан: читает `useSafeAreaInsets()` и сам добавляет top padding (фикс для всех экранов)
+- `LocalizationProvider` поднят в `App.tsx` поверх `NavigationContainer` (раньше был только в OnboardingNavigator → крашил Fundbox-экраны)
+- Строки `fundbox.*` (EN + DE) — namespace покрывает все 6 экранов
+- 2 dev-only ghost-кнопки в HomeScreen («Dev · Fundbox», «Dev · Claim») для тестирования флоу до merge Phase 5/8 — удалить в Phase 9
+- `npx tsc --noEmit` — 0 ошибок
 
 ---
 
@@ -377,7 +378,7 @@ Phase 1 ✅ (Design System — Ilia)
               ├─> Phase 3 (Onboarding — Denis)    ┐
               ├─> Phase 5 (Finder — Arseniy)       │ параллельно
               ├─> Phase 6 (Loser — Ivan)           │
-              └─> Phase 7 (Fundbox — Ilia)        ┘
+              └─> Phase 7 ✅ (Fundbox — Ilia)     ┘
                     └─> Phase 8 (Matching — Denis)
                           └─> Phase 9 (Polish — все)
                                 └─> Phase 10 (Submission — Ilia)
