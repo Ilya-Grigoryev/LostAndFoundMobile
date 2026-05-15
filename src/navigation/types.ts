@@ -14,3 +14,12 @@ export type MainStackParamList = {
   Loser: undefined;
   Fundbox: undefined;
 };
+
+export type FundboxStackParamList = {
+  Map: undefined;
+  Route: { fundboxId: string };
+  DropOff: { fundboxId: string };
+  Code: { fundboxId: string; code: string };
+  Claim: undefined;
+  ClaimSuccess: undefined;
+};
