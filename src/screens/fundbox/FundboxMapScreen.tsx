@@ -7,6 +7,7 @@ import { Button, ScreenHeader } from '../../components/ui';
 import { GeoSemicircle } from '../../components/ui/Geo';
 import FundboxMarkerView from '../../components/fundbox/FundboxMarkerView';
 import ProgressDots from '../../components/fundbox/ProgressDots';
+import UserPositionMarker from '../../components/fundbox/UserPositionMarker';
 import { Fundbox, fundboxes, mockUserPosition } from '../../constants/fundboxes';
 import { useLocalization } from '../../contexts/LocalizationContext';
 import { distanceMeters, findNearest } from '../../services/fundboxService';
@@ -56,9 +57,9 @@ export default function FundboxMapScreen() {
           <Marker
             coordinate={mockUserPosition}
             anchor={{ x: 0.5, y: 0.5 }}
-            tracksViewChanges={false}
+            tracksViewChanges
           >
-            <View style={styles.userPos} />
+            <UserPositionMarker />
           </Marker>
           {fundboxes.map(f => (
             <Marker
@@ -165,14 +166,6 @@ const styles = StyleSheet.create({
   mapWrap: {
     flex: 1,
     overflow: 'hidden',
-  },
-  userPos: {
-    width: 14,
-    height: 14,
-    borderRadius: 7,
-    backgroundColor: colors.accent,
-    borderWidth: 2.5,
-    borderColor: colors.surface,
   },
   cornerAccent: {
     position: 'absolute',

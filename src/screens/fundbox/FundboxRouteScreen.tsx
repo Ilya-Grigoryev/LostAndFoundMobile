@@ -7,6 +7,7 @@ import { Button, ScreenHeader } from '../../components/ui';
 import FundboxMarkerView from '../../components/fundbox/FundboxMarkerView';
 import ProgressDots from '../../components/fundbox/ProgressDots';
 import RouteStat from '../../components/fundbox/RouteStat';
+import UserPositionMarker from '../../components/fundbox/UserPositionMarker';
 import { mockUserPosition } from '../../constants/fundboxes';
 import { useLocalization } from '../../contexts/LocalizationContext';
 import {
@@ -76,8 +77,8 @@ export default function FundboxRouteScreen() {
             strokeWidth={4}
             lineDashPattern={[6, 4]}
           />
-          <Marker coordinate={mockUserPosition} anchor={{ x: 0.5, y: 0.5 }} tracksViewChanges={false}>
-            <View style={styles.userPos} />
+          <Marker coordinate={mockUserPosition} anchor={{ x: 0.5, y: 0.5 }} tracksViewChanges>
+            <UserPositionMarker />
           </Marker>
           <Marker
             coordinate={{ latitude: fundbox.latitude, longitude: fundbox.longitude }}
@@ -111,14 +112,6 @@ const styles = StyleSheet.create({
   },
   mapWrap: {
     flex: 1,
-  },
-  userPos: {
-    width: 14,
-    height: 14,
-    borderRadius: 7,
-    backgroundColor: colors.accent,
-    borderWidth: 2.5,
-    borderColor: colors.surface,
   },
   statBar: {
     position: 'absolute',
