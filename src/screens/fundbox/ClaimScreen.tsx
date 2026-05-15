@@ -54,7 +54,7 @@ export default function ClaimScreen() {
 
         <View style={styles.inputBlock}>
           <Text style={[typography.label, styles.eyebrowDark]}>{t('fundbox.claim.codePrompt')}</Text>
-          <CodeBoxes mode="input" value={code} onChange={setCode} />
+          <CodeBoxes value={code} onChange={setCode} />
         </View>
       </ScrollView>
 

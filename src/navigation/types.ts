@@ -21,7 +21,7 @@ export type FundboxStackParamList = {
   Map: undefined;
   Route: { fundboxId: string };
   DropOff: { fundboxId: string };
-  Code: { fundboxId: string; code: string };
+  DropOffSuccess: { fundboxId: string };
   Claim: undefined;
   ClaimSuccess: undefined;
 };

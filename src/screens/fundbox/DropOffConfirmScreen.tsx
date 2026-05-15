@@ -32,9 +32,10 @@ export default function DropOffConfirmScreen() {
   const confirm = async () => {
     if (!bothChecked || submitting) return;
     setSubmitting(true);
+    // Code is stored for Phase 8 matching/notification — finder never sees it.
     const code = generateVerificationCode();
     await saveCode(fundbox.id, code);
-    nav.replace('Code', { fundboxId: fundbox.id, code });
+    nav.replace('DropOffSuccess', { fundboxId: fundbox.id });
   };
 
   return (
