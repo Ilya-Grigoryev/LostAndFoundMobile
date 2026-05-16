@@ -8,6 +8,7 @@ import { Button, ErrorState, ScreenHeader } from '../../components/ui';
 import { getCategoryMeta } from '../../constants/categories';
 import { useLocalization } from '../../contexts/LocalizationContext';
 import { useLoserReport } from '../../contexts/LoserReportContext';
+import { saveLostReport } from '../../services/loserReportService';
 import { LoserStackParamList } from '../../navigation/types';
 import { colors, fontFamily, spacing, typography } from '../../theme';
 
@@ -72,8 +73,7 @@ export default function LoserConfirmScreen() {
     setSubmitting(true);
     setError(null);
     try {
-      // Service hookup lands in the next commit; navigate optimistically for now.
-      await new Promise(resolve => setTimeout(resolve, 200));
+      await saveLostReport({ category, location, pushOptIn });
       nav.navigate('Success');
     } catch {
       setError(t('loser.confirm.saveError'));
