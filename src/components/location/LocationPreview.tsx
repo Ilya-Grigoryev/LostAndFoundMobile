@@ -73,7 +73,7 @@ export default function LocationPreview({ value }: LocationPreviewProps) {
               key={`${c.latitude}-${c.longitude}-${i}`}
               coordinate={c}
               anchor={{ x: 0.5, y: 0.5 }}
-              tracksViewChanges
+              tracksViewChanges={false}
             >
               <View style={styles.pointDot} />
             </Marker>
