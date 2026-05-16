@@ -15,6 +15,7 @@ export type MainStackParamList = {
   Finder: undefined;
   Loser: NavigatorScreenParams<LoserStackParamList> | undefined;
   Fundbox: NavigatorScreenParams<FundboxStackParamList> | undefined;
+  ActivityHistory: undefined;
 };
 
 export type LoserStackParamList = {
