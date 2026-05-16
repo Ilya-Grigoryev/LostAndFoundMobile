@@ -68,7 +68,6 @@ export default function HomeScreen() {
     <View style={styles.root}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
 
-      {/* Header */}
       <View style={[styles.header, { paddingTop: insets.top + spacing.xs }]}>
         <GeoDotRow size={8} gap={5} />
         <Text style={[typography.label, styles.appName]}>Wien Fundus</Text>
@@ -77,7 +76,6 @@ export default function HomeScreen() {
         </View>
       </View>
 
-      {/* Two full-bleed CTA blocks */}
       <View style={styles.blocks}>
         <ActionBlock
           symbol="?"
@@ -102,7 +100,6 @@ export default function HomeScreen() {
         />
       </View>
 
-      {/* Dev-only entry — remove in Phase 9 */}
       {__DEV__ && (
         <View style={[styles.devRow, { paddingBottom: insets.bottom + spacing.sm }]}>
           <Pressable
