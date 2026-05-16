@@ -3,7 +3,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useEffect, useRef, useState } from 'react';
 import { Animated, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import * as Notifications from 'expo-notifications';
-import CategoryGlyph from '../../components/location/CategoryGlyph';
+import CategoryIcon from '../../components/location/CategoryIcon';
 import LocationPreview from '../../components/location/LocationPreview';
 import { Button, ErrorState, ScreenHeader } from '../../components/ui';
 import { getCategoryMeta } from '../../constants/categories';
@@ -50,7 +50,7 @@ function PushToggle({ value, onChange }: { value: boolean; onChange: (v: boolean
 export default function LoserConfirmScreen() {
   const nav = useNavigation<Nav>();
   const { t } = useLocalization();
-  const { category, location, pushOptIn, setPushOptIn } = useLoserReport();
+  const { category, customLabel, location, pushOptIn, setPushOptIn } = useLoserReport();
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -85,7 +85,7 @@ export default function LoserConfirmScreen() {
           effectiveOptIn = false;
         }
       }
-      await saveLostReport({ category, location, pushOptIn: effectiveOptIn });
+      await saveLostReport({ category, customLabel, location, pushOptIn: effectiveOptIn });
       nav.navigate('Success');
     } catch {
       setError(t('loser.confirm.saveError'));
@@ -108,9 +108,16 @@ export default function LoserConfirmScreen() {
           <Text style={[typography.label, styles.sectionLabel]}>{t('loser.confirm.categorySection')}</Text>
           <View style={styles.categoryRow}>
             <View style={[styles.glyphBox, { backgroundColor: categoryMeta.tint }]}>
-              <CategoryGlyph id={category} color={colors.textPrimary} scale={0.7} />
+              <CategoryIcon id={category} color={colors.textPrimary} size={36} />
             </View>
-            <Text style={[typography.h3, styles.categoryName]}>{t(categoryMeta.labelKey)}</Text>
+            <View style={styles.categoryText}>
+              <Text style={[typography.h3, styles.categoryName]}>{t(categoryMeta.labelKey)}</Text>
+              {category === 'other' && customLabel && (
+                <Text style={[typography.body, styles.customLabel]} numberOfLines={2}>
+                  {customLabel}
+                </Text>
+              )}
+            </View>
           </View>
         </View>
 
@@ -181,7 +188,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  categoryName: { flex: 1, color: colors.textPrimary },
+  categoryText: { flex: 1, gap: 2 },
+  categoryName: { color: colors.textPrimary },
+  customLabel: { color: colors.textSecondary },
   rule: { height: 1.5, backgroundColor: colors.border },
   notifyRow: {
     flexDirection: 'row',

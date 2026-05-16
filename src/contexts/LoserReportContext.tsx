@@ -2,7 +2,7 @@ import React, { createContext, useCallback, useContext, useMemo, useState } from
 import { CategoryId, LocationValue, LoserReport } from '../types/loser';
 
 interface LoserReportContextValue extends LoserReport {
-  setCategory: (id: CategoryId) => void;
+  setCategory: (id: CategoryId, customLabel?: string) => void;
   setLocation: (value: LocationValue) => void;
   setPushOptIn: (value: boolean) => void;
   reset: () => void;
@@ -10,13 +10,13 @@ interface LoserReportContextValue extends LoserReport {
 
 const LoserReportContext = createContext<LoserReportContextValue | undefined>(undefined);
 
-const INITIAL: LoserReport = { category: null, location: null, pushOptIn: true };
+const INITIAL: LoserReport = { category: null, customLabel: undefined, location: null, pushOptIn: true };
 
 export function LoserReportProvider({ children }: { children: React.ReactNode }) {
   const [report, setReport] = useState<LoserReport>(INITIAL);
 
-  const setCategory = useCallback((id: CategoryId) => {
-    setReport(prev => ({ ...prev, category: id }));
+  const setCategory = useCallback((id: CategoryId, customLabel?: string) => {
+    setReport(prev => ({ ...prev, category: id, customLabel }));
   }, []);
 
   const setLocation = useCallback((value: LocationValue) => {

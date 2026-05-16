@@ -1,10 +1,10 @@
 export type CategoryId =
-  | 'backpack'
+  | 'phone'
   | 'keys'
   | 'wallet'
-  | 'phone'
-  | 'documents'
-  | 'bicycle'
+  | 'umbrella'
+  | 'headphones'
+  | 'glasses'
   | 'other';
 
 export interface LatLng {
@@ -20,6 +20,8 @@ export type LocationValue =
 
 export interface LoserReport {
   category: CategoryId | null;
+  // Free-text description shown only when category === 'other'.
+  customLabel?: string;
   location: LocationValue | null;
   pushOptIn: boolean;
 }
