@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import CategoryTile from '../../components/location/CategoryTile';
 import DescriptionField from '../../components/location/DescriptionField';
-import { Button, ScreenHeader } from '../../components/ui';
+import { Button, ProgressDots, ScreenHeader } from '../../components/ui';
 import { categories } from '../../constants/categories';
 import { useLocalization } from '../../contexts/LocalizationContext';
 import { useLoserReport } from '../../contexts/LoserReportContext';
@@ -65,9 +65,10 @@ export default function CategoryScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <ScreenHeader
-        title=" "
+        title={t('loser.flow.title')}
         onBack={() => nav.getParent()?.goBack()}
         accentColor={colors.loserPrimary}
+        rightAction={<ProgressDots total={4} current={1} activeColor={colors.loserPrimary} />}
       />
 
       <ScrollView
@@ -77,9 +78,6 @@ export default function CategoryScreen() {
         keyboardShouldPersistTaps="handled"
       >
         <View style={styles.heading}>
-          <Text style={[typography.label, styles.eyebrow]}>
-            01 — {t('loser.category.title').toUpperCase()}
-          </Text>
           <Text style={styles.title}>{t('loser.category.title')}</Text>
           <Text style={[typography.body, styles.subtitle]}>
             {t('loser.category.subtitle')}
@@ -102,7 +100,7 @@ export default function CategoryScreen() {
 
         <View style={styles.gridSection}>
           <Text style={[typography.label, styles.sectionEyebrow]}>
-            02 — {t('loser.category.eyebrow').toUpperCase()}
+            {t('loser.category.eyebrow').toUpperCase()}
           </Text>
           <View style={styles.grid}>
             {grid.map(c => (
@@ -149,10 +147,6 @@ const styles = StyleSheet.create({
   heading: {
     paddingTop: spacing.md,
     gap: spacing.xs,
-  },
-  eyebrow: {
-    color: colors.loserPrimary,
-    letterSpacing: 2.8,
   },
   title: {
     fontFamily: fontFamily.display,

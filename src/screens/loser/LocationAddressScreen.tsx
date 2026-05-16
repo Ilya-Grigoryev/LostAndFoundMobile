@@ -5,7 +5,7 @@ import { StyleSheet, View } from 'react-native';
 import AddressMode from '../../components/location/AddressMode';
 import StepByStepMode from '../../components/location/StepByStepMode';
 import SubTabSwitcher, { SubTabOption } from '../../components/location/SubTabSwitcher';
-import { Button, ScreenHeader } from '../../components/ui';
+import { Button, ProgressDots, ScreenHeader } from '../../components/ui';
 import { useLocalization } from '../../contexts/LocalizationContext';
 import { useLoserReport } from '../../contexts/LoserReportContext';
 import { LoserStackParamList } from '../../navigation/types';
@@ -59,9 +59,10 @@ export default function LocationAddressScreen() {
   return (
     <View style={styles.root}>
       <ScreenHeader
-        title={t('loser.mode.address.title')}
+        title={t('loser.flow.title')}
         onBack={() => nav.goBack()}
         accentColor={colors.loserPrimary}
+        rightAction={<ProgressDots total={4} current={3} activeColor={colors.loserPrimary} />}
       />
 
       <View style={styles.tabsWrap}>

@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useRef } from 'react';
 import { Animated, Pressable, StyleSheet, Text, View } from 'react-native';
-import { ScreenHeader } from '../../components/ui';
+import { ProgressDots, ScreenHeader } from '../../components/ui';
 import { GeoBar, GeoCircle, GeoDotRow } from '../../components/ui/Geo';
 import { useLocalization } from '../../contexts/LocalizationContext';
 import { LoserStackParamList } from '../../navigation/types';
@@ -62,13 +62,13 @@ export default function LocationModeScreen() {
   return (
     <View style={styles.root}>
       <ScreenHeader
-        title=" "
+        title={t('loser.flow.title')}
         onBack={() => nav.goBack()}
         accentColor={colors.loserPrimary}
+        rightAction={<ProgressDots total={4} current={2} activeColor={colors.loserPrimary} />}
       />
 
       <View style={styles.heading}>
-        <Text style={[typography.label, styles.eyebrow]}>02 — {t('loser.mode.title').toUpperCase()}</Text>
         <Text style={styles.title}>{t('loser.mode.title')}</Text>
         <Text style={[typography.body, styles.subtitle]}>{t('loser.mode.subtitle')}</Text>
       </View>
@@ -116,10 +116,6 @@ const styles = StyleSheet.create({
     paddingTop: spacing.md,
     paddingBottom: spacing.md,
     gap: spacing.xs,
-  },
-  eyebrow: {
-    color: colors.loserPrimary,
-    letterSpacing: 2.8,
   },
   title: {
     fontFamily: fontFamily.display,

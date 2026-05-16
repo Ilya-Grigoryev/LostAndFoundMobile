@@ -5,7 +5,7 @@ import { StyleSheet, View } from 'react-native';
 import PinRadiusMode from '../../components/location/PinRadiusMode';
 import RouteMode from '../../components/location/RouteMode';
 import SubTabSwitcher, { SubTabOption } from '../../components/location/SubTabSwitcher';
-import { Button, ScreenHeader } from '../../components/ui';
+import { Button, ProgressDots, ScreenHeader } from '../../components/ui';
 import { useLocalization } from '../../contexts/LocalizationContext';
 import { useLoserReport } from '../../contexts/LoserReportContext';
 import { LoserStackParamList } from '../../navigation/types';
@@ -53,9 +53,10 @@ export default function LocationMapScreen() {
   return (
     <View style={styles.root}>
       <ScreenHeader
-        title={t('loser.mode.map.title')}
+        title={t('loser.flow.title')}
         onBack={() => nav.goBack()}
         accentColor={colors.loserPrimary}
+        rightAction={<ProgressDots total={4} current={3} activeColor={colors.loserPrimary} />}
       />
 
       <View style={styles.tabsWrap}>

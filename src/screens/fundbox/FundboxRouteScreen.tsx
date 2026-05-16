@@ -5,7 +5,7 @@ import { StyleSheet, View } from 'react-native';
 import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
 import { Button, ScreenHeader } from '../../components/ui';
 import FundboxMarkerView from '../../components/fundbox/FundboxMarkerView';
-import ProgressDots from '../../components/fundbox/ProgressDots';
+import ProgressDots from '../../components/ui/ProgressDots';
 import RouteStat from '../../components/fundbox/RouteStat';
 import UserPositionMarker from '../../components/fundbox/UserPositionMarker';
 import { mockUserPosition } from '../../constants/fundboxes';

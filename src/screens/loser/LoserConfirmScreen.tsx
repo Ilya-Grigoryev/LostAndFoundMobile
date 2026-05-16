@@ -5,7 +5,7 @@ import { Animated, Pressable, ScrollView, StyleSheet, Text, View } from 'react-n
 import * as Notifications from 'expo-notifications';
 import CategoryIcon from '../../components/location/CategoryIcon';
 import LocationPreview from '../../components/location/LocationPreview';
-import { Button, ErrorState, ScreenHeader } from '../../components/ui';
+import { Button, ErrorState, ProgressDots, ScreenHeader } from '../../components/ui';
 import { getCategoryMeta } from '../../constants/categories';
 import { useLocalization } from '../../contexts/LocalizationContext';
 import { useLoserReport } from '../../contexts/LoserReportContext';
@@ -59,7 +59,12 @@ export default function LoserConfirmScreen() {
   if (!category || !location) {
     return (
       <View style={styles.root}>
-        <ScreenHeader title=" " onBack={() => nav.goBack()} accentColor={colors.loserPrimary} />
+        <ScreenHeader
+          title={t('loser.flow.title')}
+          onBack={() => nav.goBack()}
+          accentColor={colors.loserPrimary}
+          rightAction={<ProgressDots total={4} current={4} activeColor={colors.loserPrimary} />}
+        />
         <ErrorState
           message={t('loser.confirm.saveError')}
           onRetry={() => nav.popToTop()}
@@ -96,11 +101,15 @@ export default function LoserConfirmScreen() {
 
   return (
     <View style={styles.root}>
-      <ScreenHeader title=" " onBack={() => nav.goBack()} accentColor={colors.loserPrimary} />
+      <ScreenHeader
+        title={t('loser.flow.title')}
+        onBack={() => nav.goBack()}
+        accentColor={colors.loserPrimary}
+        rightAction={<ProgressDots total={4} current={4} activeColor={colors.loserPrimary} />}
+      />
 
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
         <View style={styles.heading}>
-          <Text style={[typography.label, styles.eyebrow]}>03 — {t('loser.confirm.title').toUpperCase()}</Text>
           <Text style={styles.title}>{t('loser.confirm.title')}</Text>
         </View>
 
@@ -169,7 +178,6 @@ const styles = StyleSheet.create({
     paddingBottom: spacing.md,
     gap: spacing.xs,
   },
-  eyebrow: { color: colors.loserPrimary, letterSpacing: 2.8 },
   title: {
     fontFamily: fontFamily.display,
     fontSize: 38,
