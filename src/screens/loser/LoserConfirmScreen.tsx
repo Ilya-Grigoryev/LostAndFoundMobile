@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useEffect, useRef, useState } from 'react';
 import { Animated, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import * as Notifications from 'expo-notifications';
 import CategoryGlyph from '../../components/location/CategoryGlyph';
 import LocationPreview from '../../components/location/LocationPreview';
 import { Button, ErrorState, ScreenHeader } from '../../components/ui';
@@ -73,7 +74,18 @@ export default function LoserConfirmScreen() {
     setSubmitting(true);
     setError(null);
     try {
-      await saveLostReport({ category, location, pushOptIn });
+      let effectiveOptIn = pushOptIn;
+      if (pushOptIn) {
+        // Permission denial is non-fatal — the report still goes through,
+        // we only flip the opt-in flag so downstream matching knows the truth.
+        try {
+          const { status } = await Notifications.requestPermissionsAsync();
+          effectiveOptIn = status === 'granted';
+        } catch {
+          effectiveOptIn = false;
+        }
+      }
+      await saveLostReport({ category, location, pushOptIn: effectiveOptIn });
       nav.navigate('Success');
     } catch {
       setError(t('loser.confirm.saveError'));
