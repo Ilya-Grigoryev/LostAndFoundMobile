@@ -2,9 +2,19 @@ import { StyleSheet, Text, View } from 'react-native';
 import { Card } from '../ui';
 import { colors, spacing, typography } from '../../theme';
 
+export type ActivityStatusKind =
+  | 'marked'
+  | 'inFundbox'
+  | 'returned'
+  | 'active'
+  | 'possibleMatch'
+  | 'found'
+  | 'closed';
+
 export type ActivityItem = {
   id: string;
   type: 'found' | 'lost';
+  statusKind: ActivityStatusKind;
   category: string;
   title: string;
   locationLabel: string;
@@ -16,27 +26,102 @@ type ActivityItemCardProps = {
   item: ActivityItem;
 };
 
+function getStatusColors(statusKind: ActivityStatusKind) {
+  if (statusKind === 'possibleMatch') {
+    return {
+      borderColor: colors.finderPrimary,
+      backgroundColor: colors.finderPrimary,
+      textColor: colors.textOnFinder,
+    };
+  }
+
+  if (statusKind === 'inFundbox' || statusKind === 'found' || statusKind === 'returned') {
+    return {
+      borderColor: colors.success,
+      backgroundColor: colors.surface,
+      textColor: colors.success,
+    };
+  }
+
+  if (statusKind === 'closed') {
+    return {
+      borderColor: colors.disabled,
+      backgroundColor: colors.surface,
+      textColor: colors.textSecondary,
+    };
+  }
+
+  if (statusKind === 'marked') {
+    return {
+      borderColor: colors.accent,
+      backgroundColor: colors.surface,
+      textColor: colors.accent,
+    };
+  }
+
+  return {
+    borderColor: colors.loserPrimary,
+    backgroundColor: colors.surface,
+    textColor: colors.loserPrimary,
+  };
+}
+
 export default function ActivityItemCard({ item }: ActivityItemCardProps) {
   const accentColor =
     item.type === 'found' ? colors.finderPrimary : colors.loserPrimary;
+  const statusColors = getStatusColors(item.statusKind);
+  const isHighlighted = item.statusKind === 'possibleMatch';
+  const isCompleted =
+    item.statusKind === 'returned' ||
+    item.statusKind === 'found' ||
+    item.statusKind === 'closed';
 
   return (
-    <Card bordered style={styles.card}>
-      <View style={[styles.accentBar, { backgroundColor: accentColor }]} />
+    <Card
+      bordered
+      style={[
+        styles.card,
+        isHighlighted && styles.highlightedCard,
+        isCompleted && styles.completedCard,
+      ]}
+    >
+      <View
+        style={[
+          styles.accentBar,
+          isHighlighted && styles.highlightedAccentBar,
+          { backgroundColor: isCompleted ? colors.disabled : accentColor },
+        ]}
+      />
 
       <View style={styles.content}>
         <View style={styles.topRow}>
-          <Text style={styles.category}>{item.category}</Text>
-          <View style={[styles.statusBadge, { borderColor: accentColor }]}>
-            <Text style={[styles.statusText, { color: accentColor }]}>
+          <Text style={[styles.category, isCompleted && styles.mutedText]}>
+            {item.category}
+          </Text>
+          <View
+            style={[
+              styles.statusBadge,
+              {
+                borderColor: statusColors.borderColor,
+                backgroundColor: statusColors.backgroundColor,
+              },
+            ]}
+          >
+            <Text style={[styles.statusText, { color: statusColors.textColor }]}>
               {item.status}
             </Text>
           </View>
         </View>
 
-        <Text style={styles.title}>{item.title}</Text>
-        <Text style={styles.meta}>{item.locationLabel}</Text>
-        <Text style={styles.meta}>{item.dateLabel}</Text>
+        <Text style={[styles.title, isCompleted && styles.completedTitle]}>
+          {item.title}
+        </Text>
+        <Text style={[styles.meta, isCompleted && styles.mutedText]}>
+          {item.locationLabel}
+        </Text>
+        <Text style={[styles.meta, isCompleted && styles.mutedText]}>
+          {item.dateLabel}
+        </Text>
       </View>
     </Card>
   );
@@ -48,8 +133,18 @@ const styles = StyleSheet.create({
     padding: 0,
     overflow: 'hidden',
   },
+  highlightedCard: {
+    backgroundColor: colors.finderLight,
+    borderColor: colors.finderPrimary,
+  },
+  completedCard: {
+    backgroundColor: colors.borderSubtle,
+  },
   accentBar: {
     width: 8,
+  },
+  highlightedAccentBar: {
+    width: 12,
   },
   content: {
     flex: 1,
@@ -79,8 +174,14 @@ const styles = StyleSheet.create({
     ...typography.h3,
     color: colors.textPrimary,
   },
+  completedTitle: {
+    color: colors.textSecondary,
+  },
   meta: {
     ...typography.caption,
     color: colors.textSecondary,
+  },
+  mutedText: {
+    color: colors.disabled,
   },
 });
