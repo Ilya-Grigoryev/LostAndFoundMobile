@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import MapView, { MapPressEvent, Marker, Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
+import UserPositionMarker from '../fundbox/UserPositionMarker';
+import { mockUserPosition } from '../../constants/fundboxes';
 import { LatLng } from '../../types/loser';
 import { colors, fontFamily, spacing, typography } from '../../theme';
 import { useLocalization } from '../../contexts/LocalizationContext';
-
-const VIENNA_CENTER: LatLng = { latitude: 48.2082, longitude: 16.3738 };
 
 interface RouteModeProps {
   initial?: LatLng[];
@@ -25,7 +25,6 @@ export default function RouteMode({ initial, onChange }: RouteModeProps) {
   };
 
   const undo = () => setCoords(prev => prev.slice(0, -1));
-  const clear = () => setCoords([]);
 
   return (
     <View style={styles.root}>
@@ -33,13 +32,21 @@ export default function RouteMode({ initial, onChange }: RouteModeProps) {
         provider={PROVIDER_GOOGLE}
         style={StyleSheet.absoluteFill}
         initialRegion={{
-          latitude: VIENNA_CENTER.latitude,
-          longitude: VIENNA_CENTER.longitude,
+          latitude: mockUserPosition.latitude,
+          longitude: mockUserPosition.longitude,
           latitudeDelta: 0.05,
           longitudeDelta: 0.05,
         }}
         onPress={handleMapPress}
       >
+        <Marker
+          coordinate={mockUserPosition}
+          anchor={{ x: 0.5, y: 0.5 }}
+          tracksViewChanges
+        >
+          <UserPositionMarker />
+        </Marker>
+
         {coords.map((c, i) => (
           <Marker
             key={`${c.latitude}-${c.longitude}-${i}`}
@@ -65,22 +72,13 @@ export default function RouteMode({ initial, onChange }: RouteModeProps) {
           <Text style={[typography.label, styles.counterLabel]}>{t('loser.route.pointCount')}</Text>
         </View>
 
-        <View style={styles.actions}>
-          <Pressable
-            onPress={undo}
-            disabled={coords.length === 0}
-            style={[styles.actionBtn, coords.length === 0 && styles.disabled]}
-          >
-            <Text style={styles.actionLabel}>{t('loser.route.undo')}</Text>
-          </Pressable>
-          <Pressable
-            onPress={clear}
-            disabled={coords.length === 0}
-            style={[styles.actionBtn, coords.length === 0 && styles.disabled]}
-          >
-            <Text style={styles.actionLabel}>{t('loser.route.clear')}</Text>
-          </Pressable>
-        </View>
+        <Pressable
+          onPress={undo}
+          disabled={coords.length === 0}
+          style={[styles.actionBtn, coords.length === 0 && styles.disabled]}
+        >
+          <Text style={styles.actionLabel}>{t('loser.route.undo')}</Text>
+        </Pressable>
 
         <Text style={[typography.caption, styles.hint]}>{t('loser.route.hint')}</Text>
       </View>
@@ -122,14 +120,13 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
   },
   counterLabel: { color: colors.textSecondary, letterSpacing: 2.4 },
-  actions: { flexDirection: 'row', gap: spacing.sm },
   actionBtn: {
-    flex: 1,
     minHeight: 44,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1.5,
     borderColor: colors.border,
+    paddingHorizontal: spacing.md,
   },
   actionLabel: {
     ...typography.button,
