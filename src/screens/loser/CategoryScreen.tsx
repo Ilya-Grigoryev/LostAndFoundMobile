@@ -1,9 +1,18 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import React, { useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useRef, useState } from 'react';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput as RNTextInput,
+  View,
+} from 'react-native';
 import CategoryTile from '../../components/location/CategoryTile';
-import { Button, ScreenHeader, TextInput } from '../../components/ui';
+import DescriptionField from '../../components/location/DescriptionField';
+import { Button, ScreenHeader } from '../../components/ui';
 import { categories } from '../../constants/categories';
 import { useLocalization } from '../../contexts/LocalizationContext';
 import { useLoserReport } from '../../contexts/LoserReportContext';
@@ -16,27 +25,33 @@ type Nav = NativeStackNavigationProp<LoserStackParamList, 'Category'>;
 export default function CategoryScreen() {
   const nav = useNavigation<Nav>();
   const { t } = useLocalization();
-  const { category, customLabel, setCategory } = useLoserReport();
+  const { category, description: ctxDescription, setCategory } = useLoserReport();
 
-  // Track the "other" path locally so the input + CTA only appear after the
-  // tile is tapped. Stays sticky across re-renders via context defaults.
-  const [otherSelected, setOtherSelected] = useState<boolean>(category === 'other');
-  const [otherText, setOtherText] = useState<string>(customLabel ?? '');
+  const [selected, setSelected] = useState<CategoryId | null>(category);
+  const [description, setDescription] = useState<string>(ctxDescription ?? '');
+  const descriptionRef = useRef<RNTextInput>(null);
+  const scrollRef = useRef<ScrollView>(null);
+
+  const otherSelected = selected === 'other';
+  const trimmedDescription = description.trim();
+  const canContinue =
+    selected !== null && (!otherSelected || trimmedDescription.length > 0);
 
   const handlePick = (id: CategoryId) => {
+    setSelected(id);
     if (id === 'other') {
-      setOtherSelected(true);
-      return;
+      // Sonstiges turns the description into a required field — scroll back to
+      // it and pop the keyboard so the user knows what to do next.
+      requestAnimationFrame(() => {
+        scrollRef.current?.scrollTo({ y: 0, animated: true });
+        descriptionRef.current?.focus();
+      });
     }
-    setOtherSelected(false);
-    setCategory(id);
-    nav.navigate('LocationMode');
   };
 
-  const handleConfirmOther = () => {
-    const trimmed = otherText.trim();
-    if (!trimmed) return;
-    setCategory('other', trimmed);
+  const handleContinue = () => {
+    if (!canContinue || !selected) return;
+    setCategory(selected, trimmedDescription || undefined);
     nav.navigate('LocationMode');
   };
 
@@ -45,62 +60,82 @@ export default function CategoryScreen() {
   const other = categories.find(c => c.id === 'other')!;
 
   return (
-    <View style={styles.root}>
+    <KeyboardAvoidingView
+      style={styles.root}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+    >
       <ScreenHeader
         title=" "
         onBack={() => nav.getParent()?.goBack()}
         accentColor={colors.loserPrimary}
       />
-      <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
+
+      <ScrollView
+        ref={scrollRef}
+        contentContainerStyle={styles.scroll}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+      >
         <View style={styles.heading}>
-          <Text style={[typography.label, styles.eyebrow]}>01 — {t('loser.category.title').toUpperCase()}</Text>
+          <Text style={[typography.label, styles.eyebrow]}>
+            01 — {t('loser.category.title').toUpperCase()}
+          </Text>
           <Text style={styles.title}>{t('loser.category.title')}</Text>
-          <Text style={[typography.body, styles.subtitle]}>{t('loser.category.subtitle')}</Text>
+          <Text style={[typography.body, styles.subtitle]}>
+            {t('loser.category.subtitle')}
+          </Text>
         </View>
 
-        <View style={styles.grid}>
-          {grid.map(c => (
+        <DescriptionField
+          ref={descriptionRef}
+          label={t('loser.description.eyebrow').toUpperCase()}
+          meta={
+            otherSelected
+              ? t('loser.description.required')
+              : t('loser.description.optional')
+          }
+          emphasizeMeta={otherSelected}
+          placeholder={t('loser.description.placeholder')}
+          value={description}
+          onChangeText={setDescription}
+        />
+
+        <View style={styles.gridSection}>
+          <Text style={[typography.label, styles.sectionEyebrow]}>
+            02 — {t('loser.category.eyebrow').toUpperCase()}
+          </Text>
+          <View style={styles.grid}>
+            {grid.map(c => (
+              <CategoryTile
+                key={c.id}
+                id={c.id}
+                label={t(c.labelKey)}
+                tint={c.tint}
+                selected={selected === c.id}
+                onPress={() => handlePick(c.id)}
+              />
+            ))}
             <CategoryTile
-              key={c.id}
-              id={c.id}
-              label={t(c.labelKey)}
-              tint={c.tint}
-              selected={category === c.id && !otherSelected}
-              onPress={() => handlePick(c.id)}
-            />
-          ))}
-          <CategoryTile
-            id={other.id}
-            label={t(other.labelKey)}
-            tint={other.tint}
-            selected={otherSelected}
-            fullWidth
-            onPress={() => handlePick(other.id)}
-          />
-        </View>
-
-        {otherSelected && (
-          <View style={styles.otherPanel}>
-            <TextInput
-              label={t('loser.category.otherLabel')}
-              placeholder={t('loser.category.otherPlaceholder')}
-              value={otherText}
-              onChangeText={setOtherText}
-              accentColor={colors.loserPrimary}
-              autoFocus
-              returnKeyType="done"
-              onSubmitEditing={handleConfirmOther}
-            />
-            <Button
-              label={t('loser.category.otherCta')}
-              color={colors.loserPrimary}
-              disabled={otherText.trim().length === 0}
-              onPress={handleConfirmOther}
+              id={other.id}
+              label={t(other.labelKey)}
+              tint={other.tint}
+              selected={otherSelected}
+              fullWidth
+              onPress={() => handlePick(other.id)}
             />
           </View>
-        )}
+        </View>
       </ScrollView>
-    </View>
+
+      <View style={styles.cta}>
+        <Button
+          label={t('loser.category.cta')}
+          color={colors.loserPrimary}
+          disabled={!canContinue}
+          onPress={handleContinue}
+        />
+      </View>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -109,11 +144,11 @@ const styles = StyleSheet.create({
   scroll: {
     paddingHorizontal: spacing.screenMargin,
     paddingBottom: spacing.xl,
+    gap: spacing.lg,
   },
   heading: {
     paddingTop: spacing.md,
-    paddingBottom: spacing.lg,
-    gap: spacing.sm,
+    gap: spacing.xs,
   },
   eyebrow: {
     color: colors.loserPrimary,
@@ -121,22 +156,31 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: fontFamily.display,
-    fontSize: 42,
-    lineHeight: 44,
-    letterSpacing: -2,
+    fontSize: 38,
+    lineHeight: 40,
+    letterSpacing: -1.8,
     color: colors.textPrimary,
   },
   subtitle: {
     color: colors.textSecondary,
     paddingRight: spacing.lg,
   },
+  gridSection: { gap: spacing.sm },
+  sectionEyebrow: {
+    color: colors.textSecondary,
+    letterSpacing: 2.8,
+  },
   grid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: spacing.sm,
   },
-  otherPanel: {
-    marginTop: spacing.lg,
-    gap: spacing.md,
+  cta: {
+    paddingHorizontal: spacing.screenMargin,
+    paddingTop: spacing.sm,
+    paddingBottom: spacing.md,
+    backgroundColor: colors.background,
+    borderTopWidth: 1.5,
+    borderTopColor: colors.border,
   },
 });

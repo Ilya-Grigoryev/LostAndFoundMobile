@@ -20,8 +20,9 @@ export type LocationValue =
 
 export interface LoserReport {
   category: CategoryId | null;
-  // Free-text description shown only when category === 'other'.
-  customLabel?: string;
+  // Free-text description of the item. Optional for specific categories;
+  // required when category === 'other' (acts as the item name in that case).
+  description?: string;
   location: LocationValue | null;
   pushOptIn: boolean;
 }

@@ -50,7 +50,7 @@ function PushToggle({ value, onChange }: { value: boolean; onChange: (v: boolean
 export default function LoserConfirmScreen() {
   const nav = useNavigation<Nav>();
   const { t } = useLocalization();
-  const { category, customLabel, location, pushOptIn, setPushOptIn } = useLoserReport();
+  const { category, description, location, pushOptIn, setPushOptIn } = useLoserReport();
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -85,7 +85,7 @@ export default function LoserConfirmScreen() {
           effectiveOptIn = false;
         }
       }
-      await saveLostReport({ category, customLabel, location, pushOptIn: effectiveOptIn });
+      await saveLostReport({ category, description, location, pushOptIn: effectiveOptIn });
       nav.navigate('Success');
     } catch {
       setError(t('loser.confirm.saveError'));
@@ -112,9 +112,9 @@ export default function LoserConfirmScreen() {
             </View>
             <View style={styles.categoryText}>
               <Text style={[typography.h3, styles.categoryName]}>{t(categoryMeta.labelKey)}</Text>
-              {category === 'other' && customLabel && (
-                <Text style={[typography.body, styles.customLabel]} numberOfLines={2}>
-                  {customLabel}
+              {description && description.trim().length > 0 && (
+                <Text style={[typography.body, styles.description]} numberOfLines={3}>
+                  {description}
                 </Text>
               )}
             </View>
@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
   },
   categoryText: { flex: 1, gap: 2 },
   categoryName: { color: colors.textPrimary },
-  customLabel: { color: colors.textSecondary },
+  description: { color: colors.textSecondary },
   rule: { height: 1.5, backgroundColor: colors.border },
   notifyRow: {
     flexDirection: 'row',
