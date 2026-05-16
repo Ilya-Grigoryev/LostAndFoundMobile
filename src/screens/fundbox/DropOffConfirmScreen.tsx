@@ -7,6 +7,7 @@ import { GeoSquare } from '../../components/ui/Geo';
 import ProgressDots from '../../components/ui/ProgressDots';
 import { useLocalization } from '../../contexts/LocalizationContext';
 import { generateVerificationCode, getFundboxById, saveCode } from '../../services/fundboxService';
+import { runDropOffMatchingDemo } from '../../services/matchingService';
 import { FundboxStackParamList } from '../../navigation/types';
 import { colors, fontFamily, spacing, typography } from '../../theme';
 
@@ -32,9 +33,9 @@ export default function DropOffConfirmScreen() {
   const confirm = async () => {
     if (!bothChecked || submitting) return;
     setSubmitting(true);
-    // Code is stored for Phase 8 matching/notification — finder never sees it.
     const code = generateVerificationCode();
     await saveCode(fundbox.id, code);
+    runDropOffMatchingDemo(fundbox.id).catch(() => undefined);
     nav.replace('DropOffSuccess', { fundboxId: fundbox.id });
   };
 
