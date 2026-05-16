@@ -13,8 +13,17 @@ export type OnboardingStackParamList = {
 export type MainStackParamList = {
   Home: undefined;
   Finder: undefined;
-  Loser: undefined;
+  Loser: NavigatorScreenParams<LoserStackParamList> | undefined;
   Fundbox: NavigatorScreenParams<FundboxStackParamList> | undefined;
+};
+
+export type LoserStackParamList = {
+  Category: undefined;
+  LocationMode: undefined;
+  LocationMap: undefined;
+  LocationAddress: undefined;
+  Confirm: undefined;
+  Success: undefined;
 };
 
 export type FundboxStackParamList = {

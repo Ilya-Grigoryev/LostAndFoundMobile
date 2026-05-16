@@ -4,7 +4,7 @@ import { useRef, useState } from 'react';
 import { Animated, Pressable, StyleSheet, Text, View } from 'react-native';
 import { Button, ScreenHeader } from '../../components/ui';
 import { GeoSquare } from '../../components/ui/Geo';
-import ProgressDots from '../../components/fundbox/ProgressDots';
+import ProgressDots from '../../components/ui/ProgressDots';
 import { useLocalization } from '../../contexts/LocalizationContext';
 import { generateVerificationCode, getFundboxById, saveCode } from '../../services/fundboxService';
 import { FundboxStackParamList } from '../../navigation/types';

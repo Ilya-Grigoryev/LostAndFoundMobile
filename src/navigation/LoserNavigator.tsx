@@ -1,20 +1,26 @@
-import { StyleSheet, Text, View } from 'react-native';
-import { colors, typography } from '../theme';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { LoserReportProvider } from '../contexts/LoserReportContext';
+import CategoryScreen from '../screens/loser/CategoryScreen';
+import LocationAddressScreen from '../screens/loser/LocationAddressScreen';
+import LocationMapScreen from '../screens/loser/LocationMapScreen';
+import LocationModeScreen from '../screens/loser/LocationModeScreen';
+import LoserConfirmScreen from '../screens/loser/LoserConfirmScreen';
+import LoserSuccessScreen from '../screens/loser/LoserSuccessScreen';
+import { LoserStackParamList } from './types';
 
-// Stub — Ivan replaces in feature/loser-flow
+const Stack = createNativeStackNavigator<LoserStackParamList>();
+
 export default function LoserNavigator() {
   return (
-    <View style={styles.container}>
-      <Text style={[typography.h3, { color: colors.loserPrimary }]}>Loser Flow</Text>
-    </View>
+    <LoserReportProvider>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Category" component={CategoryScreen} />
+        <Stack.Screen name="LocationMode" component={LocationModeScreen} />
+        <Stack.Screen name="LocationMap" component={LocationMapScreen} />
+        <Stack.Screen name="LocationAddress" component={LocationAddressScreen} />
+        <Stack.Screen name="Confirm" component={LoserConfirmScreen} />
+        <Stack.Screen name="Success" component={LoserSuccessScreen} />
+      </Stack.Navigator>
+    </LoserReportProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: colors.background,
-  },
-});

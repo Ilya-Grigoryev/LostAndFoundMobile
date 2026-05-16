@@ -222,29 +222,31 @@ src/
 
 ---
 
-## Phase 6 — Report Lost Item Flow (P3) — Ivan
+## Phase 6 — Report Lost Item Flow (P3) ✅ (выполнено)
 
-**Цель:** loser указывает место потери в любом удобном формате — ключевая UX-инновация.
+**Что сделано:**
 
-**Deliverables:**
+- `src/types/loser.ts` — `CategoryId` (7), дискриминированный `LocationValue` (`pin` / `route` / `steps` / `address`), `LoserReport`
+- `src/contexts/LoserReportContext.tsx` — `LoserReportProvider` + хук `useLoserReport()` (category, location, pushOptIn, setters, reset); провайдер обёрнут вокруг стека → автоматический reset при выходе из флоу
+- `src/constants/categories.ts` — 7 категорий + per-category tint из палитры; helper `getCategoryMeta`
+- `src/constants/viennaBezirke.ts` — 23 Bezirke с sample-улицами + `searchAddresses` substring-фильтр для autocomplete
+- `src/services/loserReportService.ts` — `saveLostReport` → AsyncStorage `@lost_reports`
+- `LoserStackParamList` (6 routes) + типизированный nested-навигатор внутри `MainStackParamList`
+- `CategoryScreen` — Bauhaus 2×3 grid конкретных категорий + полноширинный `Sonstiges` снизу; `CategoryTile` + extracted `CategoryGlyph` (уникальная Geo-композиция на категорию, никаких эмодзи)
+- `LocationModeScreen` — двухблочный full-bleed split (loserLight / sageSoft), большие display-нумералы 01/02
+- `SubTabSwitcher` — сигнатурный sharp-corner segmented control с anim-bar indicator (`Animated.spring`)
+- `LocationMapScreen` — sub-tabs `Pin+Radius` | `Route` с переиспользуемыми компонентами
+- `PinRadiusMode` — `MapView` (PROVIDER_GOOGLE) + draggable `Marker` с pulsing halo + `Circle` + `@react-native-community/slider` (50–500m, step 50) с display-числом радиуса
+- `RouteMode` — tap-to-add waypoint + `Polyline` + display-числом точек + undo/clear actions
+- `LocationAddressScreen` — sub-tabs `Schritt für Schritt` | `Genaue Adresse`
+- `StepByStepMode` — список 23 Bezirke с двухзначным display-номером → breadcrumb + список улиц + landmark input
+- `AddressMode` — `TextInput` + mock-autocomplete карточки (badge с номером Bezirk)
+- `LocationPreview` — read-only мини-карта (pin/route) или text-блок (steps/address) для Confirm
+- `LoserConfirmScreen` — Wiener Werkstätte квитанция: 3 секции с толстыми rule-линиями + кастомный `PushToggle` (sharp-corner Animated switch) + persists через service; ErrorState при неполном state
+- `LoserSuccessScreen` — full-bleed `loserPrimary` фон, staggered reveal (circle scale → hero opacity → CTA), GeoSemicircle/GeoBar accents, ghost-CTA → goBack на Main
+- `expo-notifications` plugin в `app.json` + permission request только при `pushOptIn === true`; отказ → флаг сбрасывается, флоу не блокируется
 
-- `CategoryPickerScreen`: сетка иконок — Rucksack, Schlüssel, Geldbörse, Handy, Dokumente, Fahrrad, Sonstiges
-- `LocationPickerScreen` — 4 режима, переключаемые вкладками:
-  1. **Pin + Radius** — карта, маркер + слайдер радиуса (50m–500m)
-  2. **Schritt-für-Schritt** — Bezirk (1.–23.) из списка → улица → ориентир
-  3. **Route zeichnen** — polyline пальцем на карте
-  4. **Genaue Adresse** — текстовый поиск (mock autocomplete)
-  - Каждый режим — отдельный компонент в `src/components/location/`
-- Push notification opt-in после выбора локации (`expo-notifications`, только если Ja)
-- `LoserConfirmationScreen`: резюме категории + локации + мини-карта; кнопка "Melden"
-
-**Acceptance criteria:**
-
-- Все 4 режима переключаются, данные сохраняются при возврате
-- Pin+Radius: маркер перетаскивается, радиус меняется слайдером
-- Отказ от уведомлений не блокирует флоу
-
-**Зависимости:** Phase 2 (foundation merged); `react-native-maps` уже будет из Phase 5
+**Зависимости:** Phase 2 (foundation merged); `react-native-maps@1.20.1` уже был из Phase 7
 
 ---
 
@@ -373,7 +375,7 @@ Phase 1 ✅ (Design System — Ilia)
         └─> Phase 4 ✅ (Home — Ilia)
               ├─> Phase 3 ✅ (Onboarding — Denis) ┐
               ├─> Phase 5 (Finder — Arseniy)       │ параллельно
-              ├─> Phase 6 (Loser — Ivan)           │
+              ├─> Phase 6 ✅ (Loser — Ivan)        │
               └─> Phase 7 ✅ (Fundbox — Ilia)     ┘
                     └─> Phase 8 (Matching — Denis)
                           └─> Phase 9 (Polish — все)

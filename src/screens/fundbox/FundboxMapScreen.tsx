@@ -6,7 +6,7 @@ import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { Button, ScreenHeader } from '../../components/ui';
 import { GeoSemicircle } from '../../components/ui/Geo';
 import FundboxMarkerView from '../../components/fundbox/FundboxMarkerView';
-import ProgressDots from '../../components/fundbox/ProgressDots';
+import ProgressDots from '../../components/ui/ProgressDots';
 import UserPositionMarker from '../../components/fundbox/UserPositionMarker';
 import { Fundbox, fundboxes, mockUserPosition } from '../../constants/fundboxes';
 import { useLocalization } from '../../contexts/LocalizationContext';
