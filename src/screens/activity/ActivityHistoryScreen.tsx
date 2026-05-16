@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
+import ActivityDetailModal from '../../components/activity/ActivityDetailModal';
 import ActivityItemCard, {
   ActivityItem,
 } from '../../components/activity/ActivityItemCard';
@@ -21,6 +22,7 @@ type ActivityHistoryNav = NativeStackNavigationProp<
 export default function ActivityHistoryScreen() {
   const navigation = useNavigation<ActivityHistoryNav>();
   const [activeTab, setActiveTab] = useState<ActivityTab>('found');
+  const [selectedItem, setSelectedItem] = useState<ActivityItem | null>(null);
   const { t } = useLocalization();
 
   const foundItems: ActivityItem[] = [
@@ -129,10 +131,19 @@ export default function ActivityHistoryScreen() {
       <FlatList
         data={activeItems}
         keyExtractor={item => item.id}
-        renderItem={({ item }) => <ActivityItemCard item={item} />}
+        renderItem={({ item }) => (
+          <ActivityItemCard item={item} onPress={() => setSelectedItem(item)} />
+        )}
         contentContainerStyle={styles.listContent}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
       />
+
+      {selectedItem ? (
+        <ActivityDetailModal
+          item={selectedItem}
+          onClose={() => setSelectedItem(null)}
+        />
+      ) : null}
     </View>
   );
 }

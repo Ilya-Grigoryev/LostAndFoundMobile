@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { Card } from '../ui';
 import { colors, spacing, typography } from '../../theme';
 
@@ -24,6 +24,7 @@ export type ActivityItem = {
 
 type ActivityItemCardProps = {
   item: ActivityItem;
+  onPress?: () => void;
 };
 
 function getStatusColors(statusKind: ActivityStatusKind) {
@@ -66,7 +67,7 @@ function getStatusColors(statusKind: ActivityStatusKind) {
   };
 }
 
-export default function ActivityItemCard({ item }: ActivityItemCardProps) {
+export default function ActivityItemCard({ item, onPress }: ActivityItemCardProps) {
   const accentColor =
     item.type === 'found' ? colors.finderPrimary : colors.loserPrimary;
   const statusColors = getStatusColors(item.statusKind);
@@ -77,57 +78,70 @@ export default function ActivityItemCard({ item }: ActivityItemCardProps) {
     item.statusKind === 'closed';
 
   return (
-    <Card
-      bordered
+    <Pressable
+      onPress={onPress}
+      disabled={!onPress}
+      accessibilityRole={onPress ? 'button' : undefined}
+      accessibilityLabel={`${item.title}. ${item.status}`}
       style={[
-        styles.card,
-        isHighlighted && styles.highlightedCard,
-        isCompleted && styles.completedCard,
+        styles.pressable,
       ]}
     >
-      <View
+      <Card
+        bordered
         style={[
-          styles.accentBar,
-          isHighlighted && styles.highlightedAccentBar,
-          { backgroundColor: isCompleted ? colors.disabled : accentColor },
+          styles.card,
+          isHighlighted && styles.highlightedCard,
+          isCompleted && styles.completedCard,
         ]}
-      />
+      >
+        <View
+          style={[
+            styles.accentBar,
+            isHighlighted && styles.highlightedAccentBar,
+            { backgroundColor: isCompleted ? colors.disabled : accentColor },
+          ]}
+        />
 
-      <View style={styles.content}>
-        <View style={styles.topRow}>
-          <Text style={[styles.category, isCompleted && styles.mutedText]}>
-            {item.category}
-          </Text>
-          <View
-            style={[
-              styles.statusBadge,
-              {
-                borderColor: statusColors.borderColor,
-                backgroundColor: statusColors.backgroundColor,
-              },
-            ]}
-          >
-            <Text style={[styles.statusText, { color: statusColors.textColor }]}>
-              {item.status}
+        <View style={styles.content}>
+          <View style={styles.topRow}>
+            <Text style={[styles.category, isCompleted && styles.mutedText]}>
+              {item.category}
             </Text>
+            <View
+              style={[
+                styles.statusBadge,
+                {
+                  borderColor: statusColors.borderColor,
+                  backgroundColor: statusColors.backgroundColor,
+                },
+              ]}
+            >
+              <Text style={[styles.statusText, { color: statusColors.textColor }]}>
+                {item.status}
+              </Text>
+            </View>
           </View>
-        </View>
 
-        <Text style={[styles.title, isCompleted && styles.completedTitle]}>
-          {item.title}
-        </Text>
-        <Text style={[styles.meta, isCompleted && styles.mutedText]}>
-          {item.locationLabel}
-        </Text>
-        <Text style={[styles.meta, isCompleted && styles.mutedText]}>
-          {item.dateLabel}
-        </Text>
-      </View>
-    </Card>
+          <Text style={[styles.title, isCompleted && styles.completedTitle]}>
+            {item.title}
+          </Text>
+          <Text style={[styles.meta, isCompleted && styles.mutedText]}>
+            {item.locationLabel}
+          </Text>
+          <Text style={[styles.meta, isCompleted && styles.mutedText]}>
+            {item.dateLabel}
+          </Text>
+        </View>
+      </Card>
+    </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
+  pressable: {
+    alignSelf: 'stretch',
+  },
   card: {
     flexDirection: 'row',
     padding: 0,
