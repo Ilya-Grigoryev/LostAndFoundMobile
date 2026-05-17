@@ -14,8 +14,6 @@ interface SubTabSwitcherProps<T extends string> {
   accentColor?: string;
 }
 
-// Two big rectangular buttons + a thick bar that springs between them.
-// Sharp corners, no rounded radius — Bauhaus segmented control.
 export default function SubTabSwitcher<T extends string>({
   options,
   value,

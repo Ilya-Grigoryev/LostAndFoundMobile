@@ -1,8 +1,13 @@
 import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useLocalization } from '../../contexts/LocalizationContext';
+import { MainStackParamList } from '../../navigation/types';
 import { colors, spacing, typography } from '../../theme';
-import { ScreenHeader } from '../ui';
+import { Button, ScreenHeader } from '../ui';
 import { ActivityItem } from './ActivityItemCard';
+
+type ActivityDetailNav = NativeStackNavigationProp<MainStackParamList, 'ActivityHistory'>;
 
 type ActivityDetailModalProps = {
   item: ActivityItem;
@@ -22,20 +27,58 @@ function isPossibleMatch(item: ActivityItem) {
 }
 
 export default function ActivityDetailModal({ item, onClose }: ActivityDetailModalProps) {
+  const nav = useNavigation<ActivityDetailNav>();
   const { t } = useLocalization();
   const completed = isCompleted(item);
   const possibleMatch = isPossibleMatch(item);
   const accentColor = item.type === 'found' ? colors.finderPrimary : colors.loserPrimary;
   const detailTitle = possibleMatch
-    ? t('activity.detail.denisTitle')
+    ? t('activity.detail.matchTitle')
     : completed
       ? t('activity.detail.completedTitle')
       : t('activity.detail.noNewsTitle');
   const detailBody = possibleMatch
-    ? t('activity.detail.denisBody')
+    ? t('activity.detail.matchBody')
     : completed
       ? t('activity.detail.completedBody')
       : t('activity.detail.noNewsBody');
+
+  const matchIsOnMap = item.id === 'lost-backpack';
+
+  const openMapMatch = () => {
+    onClose();
+    nav.navigate('Fundbox', {
+      screen: 'MatchLocation',
+      params: {
+        categoryLabel: item.title,
+        placeLabel: 'U4 Station Schwedenplatz',
+        addressLabel: 'Bahnsteig Richtung Hütteldorf',
+        latitude: 48.21155,
+        longitude: 16.37815,
+      },
+    });
+  };
+
+  const openFundboxMatch = () => {
+    onClose();
+    nav.navigate('Fundbox', {
+      screen: 'Claim',
+      params: {
+        categoryLabel: item.title,
+        fundboxId: 'fb-stephansplatz',
+        droppedAtLabel: item.dateLabel,
+      },
+    });
+  };
+
+  const openMatchPlace = () => {
+    if (matchIsOnMap) {
+      openMapMatch();
+      return;
+    }
+
+    openFundboxMatch();
+  };
 
   return (
     <Modal visible animationType="none" presentationStyle="fullScreen">
@@ -78,6 +121,15 @@ export default function ActivityDetailModal({ item, onClose }: ActivityDetailMod
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>{detailTitle}</Text>
             <Text style={styles.sectionBody}>{detailBody}</Text>
+            {possibleMatch ? (
+              <View style={styles.matchButton}>
+                <Button
+                  label={matchIsOnMap ? t('activity.detail.openMapMatch') : t('activity.detail.openFundboxMatch')}
+                  color={matchIsOnMap ? colors.loserPrimary : colors.finderPrimary}
+                  onPress={openMatchPlace}
+                />
+              </View>
+            ) : null}
           </View>
 
           <View style={styles.metaGrid}>
@@ -185,6 +237,10 @@ const styles = StyleSheet.create({
   sectionBody: {
     ...typography.body,
     color: colors.textSecondary,
+  },
+  matchButton: {
+    gap: spacing.sm,
+    marginTop: spacing.sm,
   },
   metaGrid: {
     backgroundColor: colors.surface,

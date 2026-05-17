@@ -19,8 +19,6 @@ interface PinRadiusModeProps {
 
 export default function PinRadiusMode({ initial, onChange }: PinRadiusModeProps) {
   const { t } = useLocalization();
-  // The radius center starts at the user position but moves independently
-  // afterwards — that's the whole point of "imprecise location."
   const [coords, setCoords] = useState<LatLng>(initial?.coords ?? mockUserPosition);
   const [radius, setRadius] = useState<number>(initial?.radius ?? 200);
 

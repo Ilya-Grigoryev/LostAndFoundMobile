@@ -1,6 +1,3 @@
-// 23 Wiener Gemeindebezirke with a few signature streets each.
-// Mock data — used by StepByStepMode and AddressMode autocomplete.
-
 export interface Bezirk {
   number: number;
   name: string;

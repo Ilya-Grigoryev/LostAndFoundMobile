@@ -40,8 +40,6 @@ export default function CategoryScreen() {
   const handlePick = (id: CategoryId) => {
     setSelected(id);
     if (id === 'other') {
-      // Sonstiges turns the description into a required field — scroll back to
-      // it and pop the keyboard so the user knows what to do next.
       requestAnimationFrame(() => {
         scrollRef.current?.scrollTo({ y: 0, animated: true });
         descriptionRef.current?.focus();
@@ -55,7 +53,6 @@ export default function CategoryScreen() {
     nav.navigate('LocationMode');
   };
 
-  // 6 specific categories form a 2-col grid; "other" stretches full width below.
   const grid = categories.filter(c => c.id !== 'other');
   const other = categories.find(c => c.id === 'other')!;
 

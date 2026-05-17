@@ -41,8 +41,6 @@ export default function LoserSuccessScreen() {
     ]).start();
   }, [circleScale, heroOpacity, ctaOpacity]);
 
-  // Exit the entire loser stack — single goBack on the parent unmounts the
-  // navigator, which also discards the LoserReportContext state.
   const goHome = () => nav.getParent()?.goBack();
 
   return (
