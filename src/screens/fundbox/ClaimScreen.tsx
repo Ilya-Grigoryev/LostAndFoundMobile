@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
@@ -8,23 +8,21 @@ import CodeBoxes from '../../components/fundbox/CodeBoxes';
 import { fundboxes } from '../../constants/fundboxes';
 import { useLocalization } from '../../contexts/LocalizationContext';
 import { FundboxStackParamList } from '../../navigation/types';
+import { getFundboxById } from '../../services/fundboxService';
 import { colors, spacing, typography } from '../../theme';
 
 type Nav = NativeStackNavigationProp<FundboxStackParamList, 'Claim'>;
-
-// Demo: use the first Fundbox as the "match" — Phase 8 will replace this
-// with a real match coming from matchingService + push notification payload.
-const mockMatch = {
-  category: 'Rucksack',
-  fundbox: fundboxes[0],
-  droppedAtLabel: 'Heute 14:23',
-};
+type ClaimRoute = RouteProp<FundboxStackParamList, 'Claim'>;
 
 export default function ClaimScreen() {
   const nav = useNavigation<Nav>();
+  const { params } = useRoute<ClaimRoute>();
   const { t } = useLocalization();
   const [code, setCode] = useState('');
 
+  const matchFundbox = params?.fundboxId ? getFundboxById(params.fundboxId) ?? fundboxes[0] : fundboxes[0];
+  const matchCategory = params?.categoryLabel ?? 'Gegenstand';
+  const droppedAtLabel = params?.droppedAtLabel ?? 'Heute';
   const canConfirm = code.replace(/\D/g, '').length === 6;
 
   return (
@@ -39,12 +37,12 @@ export default function ClaimScreen() {
         <View style={styles.matchCard}>
           <View style={styles.matchInfo}>
             <Text style={[typography.label, styles.eyebrow]}>{t('fundbox.claim.eyebrow')}</Text>
-            <Text style={[typography.h2, styles.matchTitle]}>{mockMatch.category}</Text>
+            <Text style={[typography.h2, styles.matchTitle]}>{matchCategory}</Text>
             <Text style={[typography.caption, styles.matchMeta]} numberOfLines={2}>
-              {mockMatch.fundbox.name}
+              {matchFundbox.name}
             </Text>
             <Text style={[typography.caption, styles.matchMeta]}>
-              {t('fundbox.claim.foundAt')} · {mockMatch.droppedAtLabel}
+              {t('fundbox.claim.foundAt')} · {droppedAtLabel}
             </Text>
           </View>
           <View style={styles.matchPhoto}>
