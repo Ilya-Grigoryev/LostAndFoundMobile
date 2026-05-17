@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     fontSize: 56,
     lineHeight: 58,
     letterSpacing: -2.5,
-    textAlign: 'center',
+    textAlign: 'left',
     color: colors.accent,
   },
   hint: {
