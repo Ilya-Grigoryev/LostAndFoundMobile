@@ -79,6 +79,16 @@ export default function HomeScreen() {
         <GeoDotRow size={8} gap={5} />
         <Text style={[typography.label, styles.appName]}>Wien Fundus</Text>
         <Pressable
+          onPress={() => nav.navigate('ActivityHistory')}
+          style={({ pressed }) => [styles.historyPill, pressed && styles.headerButtonPressed]}
+          accessibilityRole="button"
+          accessibilityLabel={t('activity.headerButtonLabel')}
+        >
+          <Text style={[typography.label, styles.historyText]}>
+            {t('activity.headerButtonText')}
+          </Text>
+        </Pressable>
+        <Pressable
           onPress={switchHomeLanguage}
           style={({ pressed }) => [styles.langPill, pressed && styles.langPillPressed]}
           accessibilityRole="button"
@@ -164,14 +174,34 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
     marginLeft: spacing.xs,
   },
-  langPill: {
+  historyPill: {
+    height: 28,
     borderWidth: 1.5,
     borderColor: colors.border,
     paddingHorizontal: spacing.sm,
-    paddingVertical: 3,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.surface,
+  },
+  historyText: {
+    color: colors.textPrimary,
+    fontSize: 10,
+    letterSpacing: 1.4,
+  },
+  langPill: {
+    width: 40,
+    height: 28,
+    borderWidth: 1.5,
+    borderColor: colors.border,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.surface,
   },
   langText: {
     color: colors.textPrimary,
+  },
+  headerButtonPressed: {
+    opacity: 0.55,
   },
   langPillPressed: {
     backgroundColor: colors.accentLight,
