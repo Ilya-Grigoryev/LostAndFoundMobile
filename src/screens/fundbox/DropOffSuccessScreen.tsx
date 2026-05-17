@@ -2,17 +2,16 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useEffect, useRef } from 'react';
 import { Animated, Easing, StyleSheet, Text, View } from 'react-native';
+import { Button } from '../../components/ui';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { GeoBar, GeoCircle, GeoSquare } from '../../components/ui/Geo';
 import { useLocalization } from '../../contexts/LocalizationContext';
 import { getFundboxById } from '../../services/fundboxService';
-import { FundboxStackParamList } from '../../navigation/types';
+import { FundboxStackParamList, MainStackParamList } from '../../navigation/types';
 import { colors, fontFamily, spacing, typography } from '../../theme';
 
 type Nav = NativeStackNavigationProp<FundboxStackParamList, 'DropOffSuccess'>;
 type SuccessRouteProp = RouteProp<FundboxStackParamList, 'DropOffSuccess'>;
-
-const AUTO_RETURN_MS = 2800;
 
 export default function DropOffSuccessScreen() {
   const nav = useNavigation<Nav>();
@@ -20,9 +19,11 @@ export default function DropOffSuccessScreen() {
   const { t } = useLocalization();
   const { params } = useRoute<SuccessRouteProp>();
   const fundbox = getFundboxById(params.fundboxId);
+  const code = params.code;
 
   const circleScale = useRef(new Animated.Value(0.4)).current;
   const heroOpacity = useRef(new Animated.Value(0)).current;
+  const ctaOpacity = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     Animated.sequence([
@@ -37,16 +38,19 @@ export default function DropOffSuccessScreen() {
         duration: 320,
         useNativeDriver: true,
       }),
+      Animated.timing(ctaOpacity, {
+        toValue: 1,
+        duration: 220,
+        useNativeDriver: true,
+      }),
     ]).start();
+  }, [circleScale, heroOpacity, ctaOpacity]);
 
-    const timer = setTimeout(() => {
-      nav.getParent()?.goBack();
-    }, AUTO_RETURN_MS);
-    return () => clearTimeout(timer);
-  }, [circleScale, heroOpacity, nav]);
+  const goHome = () =>
+    nav.getParent<NativeStackNavigationProp<MainStackParamList>>()?.navigate('Home');
 
   return (
-    <View style={[styles.root, { paddingTop: insets.top }]}>
+    <View style={[styles.root, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
       <Animated.View
         style={[styles.bigCircle, { transform: [{ scale: circleScale }] }]}
         pointerEvents="none"
@@ -70,6 +74,26 @@ export default function DropOffSuccessScreen() {
             {fundbox.name}
           </Text>
         )}
+
+        <Text style={[typography.label, styles.codeLabel]}>
+          {t('fundbox.success.codeLabel')}
+        </Text>
+        <Text style={styles.codeText}>
+          {code.slice(0, 3)} – {code.slice(3)}
+        </Text>
+
+        <Text style={[typography.caption, styles.codeHint]}>
+          {t('fundbox.success.codeHint')}
+        </Text>
+      </Animated.View>
+
+      <Animated.View style={[styles.ctaWrap, { opacity: ctaOpacity }]}>
+        <Button
+          label={t('fundbox.success.home')}
+          variant="secondary"
+          color={colors.finderPrimary}
+          onPress={goHome}
+        />
       </Animated.View>
     </View>
   );
@@ -79,34 +103,24 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     backgroundColor: colors.background,
-    alignItems: 'center',
-    justifyContent: 'center',
     overflow: 'hidden',
+    paddingHorizontal: spacing.screenMargin,
   },
   bigCircle: {
     position: 'absolute',
+    top: '20%',
+    left: '-30%',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  topAccent: {
-    position: 'absolute',
-    top: '12%',
-    right: '10%',
-  },
-  bottomAccent: {
-    position: 'absolute',
-    bottom: '14%',
-    left: '12%',
-  },
+  topAccent: { position: 'absolute', top: '12%', right: '10%' },
+  bottomAccent: { position: 'absolute', bottom: '14%', left: '12%' },
   heroBlock: {
-    alignItems: 'center',
-    paddingHorizontal: spacing.screenMargin,
+    flex: 1,
+    justifyContent: 'center',
     gap: spacing.sm,
   },
-  eyebrow: {
-    color: colors.accent,
-    letterSpacing: 3.6,
-  },
+  eyebrow: { color: colors.accent, letterSpacing: 3.6 },
   hero: {
     fontFamily: fontFamily.display,
     fontSize: 56,
@@ -117,13 +131,25 @@ const styles = StyleSheet.create({
   },
   hint: {
     color: colors.accent,
-    textAlign: 'center',
     opacity: 0.86,
-    paddingHorizontal: spacing.md,
+    paddingRight: spacing.xl,
   },
-  meta: {
+  meta: { color: colors.accent, opacity: 0.7, marginTop: spacing.sm },
+  codeLabel: { color: colors.accent, opacity: 0.7, letterSpacing: 2.4, marginTop: spacing.lg },
+  codeText: {
+    fontFamily: fontFamily.display,
+    fontSize: 48,
+    lineHeight: 52,
+    letterSpacing: 1,
+    color: colors.accent,
+  },
+  ctaWrap: {
+    gap: spacing.sm,
+    paddingBottom: spacing.md,
+  },
+  codeHint: {
     color: colors.accent,
     opacity: 0.7,
-    marginTop: spacing.sm,
+    paddingRight: spacing.xl,
   },
 });

@@ -12,10 +12,17 @@ export type OnboardingStackParamList = {
 
 export type MainStackParamList = {
   Home: undefined;
-  Finder: undefined;
+  Finder: NavigatorScreenParams<FinderStackParamList> | undefined;
   Loser: NavigatorScreenParams<LoserStackParamList> | undefined;
   Fundbox: NavigatorScreenParams<FundboxStackParamList> | undefined;
   ActivityHistory: undefined;
+};
+
+export type FinderStackParamList = {
+  CameraGps: undefined;
+  Location: undefined;
+  Choice: undefined;
+  Success: undefined;
 };
 
 export type LoserStackParamList = {
@@ -31,7 +38,7 @@ export type FundboxStackParamList = {
   Map: undefined;
   Route: { fundboxId: string };
   DropOff: { fundboxId: string };
-  DropOffSuccess: { fundboxId: string };
+  DropOffSuccess: { fundboxId: string; code: string };
   Claim: { categoryLabel?: string; fundboxId?: string; droppedAtLabel?: string } | undefined;
   MatchLocation:
     | {
