@@ -1,10 +1,3 @@
-/**
- * Geometric primitives — the visual vocabulary of Bauhaus Wien.
- * Use these to compose distinctive interface elements (decorative accents
- * inside cards, dividers, category indicators, etc.). They are not generic
- * "icons" — they are structural design language.
- */
-
 import React from 'react';
 import { View } from 'react-native';
 import { colors } from '../../theme';

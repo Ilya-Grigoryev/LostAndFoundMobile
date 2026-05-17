@@ -4,9 +4,6 @@ import { colors } from '../../theme';
 
 const HIT_AREA = 56;
 
-// "You are here" marker. Translucent halo + solid inner dot in accent navy
-// so it reads as the user (cool, calm) and doesn't fight the warm finder-
-// yellow Fundbox markers for attention.
 export default function UserPositionMarker() {
   const pulse = useRef(new Animated.Value(0)).current;
 

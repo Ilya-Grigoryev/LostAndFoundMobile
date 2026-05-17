@@ -55,7 +55,6 @@ export default function FinderCameraGpsScreen() {
           setLocation(loc);
           setLocationSource('auto');
         } catch {
-          // silently fail — user can set manually
         } finally {
           setGpsLoading(false);
         }
@@ -91,7 +90,6 @@ export default function FinderCameraGpsScreen() {
         accentColor={colors.finderPrimary}
       />
 
-      {/* Camera block */}
       <View style={styles.cameraBlock}>
         {!cameraPermission?.granted ? (
           <View style={styles.permissionBox}>
@@ -142,7 +140,6 @@ export default function FinderCameraGpsScreen() {
             >
               <View style={styles.shutterInner} />
             </Pressable>
-            {/* Corner brackets for viewfinder feel */}
             <View style={styles.bracketTL} />
             <View style={styles.bracketTR} />
             <View style={styles.bracketBL} />
@@ -151,7 +148,6 @@ export default function FinderCameraGpsScreen() {
         )}
       </View>
 
-      {/* GPS block */}
       <Pressable
         style={styles.gpsBlock}
         onPress={goToLocation}
@@ -220,7 +216,6 @@ export default function FinderCameraGpsScreen() {
         </View>
       </Pressable>
 
-      {/* CTA */}
       <View style={styles.ctaWrap}>
         <Button
           label={t('finder.camera.cta')}
@@ -312,7 +307,6 @@ const styles = StyleSheet.create({
     letterSpacing: 0.4,
     color: colors.surface,
   },
-  // corner brackets
   bracketTL: {
     position: 'absolute', top: spacing.md, left: spacing.md,
     width: BRACKET, height: BRACKET,
@@ -333,7 +327,6 @@ const styles = StyleSheet.create({
     width: BRACKET, height: BRACKET,
     borderBottomWidth: BRACKET_W, borderRightWidth: BRACKET_W, borderColor: 'rgba(255,255,255,0.7)',
   },
-  // GPS block
   gpsBlock: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -341,8 +334,6 @@ const styles = StyleSheet.create({
     padding: spacing.md,
     backgroundColor: colors.surface,
     borderWidth: 1.5,
-    // borderTopWidth: 1.5,
-    // borderBottomWidth: 1.5,
     borderColor: colors.border,
     marginTop: spacing.sm,
     marginHorizontal: spacing.screenMargin,

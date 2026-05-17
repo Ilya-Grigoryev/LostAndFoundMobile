@@ -72,7 +72,6 @@ export default function FinderChoiceScreen() {
     try {
       await saveFinderReport(photoUri, location);
     } catch {
-      // silently continue — mock app, no error UI needed here
     } finally {
       setSaving(false);
     }

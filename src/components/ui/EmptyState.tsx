@@ -15,7 +15,6 @@ export default function EmptyState({
 }: EmptyStateProps) {
   return (
     <View style={styles.container}>
-      {/* Bauhaus empty mark: outlined square with a circle inside (empty container) */}
       <View style={styles.iconWrap}>
         <View style={[styles.box, { borderColor: color }]} />
         <View style={[styles.dot, { backgroundColor: color }]} />

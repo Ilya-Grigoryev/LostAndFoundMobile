@@ -1,8 +1,3 @@
-// Bauhaus Wien typography stack.
-// Archivo Black — display-only, used for huge poster-style headlines.
-// Manrope — body & UI; 400/500/700/800 weights cover the full range.
-// Fonts are loaded in App.tsx via expo-google-fonts (see useFonts hook).
-
 export const fontFamily = {
   display: 'ArchivoBlack_400Regular',
   body: 'Manrope_400Regular',
@@ -12,7 +7,6 @@ export const fontFamily = {
 } as const;
 
 export const typography = {
-  // Hero — Archivo Black, tight tracking, geometric poster impact
   hero: {
     fontFamily: fontFamily.display,
     fontSize: 56,
@@ -52,14 +46,12 @@ export const typography = {
     fontSize: 13,
     lineHeight: 18,
   },
-  // Eyebrow/kicker — uppercase tracked, for category labels
   label: {
     fontFamily: fontFamily.bodyBlack,
     fontSize: 11,
     letterSpacing: 2.8,
     textTransform: 'uppercase' as const,
   },
-  // Button label — bold mixed-case, NOT uppercased
   button: {
     fontFamily: fontFamily.bodyBlack,
     fontSize: 14,

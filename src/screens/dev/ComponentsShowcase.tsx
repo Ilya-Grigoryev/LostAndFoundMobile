@@ -47,7 +47,6 @@ export default function ComponentsShowcase() {
       <ScreenHeader title="Bauhaus Wien · UI" />
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
 
-        {/* Hero typography demo */}
         <View style={styles.hero}>
           <Text style={styles.heroH1}>Verloren.{'\n'}Gefunden.</Text>
           <Text style={styles.heroBody}>
@@ -58,7 +57,6 @@ export default function ComponentsShowcase() {
 
         <View style={styles.heroDivider} />
 
-        {/* Geometric language */}
         <Section title="Geometric Language">
           <View style={styles.geoRow}>
             <GeoCircle size={40} color={colors.loserPrimary} />
@@ -83,7 +81,6 @@ export default function ComponentsShowcase() {
           </View>
         </Section>
 
-        {/* Buttons */}
         <Section title="Buttons — Loser">
           <Button label="Verlust melden" onPress={() => {}} />
           <Button label="Abbrechen" onPress={() => {}} variant="secondary" />
@@ -97,7 +94,6 @@ export default function ComponentsShowcase() {
           <Button label="Zurück" onPress={() => {}} variant="secondary" color={colors.finderPrimary} />
         </Section>
 
-        {/* Composed Bauhaus cards — the real showcase */}
         <Section title="Action Card — Loser (Composition)">
           <Card bordered>
             <View style={styles.actionRow}>
@@ -140,7 +136,6 @@ export default function ComponentsShowcase() {
           </Card>
         </Section>
 
-        {/* Counter card */}
         <Section title="Counter Composition">
           <Card>
             <View style={styles.counterRow}>
@@ -155,7 +150,6 @@ export default function ComponentsShowcase() {
           </Card>
         </Section>
 
-        {/* Chips */}
         <Section title="Chips — Categories">
           <View style={styles.chipsRow}>
             <Chip label="Schlüssel" selected={chipKey} onPress={() => setChipKey(v => !v)} />
@@ -165,7 +159,6 @@ export default function ComponentsShowcase() {
           </View>
         </Section>
 
-        {/* Inputs */}
         <Section title="Text Input">
           <TextInput
             label="E-Mail"
@@ -178,7 +171,6 @@ export default function ComponentsShowcase() {
           <TextInput label="Mit Fehler" placeholder="Adresse" error="Ungültige Eingabe." />
         </Section>
 
-        {/* States */}
         <Section title="States">
           <View style={[styles.stateBox, styles.stateRow]}>
             <View style={styles.stateHalf}>

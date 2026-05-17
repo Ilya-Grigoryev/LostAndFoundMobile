@@ -15,9 +15,6 @@ interface CodeBoxesProps {
   onChange: (next: string) => void;
 }
 
-// Six geometric input boxes with a visual split after digit 3.
-// Auto-advances focus on entry; backspace on an empty cell jumps to the
-// previous one.
 export default function CodeBoxes({ value, onChange }: CodeBoxesProps) {
   const refs = useRef<Array<RNTextInput | null>>([]);
 

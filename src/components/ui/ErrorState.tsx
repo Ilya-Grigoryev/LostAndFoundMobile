@@ -14,7 +14,6 @@ export default function ErrorState({
 }: ErrorStateProps) {
   return (
     <View style={styles.container}>
-      {/* Bauhaus error mark: filled error square with white exclamation */}
       <View style={styles.iconBox}>
         <View style={styles.exclamationBar} />
         <View style={styles.exclamationDot} />
