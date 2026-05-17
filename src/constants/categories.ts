@@ -10,7 +10,6 @@ export interface CategoryMeta {
   id: CategoryId;
   labelKey: StringKey;
   iconName: MciIconName;
-  // Tile background tint pulled from the existing palette (no new tokens).
   tint: string;
 }
 

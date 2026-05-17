@@ -10,8 +10,6 @@ interface CategoryIconProps {
   size?: number;
 }
 
-// Real, recognizable icons from MaterialCommunityIcons. The Bauhaus look comes
-// from the tile / palette around the icon, not the icon itself.
 export default function CategoryIcon({
   id,
   color = colors.textPrimary,

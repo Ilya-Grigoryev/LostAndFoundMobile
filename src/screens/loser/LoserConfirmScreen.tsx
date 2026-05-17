@@ -54,8 +54,6 @@ export default function LoserConfirmScreen() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Guard against direct deep-link or stale state: if essentials are missing,
-  // surface a friendly error instead of rendering a half-broken page.
   if (!category || !location) {
     return (
       <View style={styles.root}>
@@ -81,8 +79,6 @@ export default function LoserConfirmScreen() {
     try {
       let effectiveOptIn = pushOptIn;
       if (pushOptIn) {
-        // Permission denial is non-fatal — the report still goes through,
-        // we only flip the opt-in flag so downstream matching knows the truth.
         try {
           const { status } = await Notifications.requestPermissionsAsync();
           effectiveOptIn = status === 'granted';
