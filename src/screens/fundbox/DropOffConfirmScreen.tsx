@@ -36,7 +36,7 @@ export default function DropOffConfirmScreen() {
     const code = generateVerificationCode();
     await saveCode(fundbox.id, code);
     runDropOffMatchingDemo(fundbox.id, language).catch(() => undefined);
-    nav.replace('DropOffSuccess', { fundboxId: fundbox.id });
+    nav.replace('DropOffSuccess', { fundboxId: fundbox.id, code });
   };
 
   return (
