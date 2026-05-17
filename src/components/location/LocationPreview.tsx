@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import MapView, { Circle, Marker, Polyline, PROVIDER_GOOGLE, Region } from 'react-native-maps';
+import MapView, { Circle, Marker, Polyline, Region } from 'react-native-maps';
 import { LatLng, LocationValue } from '../../types/loser';
 import { getBezirk } from '../../constants/viennaBezirke';
 import { colors, fontFamily, spacing, typography } from '../../theme';
@@ -34,7 +34,7 @@ export default function LocationPreview({ value }: LocationPreviewProps) {
     return (
       <View style={styles.mapWrap}>
         <MapView
-          provider={PROVIDER_GOOGLE}
+
           style={StyleSheet.absoluteFill}
           pointerEvents="none"
           initialRegion={{
@@ -63,7 +63,7 @@ export default function LocationPreview({ value }: LocationPreviewProps) {
     return (
       <View style={styles.mapWrap}>
         <MapView
-          provider={PROVIDER_GOOGLE}
+
           style={StyleSheet.absoluteFill}
           pointerEvents="none"
           initialRegion={regionFor(value.coords)}

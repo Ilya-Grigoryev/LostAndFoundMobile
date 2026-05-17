@@ -12,7 +12,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Button, ScreenHeader } from '../../components/ui';
 import { useFinderReport } from '../../contexts/FinderReportContext';
@@ -157,7 +157,7 @@ export default function FinderCameraGpsScreen() {
         <View style={styles.miniMapWrap}>
           {location ? (
             <MapView
-              provider={PROVIDER_GOOGLE}
+
               style={StyleSheet.absoluteFill}
               pointerEvents="none"
               region={{

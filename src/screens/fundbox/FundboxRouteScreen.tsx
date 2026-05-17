@@ -2,7 +2,7 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
-import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { Marker, Polyline } from 'react-native-maps';
 import { Button, ScreenHeader } from '../../components/ui';
 import FundboxMarkerView from '../../components/fundbox/FundboxMarkerView';
 import ProgressDots from '../../components/ui/ProgressDots';
@@ -67,7 +67,7 @@ export default function FundboxRouteScreen() {
 
       <View style={styles.mapWrap}>
         <MapView
-          provider={PROVIDER_GOOGLE}
+
           style={StyleSheet.absoluteFill}
           initialRegion={region}
         >
