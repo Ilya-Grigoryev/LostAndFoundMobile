@@ -2,7 +2,7 @@ import { NavigatorScreenParams } from '@react-navigation/native';
 
 export type RootStackParamList = {
   Onboarding: undefined;
-  Main: undefined;
+  Main: NavigatorScreenParams<MainStackParamList> | undefined;
 };
 
 export type OnboardingStackParamList = {
@@ -31,6 +31,15 @@ export type FundboxStackParamList = {
   Route: { fundboxId: string };
   DropOff: { fundboxId: string };
   DropOffSuccess: { fundboxId: string };
-  Claim: undefined;
+  Claim: { categoryLabel?: string; fundboxId?: string; droppedAtLabel?: string } | undefined;
+  MatchLocation:
+    | {
+        categoryLabel?: string;
+        placeLabel?: string;
+        addressLabel?: string;
+        latitude?: number;
+        longitude?: number;
+      }
+    | undefined;
   ClaimSuccess: undefined;
 };

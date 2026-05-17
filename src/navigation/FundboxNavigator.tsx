@@ -5,6 +5,7 @@ import DropOffConfirmScreen from '../screens/fundbox/DropOffConfirmScreen';
 import DropOffSuccessScreen from '../screens/fundbox/DropOffSuccessScreen';
 import FundboxMapScreen from '../screens/fundbox/FundboxMapScreen';
 import FundboxRouteScreen from '../screens/fundbox/FundboxRouteScreen';
+import MatchLocationScreen from '../screens/fundbox/MatchLocationScreen';
 import { FundboxStackParamList } from './types';
 
 const Stack = createNativeStackNavigator<FundboxStackParamList>();
@@ -17,6 +18,7 @@ export default function FundboxNavigator() {
       <Stack.Screen name="DropOff" component={DropOffConfirmScreen} />
       <Stack.Screen name="DropOffSuccess" component={DropOffSuccessScreen} />
       <Stack.Screen name="Claim" component={ClaimScreen} />
+      <Stack.Screen name="MatchLocation" component={MatchLocationScreen} />
       <Stack.Screen name="ClaimSuccess" component={ClaimSuccessScreen} />
     </Stack.Navigator>
   );

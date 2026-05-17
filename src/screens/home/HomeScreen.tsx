@@ -12,7 +12,9 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { colors, fontFamily, spacing, typography } from '../../theme';
 import { GeoCircle, GeoDotRow, GeoSquare } from '../../components/ui/Geo';
+import { useLocalization } from '../../contexts/LocalizationContext';
 import { MainStackParamList } from '../../navigation/types';
+import { runCityMatchingDemo } from '../../services/matchingService';
 
 type HomeNavProp = NativeStackNavigationProp<MainStackParamList, 'Home'>;
 
@@ -63,6 +65,11 @@ function ActionBlock({ symbol, heading, hint, bgColor, textColor, geoAccent, onP
 export default function HomeScreen() {
   const nav = useNavigation<HomeNavProp>();
   const insets = useSafeAreaInsets();
+  const { language, setLanguage, t } = useLocalization();
+
+  const switchHomeLanguage = () => {
+    setLanguage(language === 'de' ? 'en' : 'de').catch(() => undefined);
+  };
 
   return (
     <View style={styles.root}>
@@ -71,16 +78,21 @@ export default function HomeScreen() {
       <View style={[styles.header, { paddingTop: insets.top + spacing.xs }]}>
         <GeoDotRow size={8} gap={5} />
         <Text style={[typography.label, styles.appName]}>Wien Fundus</Text>
-        <View style={styles.langPill}>
-          <Text style={[typography.label, styles.langText]}>DE</Text>
-        </View>
+        <Pressable
+          onPress={switchHomeLanguage}
+          style={({ pressed }) => [styles.langPill, pressed && styles.langPillPressed]}
+          accessibilityRole="button"
+          accessibilityLabel="Switch language"
+        >
+          <Text style={[typography.label, styles.langText]}>{language.toUpperCase()}</Text>
+        </Pressable>
       </View>
 
       <View style={styles.blocks}>
         <ActionBlock
           symbol="?"
-          heading={"Ich habe etwas\nverloren."}
-          hint="Verlust melden — auch ohne genaue Adresse"
+          heading={t('home.lost.heading')}
+          hint={t('home.lost.hint')}
           bgColor={colors.loserPrimary}
           textColor={colors.textOnLoser}
           geoAccent={<GeoCircle size={60} color="rgba(255,255,255,0.16)" />}
@@ -91,8 +103,8 @@ export default function HomeScreen() {
 
         <ActionBlock
           symbol="!"
-          heading={"Ich habe etwas\ngefunden."}
-          hint="Fundort in unter 30 Sekunden markieren"
+          heading={t('home.found.heading')}
+          hint={t('home.found.hint')}
           bgColor={colors.finderPrimary}
           textColor={colors.textOnFinder}
           geoAccent={<GeoSquare size={48} color="rgba(20,19,15,0.10)" />}
@@ -118,6 +130,15 @@ export default function HomeScreen() {
             accessibilityLabel="Claim flow demo"
           >
             <Text style={[typography.label, styles.devEntryText]}>Dev · Claim</Text>
+          </Pressable>
+          <View style={styles.devDivider} />
+          <Pressable
+            onPress={() => runCityMatchingDemo(language).catch(() => undefined)}
+            style={({ pressed }) => [styles.devCell, pressed && { opacity: 0.5 }]}
+            accessibilityRole="button"
+            accessibilityLabel="City match demo"
+          >
+            <Text style={[typography.label, styles.devEntryText]}>Dev · City</Text>
           </Pressable>
         </View>
       )}
@@ -151,6 +172,9 @@ const styles = StyleSheet.create({
   },
   langText: {
     color: colors.textPrimary,
+  },
+  langPillPressed: {
+    backgroundColor: colors.accentLight,
   },
   blocks: {
     flex: 1,

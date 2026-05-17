@@ -23,7 +23,6 @@ export default function FundboxMapScreen() {
   const nearest = useMemo(() => findNearest(mockUserPosition), []);
   const [selectedId, setSelectedId] = useState<string>(nearest.id);
 
-  // Sort: recommended first, then by distance.
   const sortedBoxes = useMemo(() => {
     return [...fundboxes].sort((a, b) => {
       if (a.id === nearest.id) return -1;

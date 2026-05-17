@@ -1,7 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { colors, typography } from '../theme';
 
-// Stub — Arseniy replaces in feature/finder-flow
 export default function FinderNavigator() {
   return (
     <View style={styles.container}>

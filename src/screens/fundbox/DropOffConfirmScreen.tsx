@@ -17,7 +17,7 @@ type DropOffRouteProp = RouteProp<FundboxStackParamList, 'DropOff'>;
 export default function DropOffConfirmScreen() {
   const nav = useNavigation<Nav>();
   const { params } = useRoute<DropOffRouteProp>();
-  const { t } = useLocalization();
+  const { language, t } = useLocalization();
 
   const fundbox = getFundboxById(params.fundboxId);
   if (!fundbox) {
@@ -35,7 +35,7 @@ export default function DropOffConfirmScreen() {
     setSubmitting(true);
     const code = generateVerificationCode();
     await saveCode(fundbox.id, code);
-    runDropOffMatchingDemo(fundbox.id).catch(() => undefined);
+    runDropOffMatchingDemo(fundbox.id, language).catch(() => undefined);
     nav.replace('DropOffSuccess', { fundboxId: fundbox.id });
   };
 
