@@ -280,8 +280,9 @@ function openScreenFromMatchNotification(
     navigationRef.navigate('Main', {
       screen: 'Fundbox',
       params: {
-        screen: 'MatchLocation',
+        screen: 'PossibleMatch',
         params: {
+          matchPlace: 'city',
           categoryLabel: categoryLabelFromNotification,
           placeLabel: typeof data.placeLabel === 'string' ? data.placeLabel : undefined,
           addressLabel: typeof data.addressLabel === 'string' ? data.addressLabel : undefined,
@@ -296,8 +297,9 @@ function openScreenFromMatchNotification(
   navigationRef.navigate('Main', {
     screen: 'Fundbox',
     params: {
-      screen: 'Claim',
+      screen: 'PossibleMatch',
       params: {
+        matchPlace: 'fundbox',
         categoryLabel: categoryLabelFromNotification,
         fundboxId: typeof data.fundboxId === 'string' ? data.fundboxId : undefined,
         droppedAtLabel: data.language === 'en' ? 'Just now' : 'Gerade eben',
