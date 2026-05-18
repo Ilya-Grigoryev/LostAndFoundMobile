@@ -45,39 +45,21 @@ export default function ActivityDetailModal({ item, onClose }: ActivityDetailMod
 
   const matchIsOnMap = item.id === 'lost-backpack';
 
-  const openMapMatch = () => {
-    onClose();
-    nav.navigate('Fundbox', {
-      screen: 'MatchLocation',
-      params: {
-        categoryLabel: item.title,
-        placeLabel: 'U4 Station Schwedenplatz',
-        addressLabel: 'Bahnsteig Richtung Hütteldorf',
-        latitude: 48.21155,
-        longitude: 16.37815,
-      },
-    });
-  };
-
-  const openFundboxMatch = () => {
-    onClose();
-    nav.navigate('Fundbox', {
-      screen: 'Claim',
-      params: {
-        categoryLabel: item.title,
-        fundboxId: 'fb-stephansplatz',
-        droppedAtLabel: item.dateLabel,
-      },
-    });
-  };
-
   const openMatchPlace = () => {
-    if (matchIsOnMap) {
-      openMapMatch();
-      return;
-    }
-
-    openFundboxMatch();
+    onClose();
+    nav.navigate('Fundbox', {
+      screen: 'PossibleMatch',
+      params: {
+        matchPlace: matchIsOnMap ? 'city' : 'fundbox',
+        categoryLabel: item.title,
+        fundboxId: matchIsOnMap ? undefined : 'fb-stephansplatz',
+        droppedAtLabel: item.dateLabel,
+        placeLabel: matchIsOnMap ? 'U4 Station Schwedenplatz' : undefined,
+        addressLabel: matchIsOnMap ? 'Bahnsteig Richtung Huetteldorf' : undefined,
+        latitude: matchIsOnMap ? 48.21155 : undefined,
+        longitude: matchIsOnMap ? 16.37815 : undefined,
+      },
+    });
   };
 
   return (

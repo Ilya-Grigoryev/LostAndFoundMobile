@@ -39,6 +39,19 @@ export type FundboxStackParamList = {
   Route: { fundboxId: string };
   DropOff: { fundboxId: string };
   DropOffSuccess: { fundboxId: string; code: string };
+  PossibleMatch:
+    | {
+        categoryLabel?: string;
+        matchPlace?: 'city' | 'fundbox';
+        fundboxId?: string;
+        droppedAtLabel?: string;
+        placeLabel?: string;
+        addressLabel?: string;
+        latitude?: number;
+        longitude?: number;
+      }
+    | undefined;
+  MatchFundboxRoute: { fundboxId?: string; categoryLabel?: string } | undefined;
   Claim: { categoryLabel?: string; fundboxId?: string; droppedAtLabel?: string } | undefined;
   MatchLocation:
     | {

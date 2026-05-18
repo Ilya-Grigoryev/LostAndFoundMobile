@@ -1,0 +1,118 @@
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useMemo } from 'react';
+import { StyleSheet, View } from 'react-native';
+import MapView, { Marker, Polyline } from 'react-native-maps';
+import FundboxMarkerView from '../../components/fundbox/FundboxMarkerView';
+import RouteStat from '../../components/fundbox/RouteStat';
+import UserPositionMarker from '../../components/fundbox/UserPositionMarker';
+import { Button, ScreenHeader } from '../../components/ui';
+import { fundboxes, mockUserPosition } from '../../constants/fundboxes';
+import { useLocalization } from '../../contexts/LocalizationContext';
+import { FundboxStackParamList } from '../../navigation/types';
+import { distanceMeters, getFundboxById, walkingMinutes } from '../../services/fundboxService';
+import { colors, spacing } from '../../theme';
+
+type Nav = NativeStackNavigationProp<FundboxStackParamList, 'MatchFundboxRoute'>;
+type MatchFundboxRoute = RouteProp<FundboxStackParamList, 'MatchFundboxRoute'>;
+
+export default function MatchFundboxRouteScreen() {
+  const nav = useNavigation<Nav>();
+  const { params } = useRoute<MatchFundboxRoute>();
+  const { t } = useLocalization();
+
+  const fundbox = params?.fundboxId ? getFundboxById(params.fundboxId) ?? fundboxes[0] : fundboxes[0];
+  const meters = distanceMeters(mockUserPosition, fundbox);
+  const minutes = walkingMinutes(meters);
+
+  const coords = useMemo(
+    () => [
+      mockUserPosition,
+      { latitude: fundbox.latitude, longitude: fundbox.longitude },
+    ],
+    [fundbox.latitude, fundbox.longitude],
+  );
+
+  const region = useMemo(() => {
+    const midLat = (mockUserPosition.latitude + fundbox.latitude) / 2;
+    const midLng = (mockUserPosition.longitude + fundbox.longitude) / 2;
+    const latDelta = Math.abs(mockUserPosition.latitude - fundbox.latitude) * 2.2 + 0.01;
+    const lngDelta = Math.abs(mockUserPosition.longitude - fundbox.longitude) * 2.2 + 0.01;
+    return {
+      latitude: midLat,
+      longitude: midLng,
+      latitudeDelta: latDelta,
+      longitudeDelta: lngDelta,
+    };
+  }, [fundbox.latitude, fundbox.longitude]);
+
+  return (
+    <View style={styles.root}>
+      <ScreenHeader
+        title={params?.categoryLabel ?? t('fundbox.matchRoute.title')}
+        onBack={() => nav.goBack()}
+        accentColor={colors.loserPrimary}
+      />
+
+      <View style={styles.mapWrap}>
+        <MapView
+          style={StyleSheet.absoluteFill}
+          initialRegion={region}
+        >
+          <Polyline
+            coordinates={coords}
+            strokeColor={colors.loserPrimary}
+            strokeWidth={4}
+            lineDashPattern={[6, 4]}
+          />
+          <Marker coordinate={mockUserPosition} anchor={{ x: 0.5, y: 0.5 }} tracksViewChanges>
+            <UserPositionMarker />
+          </Marker>
+          <Marker
+            coordinate={{ latitude: fundbox.latitude, longitude: fundbox.longitude }}
+            anchor={{ x: 0.5, y: 0.5 }}
+            tracksViewChanges={false}
+          >
+            <FundboxMarkerView active />
+          </Marker>
+        </MapView>
+
+        <View pointerEvents="none" style={styles.statBar}>
+          <RouteStat distanceMeters={meters} minutes={minutes} destination={fundbox.district} />
+        </View>
+      </View>
+
+      <View style={styles.bottom}>
+        <Button
+          label={t('fundbox.matchRoute.pickedUpCta')}
+          color={colors.loserPrimary}
+          onPress={() => nav.replace('ClaimSuccess')}
+        />
+      </View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+    backgroundColor: colors.background,
+  },
+  mapWrap: {
+    flex: 1,
+  },
+  statBar: {
+    position: 'absolute',
+    top: spacing.md,
+    left: spacing.screenMargin,
+    right: spacing.screenMargin,
+  },
+  bottom: {
+    paddingHorizontal: spacing.screenMargin,
+    paddingTop: spacing.md,
+    paddingBottom: spacing.lg,
+    backgroundColor: colors.background,
+    borderTopWidth: 1.5,
+    borderTopColor: colors.border,
+  },
+});
