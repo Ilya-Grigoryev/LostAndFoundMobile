@@ -57,7 +57,7 @@ export default function ClaimSuccessScreen() {
       </View>
 
       <Animated.View style={[styles.heroBlock, { opacity: heroOpacity }]}>
-        <Text style={[typography.label, styles.eyebrow]}>Treffer</Text>
+        <Text style={[typography.label, styles.eyebrow]}>{t('fundbox.claim.successEyebrow')}</Text>
         <Text style={styles.hero}>{t('fundbox.claim.successHero')}</Text>
         <Text style={[typography.body, styles.hint]}>{t('fundbox.claim.successHint')}</Text>
       </Animated.View>
