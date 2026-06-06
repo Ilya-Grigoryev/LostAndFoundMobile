@@ -40,7 +40,7 @@ export type FundboxStackParamList = {
   Map: undefined;
   Route: { fundboxId: string };
   DropOff: { fundboxId: string };
-  DropOffSuccess: { fundboxId: string; code: string };
+  DropOffSuccess: { fundboxId: string; depositId: string };
   PossibleMatch:
     | {
         categoryLabel?: string;

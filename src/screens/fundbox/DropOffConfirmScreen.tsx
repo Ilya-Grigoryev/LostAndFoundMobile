@@ -6,7 +6,7 @@ import { Button, ScreenHeader } from '../../components/ui';
 import { GeoSquare } from '../../components/ui/Geo';
 import ProgressDots from '../../components/ui/ProgressDots';
 import { useLocalization } from '../../contexts/LocalizationContext';
-import { generateVerificationCode, getFundboxById, saveCode } from '../../services/fundboxService';
+import { generateDepositId, getFundboxById } from '../../services/fundboxService';
 import { runDropOffMatchingDemo } from '../../services/matchingService';
 import { FundboxStackParamList } from '../../navigation/types';
 import { colors, fontFamily, spacing, typography } from '../../theme';
@@ -30,13 +30,14 @@ export default function DropOffConfirmScreen() {
   const [submitting, setSubmitting] = useState(false);
   const bothChecked = itemChecked && closedChecked;
 
-  const confirm = async () => {
+  const confirm = () => {
     if (!bothChecked || submitting) return;
     setSubmitting(true);
-    const code = generateVerificationCode();
-    await saveCode(fundbox.id, code);
+    // The finder only receives a deposit reference; the pickup code is released to the
+    // owner later, after they verify ownership (ISSUE-13).
+    const depositId = generateDepositId();
     runDropOffMatchingDemo(fundbox.id, language).catch(() => undefined);
-    nav.replace('DropOffSuccess', { fundboxId: fundbox.id, code });
+    nav.replace('DropOffSuccess', { fundboxId: fundbox.id, depositId });
   };
 
   return (

@@ -1,7 +1,4 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Fundbox, fundboxes, mockUserPosition } from '../constants/fundboxes';
-
-const CODES_STORAGE_KEY = '@fundbox_codes';
 
 interface Coords {
   latitude: number;
@@ -46,26 +43,15 @@ export function walkingMinutes(meters: number): number {
   return Math.max(1, Math.round(meters / 83));
 }
 
-export function generateVerificationCode(): string {
+// Pickup code released by the system to the verified owner (never to the finder). See ISSUE-13.
+export function generatePickupCode(): string {
   let out = '';
   for (let i = 0; i < 6; i++) out += Math.floor(Math.random() * 10);
   return out;
 }
 
-interface SavedCode {
-  fundboxId: string;
-  code: string;
-  createdAt: number;
-}
-
-export async function saveCode(fundboxId: string, code: string): Promise<void> {
-  const raw = await AsyncStorage.getItem(CODES_STORAGE_KEY);
-  const list: SavedCode[] = raw ? JSON.parse(raw) : [];
-  list.push({ fundboxId, code, createdAt: Date.now() });
-  await AsyncStorage.setItem(CODES_STORAGE_KEY, JSON.stringify(list));
-}
-
-export async function getSavedCodes(): Promise<SavedCode[]> {
-  const raw = await AsyncStorage.getItem(CODES_STORAGE_KEY);
-  return raw ? JSON.parse(raw) : [];
+// Reference the finder receives when dropping an item off — confirms the deposit, not a pickup code.
+export function generateDepositId(): string {
+  const number = Math.floor(10000 + Math.random() * 90000);
+  return `FND-${number}`;
 }
