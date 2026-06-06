@@ -69,6 +69,7 @@ export default function ActivityHistoryScreen() {
       dateLabel: t('activity.lost.documents.date'),
       status: t('activity.lost.documents.status'),
       matchDescription: t('activity.lost.documents.matchDescription'),
+      categoryId: 'other',
     },
     {
       id: 'lost-backpack',
@@ -81,6 +82,7 @@ export default function ActivityHistoryScreen() {
       status: t('activity.lost.backpack.matchStatus'),
       matchDescription: t('activity.lost.backpack.matchDescription'),
       matchPhotoUri: 'https://picsum.photos/seed/lostfound-backpack/600/400',
+      categoryId: 'other',
     },
     {
       id: 'lost-scarf',
@@ -91,6 +93,7 @@ export default function ActivityHistoryScreen() {
       locationLabel: t('activity.lost.scarf.location'),
       dateLabel: t('activity.lost.scarf.date'),
       status: t('activity.lost.scarf.status'),
+      categoryId: 'other',
     },
     {
       id: 'lost-wallet',
@@ -117,6 +120,22 @@ export default function ActivityHistoryScreen() {
   const activeItems = activeTab === 'found' ? foundItems : lostItems;
   const accentColor =
     activeTab === 'found' ? colors.finderPrimary : colors.loserPrimary;
+
+  // A still-open lost report the user owns can be reopened pre-filled for editing (ISSUE-03).
+  const isEditable = (item: ActivityItem) =>
+    item.type === 'lost' &&
+    item.categoryId != null &&
+    item.statusKind !== 'found' &&
+    item.statusKind !== 'closed' &&
+    item.statusKind !== 'returned';
+
+  const startEdit = (item: ActivityItem) => {
+    setSelectedItem(null);
+    navigation.navigate('Loser', {
+      screen: 'Category',
+      params: { editId: item.id, categoryId: item.categoryId, description: item.title },
+    });
+  };
 
   return (
     <View style={styles.root}>
@@ -145,7 +164,12 @@ export default function ActivityHistoryScreen() {
         data={activeItems}
         keyExtractor={item => item.id}
         renderItem={({ item }) => (
-          <ActivityItemCard item={item} onPress={() => setSelectedItem(item)} />
+          <ActivityItemCard
+            item={item}
+            onPress={() => setSelectedItem(item)}
+            onEdit={isEditable(item) ? () => startEdit(item) : undefined}
+            editLabel={t('activity.edit.cardLabel')}
+          />
         )}
         contentContainerStyle={styles.listContent}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
@@ -155,6 +179,7 @@ export default function ActivityHistoryScreen() {
         <ActivityDetailModal
           item={selectedItem}
           onClose={() => setSelectedItem(null)}
+          onEdit={isEditable(selectedItem) ? () => startEdit(selectedItem) : undefined}
         />
       ) : null}
     </View>

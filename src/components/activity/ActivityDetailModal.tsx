@@ -12,6 +12,8 @@ type ActivityDetailNav = NativeStackNavigationProp<MainStackParamList, 'Activity
 type ActivityDetailModalProps = {
   item: ActivityItem;
   onClose: () => void;
+  // Set for the user's own still-open reports to reopen the form pre-filled (ISSUE-03).
+  onEdit?: () => void;
 };
 
 function isCompleted(item: ActivityItem) {
@@ -26,7 +28,7 @@ function isPossibleMatch(item: ActivityItem) {
   return item.statusKind === 'possibleMatch';
 }
 
-export default function ActivityDetailModal({ item, onClose }: ActivityDetailModalProps) {
+export default function ActivityDetailModal({ item, onClose, onEdit }: ActivityDetailModalProps) {
   const nav = useNavigation<ActivityDetailNav>();
   const { t } = useLocalization();
   const completed = isCompleted(item);
@@ -123,14 +125,25 @@ export default function ActivityDetailModal({ item, onClose }: ActivityDetailMod
             <DetailLine label={t('activity.detail.date')} value={item.dateLabel} />
           </View>
 
-          <Pressable
-            onPress={onClose}
-            style={({ pressed }) => [styles.closeButton, pressed && styles.pressed]}
-            accessibilityRole="button"
-            accessibilityLabel={t('activity.detail.close')}
-          >
-            <Text style={styles.closeText}>{t('activity.detail.close')}</Text>
-          </Pressable>
+          <View style={styles.footer}>
+            {onEdit ? (
+              <Button
+                label={t('activity.edit.action')}
+                variant="secondary"
+                color={colors.loserPrimary}
+                onPress={onEdit}
+              />
+            ) : null}
+
+            <Pressable
+              onPress={onClose}
+              style={({ pressed }) => [styles.closeButton, pressed && styles.pressed]}
+              accessibilityRole="button"
+              accessibilityLabel={t('activity.detail.close')}
+            >
+              <Text style={styles.closeText}>{t('activity.detail.close')}</Text>
+            </Pressable>
+          </View>
         </View>
       </View>
     </Modal>
@@ -246,6 +259,10 @@ const styles = StyleSheet.create({
     ...typography.bodyBold,
     color: colors.textPrimary,
   },
+  footer: {
+    marginTop: 'auto',
+    gap: spacing.sm,
+  },
   closeButton: {
     minHeight: 52,
     alignItems: 'center',
@@ -253,7 +270,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.accent,
     borderWidth: 1.5,
     borderColor: colors.accent,
-    marginTop: 'auto',
   },
   closeText: {
     ...typography.button,

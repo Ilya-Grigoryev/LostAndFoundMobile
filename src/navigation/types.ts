@@ -1,4 +1,5 @@
 import { NavigatorScreenParams } from '@react-navigation/native';
+import { CategoryId } from '../types/loser';
 
 export type RootStackParamList = {
   Onboarding: undefined;
@@ -26,7 +27,8 @@ export type FinderStackParamList = {
 };
 
 export type LoserStackParamList = {
-  Category: undefined;
+  // Optional prefill values when editing an existing report (ISSUE-03).
+  Category: { editId?: string; categoryId?: CategoryId; description?: string } | undefined;
   LocationMode: undefined;
   LocationMap: undefined;
   LocationAddress: undefined;
