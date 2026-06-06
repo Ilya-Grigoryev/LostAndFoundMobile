@@ -82,7 +82,7 @@ export default function ActivityDetailModal({
         <ScreenHeader
           title={t('activity.detail.title')}
           onBack={onClose}
-          accentColor={possibleMatch ? colors.finderPrimary : accentColor}
+          accentColor={accentColor}
         />
 
         <View style={styles.content}>
@@ -206,8 +206,8 @@ const styles = StyleSheet.create({
     minHeight: 150,
   },
   matchCard: {
-    backgroundColor: colors.finderLight,
-    borderColor: colors.finderPrimary,
+    backgroundColor: colors.loserLight,
+    borderColor: colors.loserPrimary,
   },
   completedCard: {
     backgroundColor: colors.borderSubtle,
@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
   },
   matchAccent: {
     width: 16,
-    backgroundColor: colors.finderPrimary,
+    backgroundColor: colors.loserPrimary,
   },
   heroContent: {
     flex: 1,
