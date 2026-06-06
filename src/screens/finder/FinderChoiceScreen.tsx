@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useRef, useState } from 'react';
-import { Animated, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Animated, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ScreenHeader } from '../../components/ui';
 import { GeoCircle, GeoSquare } from '../../components/ui/Geo';
@@ -23,9 +23,11 @@ interface ChoiceBlockProps {
   geoAccent: React.ReactNode;
   onPress: () => void;
   disabled?: boolean;
+  // Optional element rendered under the hint (e.g. the "What is a Fundbox?" link).
+  extra?: React.ReactNode;
 }
 
-function ChoiceBlock({ symbol, heading, hint, bgColor, textColor, geoAccent, onPress, disabled }: ChoiceBlockProps) {
+function ChoiceBlock({ symbol, heading, hint, bgColor, textColor, geoAccent, onPress, disabled, extra }: ChoiceBlockProps) {
   const scale = useRef(new Animated.Value(1)).current;
 
   const pressIn = () =>
@@ -49,6 +51,7 @@ function ChoiceBlock({ symbol, heading, hint, bgColor, textColor, geoAccent, onP
           <Text style={[styles.symbol, { color: textColor }]}>{symbol}</Text>
           <Text style={[typography.h2, styles.heading, { color: textColor }]}>{heading}</Text>
           <Text style={[typography.caption, { color: textColor, opacity: 0.72 }]}>{hint}</Text>
+          {extra}
         </View>
         <View style={[styles.arrowBox, { borderColor: textColor + '40' }]}>
           <Text style={[styles.arrowText, { color: textColor }]}>→</Text>
@@ -65,6 +68,8 @@ export default function FinderChoiceScreen() {
   const { photoUri, location, reset } = useFinderReport();
 
   const [saving, setSaving] = useState(false);
+  // First-time / non-local finders may not know what a Fundbox is (ISSUE-01).
+  const [showFundboxInfo, setShowFundboxInfo] = useState(false);
 
   const handleLeave = async () => {
     if (!photoUri || !location || saving) return;
@@ -113,8 +118,47 @@ export default function FinderChoiceScreen() {
           textColor={colors.textOnFinder}
           geoAccent={<GeoSquare size={44} color="rgba(20,19,15,0.10)" />}
           onPress={handleFundbox}
+          extra={
+            <Pressable
+              onPress={() => setShowFundboxInfo(true)}
+              hitSlop={8}
+              style={styles.infoLink}
+              accessibilityRole="button"
+              accessibilityLabel={t('finder.choice.whatIsFundbox')}
+            >
+              <Text style={[styles.infoLinkText, { color: colors.textOnFinder }]}>
+                {`ⓘ  ${t('finder.choice.whatIsFundbox')}`}
+              </Text>
+            </Pressable>
+          }
         />
       </View>
+
+      <Modal
+        visible={showFundboxInfo}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowFundboxInfo(false)}
+      >
+        <Pressable style={styles.infoBackdrop} onPress={() => setShowFundboxInfo(false)}>
+          <Pressable style={styles.infoCard} onPress={() => {}}>
+            <Text style={[typography.h3, styles.infoTitle]}>
+              {t('finder.choice.fundboxInfoTitle')}
+            </Text>
+            <Text style={[typography.body, styles.infoBody]}>
+              {t('finder.choice.fundboxInfoBody')}
+            </Text>
+            <Pressable
+              style={styles.infoClose}
+              onPress={() => setShowFundboxInfo(false)}
+              accessibilityRole="button"
+              accessibilityLabel={t('finder.choice.fundboxInfoClose')}
+            >
+              <Text style={styles.infoCloseText}>{t('finder.choice.fundboxInfoClose')}</Text>
+            </Pressable>
+          </Pressable>
+        </Pressable>
+      </Modal>
     </View>
   );
 }
@@ -155,4 +199,41 @@ const styles = StyleSheet.create({
   },
   arrowText: { fontFamily: fontFamily.body, fontSize: 20 },
   divider: { height: 1.5, backgroundColor: colors.border },
+  infoLink: {
+    marginTop: spacing.sm,
+    alignSelf: 'flex-start',
+    borderBottomWidth: 1,
+    borderBottomColor: colors.textOnFinder + '55',
+  },
+  infoLinkText: {
+    fontFamily: fontFamily.bodyBold,
+    fontSize: 13,
+  },
+  infoBackdrop: {
+    flex: 1,
+    backgroundColor: colors.overlay,
+    justifyContent: 'center',
+    padding: spacing.screenMargin,
+  },
+  infoCard: {
+    backgroundColor: colors.surface,
+    borderWidth: 1.5,
+    borderColor: colors.border,
+    padding: spacing.lg,
+    gap: spacing.md,
+  },
+  infoTitle: { color: colors.textPrimary },
+  infoBody: { color: colors.textSecondary },
+  infoClose: {
+    minHeight: 52,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.finderPrimary,
+    borderWidth: 1.5,
+    borderColor: colors.border,
+  },
+  infoCloseText: {
+    ...typography.button,
+    color: colors.textOnFinder,
+  },
 });
