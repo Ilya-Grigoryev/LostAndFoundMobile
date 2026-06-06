@@ -14,6 +14,9 @@ type ActivityDetailModalProps = {
   onClose: () => void;
   // Set for the user's own still-open reports to reopen the form pre-filled (ISSUE-03).
   onEdit?: () => void;
+  // Resolve/delete actions for the user's own history entries (ISSUE-05).
+  onResolve?: () => void;
+  onDelete?: () => void;
 };
 
 function isCompleted(item: ActivityItem) {
@@ -28,7 +31,13 @@ function isPossibleMatch(item: ActivityItem) {
   return item.statusKind === 'possibleMatch';
 }
 
-export default function ActivityDetailModal({ item, onClose, onEdit }: ActivityDetailModalProps) {
+export default function ActivityDetailModal({
+  item,
+  onClose,
+  onEdit,
+  onResolve,
+  onDelete,
+}: ActivityDetailModalProps) {
   const nav = useNavigation<ActivityDetailNav>();
   const { t } = useLocalization();
   const completed = isCompleted(item);
@@ -132,6 +141,26 @@ export default function ActivityDetailModal({ item, onClose, onEdit }: ActivityD
                 variant="secondary"
                 color={colors.loserPrimary}
                 onPress={onEdit}
+              />
+            ) : null}
+
+            {onResolve ? (
+              <Button
+                label={t('activity.action.resolve')}
+                variant="secondary"
+                color={colors.success}
+                withArrow={false}
+                onPress={onResolve}
+              />
+            ) : null}
+
+            {onDelete ? (
+              <Button
+                label={t('activity.action.delete')}
+                variant="secondary"
+                color={colors.error}
+                withArrow={false}
+                onPress={onDelete}
               />
             ) : null}
 
