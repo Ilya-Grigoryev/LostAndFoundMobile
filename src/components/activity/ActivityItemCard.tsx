@@ -20,6 +20,9 @@ export type ActivityItem = {
   locationLabel: string;
   dateLabel: string;
   status: string;
+  // For possible-match items: details of the found item, shown before claiming (ISSUE-02).
+  matchDescription?: string;
+  matchPhotoUri?: string;
 };
 
 type ActivityItemCardProps = {

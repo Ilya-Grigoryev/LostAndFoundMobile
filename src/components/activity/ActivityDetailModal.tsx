@@ -52,6 +52,9 @@ export default function ActivityDetailModal({ item, onClose }: ActivityDetailMod
       params: {
         matchPlace: matchIsOnMap ? 'city' : 'fundbox',
         categoryLabel: item.title,
+        // Found-item details the owner needs to recognise the item before claiming (ISSUE-02).
+        description: item.matchDescription,
+        photoUri: item.matchPhotoUri,
         fundboxId: matchIsOnMap ? undefined : 'fb-stephansplatz',
         droppedAtLabel: item.dateLabel,
         placeLabel: matchIsOnMap ? 'U4 Station Schwedenplatz' : undefined,

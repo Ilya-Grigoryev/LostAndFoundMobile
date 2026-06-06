@@ -42,6 +42,8 @@ export type FundboxStackParamList = {
   PossibleMatch:
     | {
         categoryLabel?: string;
+        description?: string;
+        photoUri?: string;
         matchPlace?: 'city' | 'fundbox';
         fundboxId?: string;
         droppedAtLabel?: string;

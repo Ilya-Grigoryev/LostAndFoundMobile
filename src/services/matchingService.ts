@@ -249,6 +249,7 @@ async function sendMatchNotificationForDemo(match: MatchReport, language: Langua
       data: {
         matchPlace: match.place,
         categoryLabel: categoryLabelForMessage,
+        description: match.description ?? '',
         language,
         fundboxId: match.fundboxId ?? '',
         placeLabel: match.placeLabel ?? '',
@@ -275,6 +276,8 @@ function openScreenFromMatchNotification(
 
   const routePlaceFromNotification = data.matchPlace === 'city' ? 'city' : 'fundbox';
   const categoryLabelFromNotification = typeof data.categoryLabel === 'string' ? data.categoryLabel : undefined;
+  const descriptionFromNotification =
+    typeof data.description === 'string' && data.description.length > 0 ? data.description : undefined;
 
   if (routePlaceFromNotification === 'city') {
     navigationRef.navigate('Main', {
@@ -284,6 +287,7 @@ function openScreenFromMatchNotification(
         params: {
           matchPlace: 'city',
           categoryLabel: categoryLabelFromNotification,
+          description: descriptionFromNotification,
           placeLabel: typeof data.placeLabel === 'string' ? data.placeLabel : undefined,
           addressLabel: typeof data.addressLabel === 'string' ? data.addressLabel : undefined,
           latitude: typeof data.latitude === 'number' ? data.latitude : undefined,
@@ -301,6 +305,7 @@ function openScreenFromMatchNotification(
       params: {
         matchPlace: 'fundbox',
         categoryLabel: categoryLabelFromNotification,
+        description: descriptionFromNotification,
         fundboxId: typeof data.fundboxId === 'string' ? data.fundboxId : undefined,
         droppedAtLabel: data.language === 'en' ? 'Just now' : 'Gerade eben',
       },
