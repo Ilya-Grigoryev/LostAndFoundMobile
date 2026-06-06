@@ -68,6 +68,7 @@ export default function ActivityHistoryScreen() {
       locationLabel: t('activity.lost.documents.location'),
       dateLabel: t('activity.lost.documents.date'),
       status: t('activity.lost.documents.status'),
+      matchDescription: t('activity.lost.documents.matchDescription'),
     },
     {
       id: 'lost-backpack',
@@ -78,6 +79,8 @@ export default function ActivityHistoryScreen() {
       locationLabel: t('activity.lost.backpack.location'),
       dateLabel: t('activity.lost.backpack.date'),
       status: t('activity.lost.backpack.matchStatus'),
+      matchDescription: t('activity.lost.backpack.matchDescription'),
+      matchPhotoUri: 'https://picsum.photos/seed/lostfound-backpack/600/400',
     },
     {
       id: 'lost-scarf',

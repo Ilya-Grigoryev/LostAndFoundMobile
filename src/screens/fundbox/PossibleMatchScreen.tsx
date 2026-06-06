@@ -1,6 +1,6 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { StyleSheet, Text, View } from 'react-native';
+import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Button, ScreenHeader } from '../../components/ui';
 import { GeoSquare } from '../../components/ui/Geo';
 import { fundboxes } from '../../constants/fundboxes';
@@ -19,6 +19,8 @@ export default function PossibleMatchScreen() {
 
   const matchPlace = params?.matchPlace ?? 'fundbox';
   const categoryLabel = params?.categoryLabel ?? t('matching.itemFallback');
+  const photoUri = params?.photoUri;
+  const description = params?.description;
   const fundbox = params?.fundboxId ? getFundboxById(params.fundboxId) ?? fundboxes[0] : fundboxes[0];
   const placeLabel =
     matchPlace === 'city'
@@ -59,19 +61,37 @@ export default function PossibleMatchScreen() {
         accentColor={colors.finderPrimary}
       />
 
-      <View style={styles.body}>
+      <ScrollView contentContainerStyle={styles.body}>
+        {/* Real finder photo when available, otherwise a clearly labelled placeholder. */}
+        <View style={styles.photo}>
+          {photoUri ? (
+            <>
+              <Image source={{ uri: photoUri }} style={styles.photoImage} resizeMode="cover" />
+              <Text style={[typography.label, styles.photoCaption]}>
+                {t('possibleMatch.photoCaption')}
+              </Text>
+            </>
+          ) : (
+            <View style={styles.photoPlaceholder}>
+              <GeoSquare size={42} color={colors.finderPrimary} />
+              <Text style={[typography.caption, styles.photoMissing]}>
+                {t('possibleMatch.photoMissing')}
+              </Text>
+            </View>
+          )}
+        </View>
+
         <View style={styles.card}>
-          <View style={styles.photo}>
-            <GeoSquare size={42} color={colors.finderPrimary} />
-          </View>
-          <View style={styles.info}>
-            <Text style={[typography.label, styles.eyebrow]}>{t('possibleMatch.eyebrow')}</Text>
-            <Text style={[typography.h2, styles.title]}>{categoryLabel}</Text>
-            <Text style={[typography.body, styles.bodyText]}>{t('possibleMatch.body')}</Text>
-          </View>
+          <Text style={[typography.label, styles.eyebrow]}>{t('possibleMatch.eyebrow')}</Text>
+          <Text style={[typography.h2, styles.title]}>{categoryLabel}</Text>
+          <Text style={[typography.body, styles.bodyText]}>{t('possibleMatch.body')}</Text>
         </View>
 
         <View style={styles.detailBox}>
+          <DetailLine
+            label={t('possibleMatch.description')}
+            value={description || t('possibleMatch.descriptionFallback')}
+          />
           <DetailLine label={t('possibleMatch.place')} value={placeLabel} />
           {addressLabel ? (
             <DetailLine label={t('possibleMatch.address')} value={addressLabel} />
@@ -80,7 +100,7 @@ export default function PossibleMatchScreen() {
             <DetailLine label={t('possibleMatch.foundAt')} value={params.droppedAtLabel} />
           ) : null}
         </View>
-      </View>
+      </ScrollView>
 
       <View style={styles.bottom}>
         <Button
@@ -114,30 +134,40 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
   },
   body: {
-    flex: 1,
     padding: spacing.screenMargin,
     gap: spacing.md,
   },
   card: {
-    flexDirection: 'row',
     backgroundColor: colors.finderLight,
     borderWidth: 1.5,
     borderColor: colors.finderPrimary,
     padding: spacing.md,
-    gap: spacing.md,
+    gap: spacing.xs,
   },
   photo: {
-    width: 96,
-    height: 96,
     backgroundColor: colors.surface,
     borderWidth: 1.5,
     borderColor: colors.border,
+  },
+  photoImage: {
+    width: '100%',
+    height: 220,
+  },
+  photoPlaceholder: {
+    height: 220,
     alignItems: 'center',
     justifyContent: 'center',
+    gap: spacing.sm,
   },
-  info: {
-    flex: 1,
-    gap: spacing.xs,
+  photoMissing: {
+    color: colors.textSecondary,
+  },
+  photoCaption: {
+    color: colors.textSecondary,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+    borderTopWidth: 1.5,
+    borderTopColor: colors.borderSubtle,
   },
   eyebrow: {
     color: colors.finderPressed,
