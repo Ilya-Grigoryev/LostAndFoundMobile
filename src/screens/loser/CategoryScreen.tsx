@@ -40,8 +40,8 @@ export default function CategoryScreen() {
 
   const otherSelected = selected === 'other';
   const trimmedDescription = description.trim();
-  const canContinue =
-    selected !== null && (!otherSelected || trimmedDescription.length > 0);
+  // A description is required for every category so matches are reliable, not just "Other" (ISSUE-08).
+  const canContinue = selected !== null && trimmedDescription.length > 0;
 
   const handlePick = (id: CategoryId) => {
     setSelected(id);
@@ -90,12 +90,8 @@ export default function CategoryScreen() {
         <DescriptionField
           ref={descriptionRef}
           label={t('loser.description.eyebrow').toUpperCase()}
-          meta={
-            otherSelected
-              ? t('loser.description.required')
-              : t('loser.description.optional')
-          }
-          emphasizeMeta={otherSelected}
+          meta={t('loser.description.required')}
+          emphasizeMeta={trimmedDescription.length === 0}
           placeholder={t('loser.description.placeholder')}
           value={description}
           onChangeText={setDescription}
