@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { useLocalization } from '../../contexts/LocalizationContext';
 import { colors, fontFamily, typography } from '../../theme';
 
 interface RouteStatProps {
@@ -9,6 +10,7 @@ interface RouteStatProps {
 }
 
 export default function RouteStat({ distanceMeters, minutes, destination }: RouteStatProps) {
+  const { t } = useLocalization();
   const distance =
     distanceMeters < 1000
       ? `${Math.round(distanceMeters)}`
@@ -21,16 +23,26 @@ export default function RouteStat({ distanceMeters, minutes, destination }: Rout
       <View style={styles.divider} />
       <Cell value={`${minutes}`} unit="min" />
       <View style={styles.divider} />
-      <Cell label={destination} />
+      <Cell label={destination} destinationLabel={t('fundbox.route.destination')} />
     </View>
   );
 }
 
-function Cell({ value, unit, label }: { value?: string; unit?: string; label?: string }) {
+function Cell({
+  value,
+  unit,
+  label,
+  destinationLabel,
+}: {
+  value?: string;
+  unit?: string;
+  label?: string;
+  destinationLabel?: string;
+}) {
   if (label) {
     return (
       <View style={[styles.cell, styles.cellLabelOnly]}>
-        <Text style={[typography.label, styles.unit]}>Ziel</Text>
+        <Text style={[typography.label, styles.unit]}>{destinationLabel}</Text>
         <Text style={styles.destination} numberOfLines={2}>
           {label}
         </Text>
