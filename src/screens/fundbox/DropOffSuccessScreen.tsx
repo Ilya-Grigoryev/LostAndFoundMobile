@@ -19,7 +19,7 @@ export default function DropOffSuccessScreen() {
   const { t } = useLocalization();
   const { params } = useRoute<SuccessRouteProp>();
   const fundbox = getFundboxById(params.fundboxId);
-  const code = params.code;
+  const depositId = params.depositId;
 
   const circleScale = useRef(new Animated.Value(0.4)).current;
   const heroOpacity = useRef(new Animated.Value(0)).current;
@@ -76,14 +76,12 @@ export default function DropOffSuccessScreen() {
         )}
 
         <Text style={[typography.label, styles.codeLabel]}>
-          {t('fundbox.success.codeLabel')}
+          {t('fundbox.success.depositLabel')}
         </Text>
-        <Text style={styles.codeText}>
-          {code.slice(0, 3)} – {code.slice(3)}
-        </Text>
+        <Text style={styles.codeText}>{depositId}</Text>
 
         <Text style={[typography.caption, styles.codeHint]}>
-          {t('fundbox.success.codeHint')}
+          {t('fundbox.success.depositHint')}
         </Text>
       </Animated.View>
 

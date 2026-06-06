@@ -1,7 +1,7 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useMemo } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import FundboxMarkerView from '../../components/fundbox/FundboxMarkerView';
 import RouteStat from '../../components/fundbox/RouteStat';
@@ -10,8 +10,13 @@ import { Button, ScreenHeader } from '../../components/ui';
 import { fundboxes, mockUserPosition } from '../../constants/fundboxes';
 import { useLocalization } from '../../contexts/LocalizationContext';
 import { FundboxStackParamList } from '../../navigation/types';
-import { distanceMeters, getFundboxById, walkingMinutes } from '../../services/fundboxService';
-import { colors, spacing } from '../../theme';
+import {
+  distanceMeters,
+  generatePickupCode,
+  getFundboxById,
+  walkingMinutes,
+} from '../../services/fundboxService';
+import { colors, fontFamily, spacing, typography } from '../../theme';
 
 type Nav = NativeStackNavigationProp<FundboxStackParamList, 'MatchFundboxRoute'>;
 type MatchFundboxRoute = RouteProp<FundboxStackParamList, 'MatchFundboxRoute'>;
@@ -24,6 +29,17 @@ export default function MatchFundboxRouteScreen() {
   const fundbox = params?.fundboxId ? getFundboxById(params.fundboxId) ?? fundboxes[0] : fundboxes[0];
   const meters = distanceMeters(mockUserPosition, fundbox);
   const minutes = walkingMinutes(meters);
+
+  // Ownership was verified on the match screen, so the system releases the pickup code to the
+  // owner here — the finder never sees it and the compartment stays hidden until entry (ISSUE-13).
+  const pickupCode = useMemo(() => generatePickupCode(), []);
+  const validUntil = useMemo(() => {
+    const due = new Date();
+    due.setDate(due.getDate() + 2);
+    due.setHours(18, 0, 0, 0);
+    const pad = (value: number) => String(value).padStart(2, '0');
+    return `${pad(due.getDate())}.${pad(due.getMonth() + 1)}.${due.getFullYear()} ${pad(due.getHours())}:${pad(due.getMinutes())}`;
+  }, []);
 
   const coords = useMemo(
     () => [
@@ -83,6 +99,24 @@ export default function MatchFundboxRouteScreen() {
       </View>
 
       <View style={styles.bottom}>
+        <View style={styles.codePanel}>
+          <Text style={[typography.label, styles.codeEyebrow]}>
+            {t('fundbox.matchRoute.codeEyebrow')}
+          </Text>
+          <Text style={[typography.label, styles.codeLabel]}>
+            {t('fundbox.matchRoute.codeLabel')}
+          </Text>
+          <Text style={styles.codeValue}>
+            {pickupCode.slice(0, 3)} – {pickupCode.slice(3)}
+          </Text>
+          <Text style={[typography.caption, styles.codeMeta]}>
+            {t('fundbox.matchRoute.codeValid')} {validUntil} · {fundbox.name.split(' · ')[0]}
+          </Text>
+          <Text style={[typography.caption, styles.codeNote]}>
+            {t('fundbox.matchRoute.codeNote')}
+          </Text>
+        </View>
+
         <Button
           label={t('fundbox.matchRoute.pickedUpCta')}
           color={colors.loserPrimary}
@@ -111,8 +145,38 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.screenMargin,
     paddingTop: spacing.md,
     paddingBottom: spacing.lg,
+    gap: spacing.md,
     backgroundColor: colors.background,
     borderTopWidth: 1.5,
     borderTopColor: colors.border,
+  },
+  codePanel: {
+    backgroundColor: colors.loserLight,
+    borderWidth: 1.5,
+    borderColor: colors.loserPrimary,
+    padding: spacing.md,
+    gap: spacing.xs,
+  },
+  codeEyebrow: {
+    color: colors.loserPressed,
+    letterSpacing: 2.4,
+  },
+  codeLabel: {
+    color: colors.textSecondary,
+    marginTop: spacing.xs,
+  },
+  codeValue: {
+    fontFamily: fontFamily.display,
+    fontSize: 40,
+    lineHeight: 44,
+    letterSpacing: 1,
+    color: colors.textPrimary,
+  },
+  codeMeta: {
+    color: colors.textSecondary,
+  },
+  codeNote: {
+    color: colors.textSecondary,
+    marginTop: spacing.xs,
   },
 });
