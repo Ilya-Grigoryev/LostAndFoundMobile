@@ -100,6 +100,13 @@ export default function PossibleMatchScreen() {
             <DetailLine label={t('possibleMatch.foundAt')} value={params.droppedAtLabel} />
           ) : null}
         </View>
+
+        {/* Set expectations for the pickup-code step that follows for Fundbox matches (ISSUE-04). */}
+        {matchPlace === 'fundbox' ? (
+          <Text style={[typography.caption, styles.nextStep]}>
+            {t('possibleMatch.nextStepFundbox')}
+          </Text>
+        ) : null}
       </ScrollView>
 
       <View style={styles.bottom}>
@@ -182,6 +189,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     borderWidth: 1.5,
     borderColor: colors.border,
+  },
+  nextStep: {
+    color: colors.textSecondary,
   },
   detailLine: {
     padding: spacing.md,

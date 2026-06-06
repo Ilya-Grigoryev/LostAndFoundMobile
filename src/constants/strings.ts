@@ -34,6 +34,8 @@ export const strings = {
     'possibleMatch.photoMissing': 'No photo provided',
     'possibleMatch.confirmCta': 'This is my item',
     'possibleMatch.rejectCta': 'Not my item',
+    'possibleMatch.nextStepFundbox':
+      'If it is yours, we release a one-time pickup code for the Fundbox on the next screen — the finder never sees it.',
     'fundbox.map.title': 'Nearest Fundbox',
     'fundbox.map.recommended': 'Recommended',
     'fundbox.map.routeCta': 'Show route',
@@ -265,6 +267,8 @@ export const strings = {
     'possibleMatch.photoMissing': 'Kein Foto vorhanden',
     'possibleMatch.confirmCta': 'Das ist mein Gegenstand',
     'possibleMatch.rejectCta': 'Nicht mein Gegenstand',
+    'possibleMatch.nextStepFundbox':
+      'Wenn er dir gehört, geben wir auf dem nächsten Bildschirm einen einmaligen Abholcode für die Fundbox frei — der Finder sieht ihn nie.',
     'fundbox.map.title': 'Nächste Fundbox',
     'fundbox.map.recommended': 'Empfohlen',
     'fundbox.map.routeCta': 'Route anzeigen',
