@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Alert, FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
 import ActivityDetailModal from '../../components/activity/ActivityDetailModal';
@@ -23,6 +23,9 @@ export default function ActivityHistoryScreen() {
   const navigation = useNavigation<ActivityHistoryNav>();
   const [activeTab, setActiveTab] = useState<ActivityTab>('found');
   const [selectedItem, setSelectedItem] = useState<ActivityItem | null>(null);
+  // User actions overlaid on the demo data: hidden (deleted) and resolved entries (ISSUE-05).
+  const [deletedIds, setDeletedIds] = useState<string[]>([]);
+  const [resolvedIds, setResolvedIds] = useState<string[]>([]);
   const { t } = useLocalization();
 
   const foundItems: ActivityItem[] = [
@@ -117,17 +120,52 @@ export default function ActivityHistoryScreen() {
     },
   ];
 
-  const activeItems = activeTab === 'found' ? foundItems : lostItems;
+  const baseItems = activeTab === 'found' ? foundItems : lostItems;
+  // Apply the user's delete/resolve actions over the demo data (ISSUE-05).
+  const activeItems = baseItems
+    .filter(item => !deletedIds.includes(item.id))
+    .map(item =>
+      resolvedIds.includes(item.id)
+        ? { ...item, statusKind: 'returned' as const, status: t('activity.status.resolved') }
+        : item,
+    );
   const accentColor =
     activeTab === 'found' ? colors.finderPrimary : colors.loserPrimary;
 
+  const isCompletedStatus = (item: ActivityItem) =>
+    item.statusKind === 'found' ||
+    item.statusKind === 'closed' ||
+    item.statusKind === 'returned';
+
   // A still-open lost report the user owns can be reopened pre-filled for editing (ISSUE-03).
   const isEditable = (item: ActivityItem) =>
-    item.type === 'lost' &&
-    item.categoryId != null &&
-    item.statusKind !== 'found' &&
-    item.statusKind !== 'closed' &&
-    item.statusKind !== 'returned';
+    item.type === 'lost' && item.categoryId != null && !isCompletedStatus(item);
+
+  // Only entries that are not already finished can be marked resolved (ISSUE-05).
+  const isResolvable = (item: ActivityItem) => !isCompletedStatus(item);
+
+  const resolveItem = (item: ActivityItem) => {
+    setResolvedIds(prev => (prev.includes(item.id) ? prev : [...prev, item.id]));
+    setSelectedItem(null);
+  };
+
+  const deleteItem = (item: ActivityItem) => {
+    Alert.alert(
+      t('activity.action.deleteConfirmTitle'),
+      t('activity.action.deleteConfirmBody'),
+      [
+        { text: t('activity.action.deleteConfirmCancel'), style: 'cancel' },
+        {
+          text: t('activity.action.deleteConfirmOk'),
+          style: 'destructive',
+          onPress: () => {
+            setDeletedIds(prev => [...prev, item.id]);
+            setSelectedItem(null);
+          },
+        },
+      ],
+    );
+  };
 
   const startEdit = (item: ActivityItem) => {
     setSelectedItem(null);
@@ -180,6 +218,8 @@ export default function ActivityHistoryScreen() {
           item={selectedItem}
           onClose={() => setSelectedItem(null)}
           onEdit={isEditable(selectedItem) ? () => startEdit(selectedItem) : undefined}
+          onResolve={isResolvable(selectedItem) ? () => resolveItem(selectedItem) : undefined}
+          onDelete={() => deleteItem(selectedItem)}
         />
       ) : null}
     </View>
