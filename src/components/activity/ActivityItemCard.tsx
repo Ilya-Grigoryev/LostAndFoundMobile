@@ -39,10 +39,12 @@ type ActivityItemCardProps = {
 
 function getStatusColors(statusKind: ActivityStatusKind) {
   if (statusKind === 'possibleMatch') {
+    // A possible match concerns the user's lost item, so it stays in the loser colour
+    // family rather than the finder/Fundbox yellow used elsewhere (ISSUE-06).
     return {
-      borderColor: colors.finderPrimary,
-      backgroundColor: colors.finderPrimary,
-      textColor: colors.textOnFinder,
+      borderColor: colors.loserPrimary,
+      backgroundColor: colors.loserPrimary,
+      textColor: colors.textOnLoser,
     };
   }
 
@@ -170,8 +172,8 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   highlightedCard: {
-    backgroundColor: colors.finderLight,
-    borderColor: colors.finderPrimary,
+    backgroundColor: colors.loserLight,
+    borderColor: colors.loserPrimary,
   },
   completedCard: {
     backgroundColor: colors.borderSubtle,
