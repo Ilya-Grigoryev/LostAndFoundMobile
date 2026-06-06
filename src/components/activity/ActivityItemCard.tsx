@@ -1,5 +1,7 @@
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { Card } from '../ui';
+import { CategoryId } from '../../types/loser';
 import { colors, spacing, typography } from '../../theme';
 
 export type ActivityStatusKind =
@@ -23,11 +25,16 @@ export type ActivityItem = {
   // For possible-match items: details of the found item, shown before claiming (ISSUE-02).
   matchDescription?: string;
   matchPhotoUri?: string;
+  // For the user's own reports: lets the report form be reopened pre-filled (ISSUE-03).
+  categoryId?: CategoryId;
 };
 
 type ActivityItemCardProps = {
   item: ActivityItem;
   onPress?: () => void;
+  // When set, a pencil button is shown so the report can be reopened for editing (ISSUE-03).
+  onEdit?: () => void;
+  editLabel?: string;
 };
 
 function getStatusColors(statusKind: ActivityStatusKind) {
@@ -70,7 +77,7 @@ function getStatusColors(statusKind: ActivityStatusKind) {
   };
 }
 
-export default function ActivityItemCard({ item, onPress }: ActivityItemCardProps) {
+export default function ActivityItemCard({ item, onPress, onEdit, editLabel }: ActivityItemCardProps) {
   const accentColor =
     item.type === 'found' ? colors.finderPrimary : colors.loserPrimary;
   const statusColors = getStatusColors(item.statusKind);
@@ -136,6 +143,18 @@ export default function ActivityItemCard({ item, onPress }: ActivityItemCardProp
             {item.dateLabel}
           </Text>
         </View>
+
+        {onEdit ? (
+          <Pressable
+            onPress={onEdit}
+            hitSlop={10}
+            style={styles.editButton}
+            accessibilityRole="button"
+            accessibilityLabel={editLabel}
+          >
+            <MaterialCommunityIcons name="pencil" size={18} color={colors.loserPrimary} />
+          </Pressable>
+        ) : null}
       </Card>
     </Pressable>
   );
@@ -200,5 +219,17 @@ const styles = StyleSheet.create({
   },
   mutedText: {
     color: colors.disabled,
+  },
+  editButton: {
+    position: 'absolute',
+    right: spacing.sm,
+    bottom: spacing.sm,
+    width: 36,
+    height: 36,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1.5,
+    borderColor: colors.loserPrimary,
+    backgroundColor: colors.surface,
   },
 });

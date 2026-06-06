@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useRef, useState } from 'react';
 import {
@@ -21,14 +21,20 @@ import { CategoryId } from '../../types/loser';
 import { colors, fontFamily, spacing, typography } from '../../theme';
 
 type Nav = NativeStackNavigationProp<LoserStackParamList, 'Category'>;
+type CategoryRoute = RouteProp<LoserStackParamList, 'Category'>;
 
 export default function CategoryScreen() {
   const nav = useNavigation<Nav>();
+  const { params } = useRoute<CategoryRoute>();
   const { t } = useLocalization();
   const { category, description: ctxDescription, setCategory } = useLoserReport();
 
-  const [selected, setSelected] = useState<CategoryId | null>(category);
-  const [description, setDescription] = useState<string>(ctxDescription ?? '');
+  // When editing an existing report, prefill from the navigation params (ISSUE-03).
+  const isEditing = params?.editId != null;
+  const [selected, setSelected] = useState<CategoryId | null>(params?.categoryId ?? category);
+  const [description, setDescription] = useState<string>(
+    params?.description ?? ctxDescription ?? '',
+  );
   const descriptionRef = useRef<RNTextInput>(null);
   const scrollRef = useRef<ScrollView>(null);
 
@@ -62,7 +68,7 @@ export default function CategoryScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <ScreenHeader
-        title={t('loser.flow.title')}
+        title={isEditing ? t('loser.flow.editTitle') : t('loser.flow.title')}
         onBack={() => nav.getParent()?.goBack()}
         accentColor={colors.loserPrimary}
         rightAction={<ProgressDots total={4} current={1} activeColor={colors.loserPrimary} />}
