@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, StyleSheet, Text, View } from 'react-native';
 import { Button, TextInput } from '../../components/ui';
 import { useLocalization } from '../../contexts/LocalizationContext';
 import { colors, spacing, typography } from '../../theme';
@@ -58,7 +58,10 @@ export default function GuestRegistrationScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+    >
       <View style={styles.header}>
         <Text style={[typography.h2, styles.title]}>{t('onboarding.guest.title')}</Text>
         <Text style={[typography.body, styles.subtitle]}>{t('onboarding.guest.subtitle')}</Text>
@@ -90,7 +93,7 @@ export default function GuestRegistrationScreen() {
       {guestSaveProblemText && <Text style={styles.error}>{guestSaveProblemText}</Text>}
 
       <Button label={t('onboarding.guest.button')} onPress={finish} loading={guestIsSaving} />
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
