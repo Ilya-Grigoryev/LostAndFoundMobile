@@ -4,11 +4,10 @@ import { colors, spacing } from '../../theme';
 
 interface ProgressDotsProps {
   total: number;
-  current: number; // 1-based; 0 means none active yet
+  current: number;
   activeColor?: string;
 }
 
-// Bauhaus step indicator: filled square = current, filled accent = past, hollow = future.
 export default function ProgressDots({ total, current, activeColor = colors.finderPrimary }: ProgressDotsProps) {
   return (
     <View style={styles.row}>

@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 import { Button, ScreenHeader } from '../../components/ui';
 import { GeoSemicircle } from '../../components/ui/Geo';
 import FundboxMarkerView from '../../components/fundbox/FundboxMarkerView';
@@ -44,7 +44,7 @@ export default function FundboxMapScreen() {
 
       <View style={styles.mapWrap}>
         <MapView
-          provider={PROVIDER_GOOGLE}
+
           style={StyleSheet.absoluteFill}
           initialRegion={{
             latitude: mockUserPosition.latitude,

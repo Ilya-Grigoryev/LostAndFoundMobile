@@ -16,7 +16,6 @@ interface ButtonProps {
 }
 
 function textOnAccent(accent: string): string {
-  // Mustard yellow needs dark text; other accents take white
   return accent === colors.finderPrimary ? colors.textOnFinder : colors.textOnLoser;
 }
 

@@ -1,7 +1,7 @@
 import Slider from '@react-native-community/slider';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import MapView, { Circle, MapPressEvent, Marker, MarkerDragStartEndEvent, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { Circle, MapPressEvent, Marker, MarkerDragStartEndEvent } from 'react-native-maps';
 import UserPositionMarker from '../fundbox/UserPositionMarker';
 import { mockUserPosition } from '../../constants/fundboxes';
 import { LatLng } from '../../types/loser';
@@ -32,7 +32,7 @@ export default function PinRadiusMode({ initial, onChange }: PinRadiusModeProps)
   return (
     <View style={styles.root}>
       <MapView
-        provider={PROVIDER_GOOGLE}
+
         style={StyleSheet.absoluteFill}
         initialRegion={{
           latitude: mockUserPosition.latitude,

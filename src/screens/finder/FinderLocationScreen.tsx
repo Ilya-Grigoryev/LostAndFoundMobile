@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useCallback, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 import { Button, ScreenHeader } from '../../components/ui';
 import { TextInput } from '../../components/ui';
 import SubTabSwitcher, { SubTabOption } from '../../components/location/SubTabSwitcher';
@@ -73,7 +73,7 @@ export default function FinderLocationScreen() {
       {tab === 'map' ? (
         <View style={styles.mapContainer}>
           <MapView
-            provider={PROVIDER_GOOGLE}
+
             style={StyleSheet.absoluteFill}
             initialRegion={{
               latitude: savedLocation?.latitude ?? VIENNA_CENTER.latitude,

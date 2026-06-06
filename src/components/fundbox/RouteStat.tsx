@@ -8,8 +8,6 @@ interface RouteStatProps {
   destination: string;
 }
 
-// Three-block Bauhaus stat bar: distance / time / name.
-// Big poster-style numerals (Archivo Black) — readable at a glance.
 export default function RouteStat({ distanceMeters, minutes, destination }: RouteStatProps) {
   const distance =
     distanceMeters < 1000

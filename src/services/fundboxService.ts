@@ -8,7 +8,6 @@ interface Coords {
   longitude: number;
 }
 
-// Great-circle distance (Haversine) in meters.
 function haversineMeters(a: Coords, b: Coords): number {
   const R = 6_371_000;
   const toRad = (deg: number) => (deg * Math.PI) / 180;
@@ -43,12 +42,10 @@ export function findNearest(from: Coords = mockUserPosition): Fundbox {
   return nearest;
 }
 
-// Walking time estimate at ≈ 5 km/h = 83 m/min.
 export function walkingMinutes(meters: number): number {
   return Math.max(1, Math.round(meters / 83));
 }
 
-// 6-digit pickup code. Cryptographic strength not required — UX prop.
 export function generateVerificationCode(): string {
   let out = '';
   for (let i = 0; i < 6; i++) out += Math.floor(Math.random() * 10);

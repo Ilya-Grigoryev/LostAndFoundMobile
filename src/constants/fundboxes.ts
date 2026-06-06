@@ -1,6 +1,3 @@
-// Five mock Fundbox locations across central Vienna districts.
-// Coordinates are hand-picked landmarks; hours mimic public-facing kiosks.
-
 export interface Fundbox {
   id: string;
   name: string;
@@ -59,8 +56,6 @@ export const fundboxes: readonly Fundbox[] = [
   },
 ] as const;
 
-// User reference position for "nearest fundbox" calculation during demo.
-// Mock — in real app this would come from expo-location.
 export const mockUserPosition = {
   latitude: 48.20611,
   longitude: 16.36926,

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import MapView, { MapPressEvent, Marker, Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { MapPressEvent, Marker, Polyline } from 'react-native-maps';
 import UserPositionMarker from '../fundbox/UserPositionMarker';
 import { mockUserPosition } from '../../constants/fundboxes';
 import { LatLng } from '../../types/loser';
@@ -29,7 +29,7 @@ export default function RouteMode({ initial, onChange }: RouteModeProps) {
   return (
     <View style={styles.root}>
       <MapView
-        provider={PROVIDER_GOOGLE}
+
         style={StyleSheet.absoluteFill}
         initialRegion={{
           latitude: mockUserPosition.latitude,
