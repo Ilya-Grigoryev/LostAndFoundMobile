@@ -3,7 +3,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
-import { Button, ScreenHeader } from '../../components/ui';
+import { ScreenFooter, ScreenHeader } from '../../components/ui';
 import { GeoSemicircle } from '../../components/ui/Geo';
 import FundboxMarkerView from '../../components/fundbox/FundboxMarkerView';
 import ProgressDots from '../../components/ui/ProgressDots';
@@ -98,12 +98,12 @@ export default function FundboxMapScreen() {
           ))}
         </ScrollView>
 
-        <Button
-          label={t('fundbox.map.routeCta')}
-          color={colors.finderPrimary}
-          onPress={() => nav.navigate('Route', { fundboxId: selected.id })}
-        />
       </View>
+      <ScreenFooter
+        label={t('fundbox.map.routeCta')}
+        color={colors.finderPrimary}
+        onPress={() => nav.navigate('Route', { fundboxId: selected.id })}
+      />
     </View>
   );
 }
@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     paddingHorizontal: spacing.screenMargin,
     paddingTop: spacing.md,
-    paddingBottom: spacing.lg,
+    paddingBottom: spacing.sm,
     borderTopWidth: 1.5,
     borderTopColor: colors.border,
     gap: spacing.sm,

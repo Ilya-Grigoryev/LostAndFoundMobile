@@ -50,7 +50,7 @@ export default function DropOffSuccessScreen() {
     nav.getParent<NativeStackNavigationProp<MainStackParamList>>()?.navigate('Home');
 
   return (
-    <View style={[styles.root, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
+    <View style={[styles.root, { paddingTop: insets.top, paddingBottom: Math.max(spacing.md, insets.bottom) }]}>
       <Animated.View
         style={[styles.bigCircle, { transform: [{ scale: circleScale }] }]}
         pointerEvents="none"
@@ -143,7 +143,6 @@ const styles = StyleSheet.create({
   },
   ctaWrap: {
     gap: spacing.sm,
-    paddingBottom: spacing.md,
   },
   codeHint: {
     color: colors.accent,

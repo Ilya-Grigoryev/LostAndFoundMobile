@@ -5,7 +5,7 @@ import { StyleSheet, View } from 'react-native';
 import AddressMode from '../../components/location/AddressMode';
 import StepByStepMode from '../../components/location/StepByStepMode';
 import SubTabSwitcher, { SubTabOption } from '../../components/location/SubTabSwitcher';
-import { Button, ProgressDots, ScreenHeader } from '../../components/ui';
+import { ProgressDots, ScreenFooter, ScreenHeader } from '../../components/ui';
 import { useLocalization } from '../../contexts/LocalizationContext';
 import { useLoserReport } from '../../contexts/LoserReportContext';
 import { LoserStackParamList } from '../../navigation/types';
@@ -80,14 +80,12 @@ export default function LocationAddressScreen() {
         )}
       </View>
 
-      <View style={styles.cta}>
-        <Button
-          label={tab === 'steps' ? t('loser.steps.cta') : t('loser.address.cta')}
-          color={colors.loserPrimary}
-          disabled={!canContinue}
-          onPress={handleContinue}
-        />
-      </View>
+      <ScreenFooter
+        label={tab === 'steps' ? t('loser.steps.cta') : t('loser.address.cta')}
+        color={colors.loserPrimary}
+        disabled={!canContinue}
+        onPress={handleContinue}
+      />
     </View>
   );
 }
@@ -96,10 +94,4 @@ const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
   tabsWrap: { paddingHorizontal: spacing.screenMargin, paddingVertical: spacing.sm },
   modeArea: { flex: 1 },
-  cta: {
-    paddingHorizontal: spacing.screenMargin,
-    paddingTop: spacing.sm,
-    paddingBottom: spacing.md,
-    backgroundColor: colors.background,
-  },
 });

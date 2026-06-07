@@ -1,6 +1,7 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useMemo } from 'react';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StyleSheet, Text, View } from 'react-native';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import FundboxMarkerView from '../../components/fundbox/FundboxMarkerView';
@@ -25,6 +26,7 @@ export default function MatchFundboxRouteScreen() {
   const nav = useNavigation<Nav>();
   const { params } = useRoute<MatchFundboxRoute>();
   const { t } = useLocalization();
+  const insets = useSafeAreaInsets();
 
   const fundbox = params?.fundboxId ? getFundboxById(params.fundboxId) ?? fundboxes[0] : fundboxes[0];
   const meters = distanceMeters(mockUserPosition, fundbox);
@@ -98,7 +100,7 @@ export default function MatchFundboxRouteScreen() {
         </View>
       </View>
 
-      <View style={styles.bottom}>
+      <View style={[styles.bottom, { paddingBottom: Math.max(spacing.md, insets.bottom) }]}>
         <View style={styles.codePanel}>
           <Text style={[typography.label, styles.codeEyebrow]}>
             {t('fundbox.matchRoute.codeEyebrow')}
@@ -144,7 +146,6 @@ const styles = StyleSheet.create({
   bottom: {
     paddingHorizontal: spacing.screenMargin,
     paddingTop: spacing.md,
-    paddingBottom: spacing.lg,
     gap: spacing.md,
     backgroundColor: colors.background,
     borderTopWidth: 1.5,

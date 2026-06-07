@@ -2,7 +2,7 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { Button, ScreenHeader } from '../../components/ui';
+import { Button, ScreenFooter, ScreenHeader } from '../../components/ui';
 import { GeoSquare } from '../../components/ui/Geo';
 import CodeBoxes from '../../components/fundbox/CodeBoxes';
 import { fundboxes } from '../../constants/fundboxes';
@@ -56,14 +56,12 @@ export default function ClaimScreen() {
         </View>
       </ScrollView>
 
-      <View style={styles.bottom}>
-        <Button
-          label={t('fundbox.claim.confirmCta')}
-          color={colors.loserPrimary}
-          onPress={() => nav.replace('ClaimSuccess')}
-          disabled={!canConfirm}
-        />
-      </View>
+      <ScreenFooter
+        label={t('fundbox.claim.confirmCta')}
+        color={colors.loserPrimary}
+        onPress={() => nav.replace('ClaimSuccess')}
+        disabled={!canConfirm}
+      />
     </View>
   );
 }
@@ -114,13 +112,5 @@ const styles = StyleSheet.create({
   },
   inputBlock: {
     gap: spacing.md,
-  },
-  bottom: {
-    paddingHorizontal: spacing.screenMargin,
-    paddingTop: spacing.md,
-    paddingBottom: spacing.lg,
-    backgroundColor: colors.background,
-    borderTopWidth: 1.5,
-    borderTopColor: colors.border,
   },
 });

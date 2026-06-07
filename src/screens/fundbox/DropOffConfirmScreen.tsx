@@ -2,7 +2,7 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useRef, useState } from 'react';
 import { Animated, Pressable, StyleSheet, Text, View } from 'react-native';
-import { Button, ScreenHeader } from '../../components/ui';
+import { ScreenFooter, ScreenHeader } from '../../components/ui';
 import { GeoSquare } from '../../components/ui/Geo';
 import ProgressDots from '../../components/ui/ProgressDots';
 import { useLocalization } from '../../contexts/LocalizationContext';
@@ -81,15 +81,13 @@ export default function DropOffConfirmScreen() {
         </View>
       </View>
 
-      <View style={styles.bottom}>
-        <Button
-          label={t('fundbox.dropoff.confirmCta')}
-          color={colors.finderPrimary}
-          onPress={confirm}
-          disabled={!bothChecked}
-          loading={submitting}
-        />
-      </View>
+      <ScreenFooter
+        label={t('fundbox.dropoff.confirmCta')}
+        color={colors.finderPrimary}
+        onPress={confirm}
+        disabled={!bothChecked}
+        loading={submitting}
+      />
     </View>
   );
 }
@@ -229,13 +227,5 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.bodyBlack,
     fontSize: 18,
     color: colors.accent,
-  },
-  bottom: {
-    paddingHorizontal: spacing.screenMargin,
-    paddingTop: spacing.md,
-    paddingBottom: spacing.lg,
-    backgroundColor: colors.background,
-    borderTopWidth: 1.5,
-    borderTopColor: colors.border,
   },
 });

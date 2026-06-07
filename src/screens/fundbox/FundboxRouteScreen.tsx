@@ -3,7 +3,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import MapView, { Marker, Polyline } from 'react-native-maps';
-import { Button, ScreenHeader } from '../../components/ui';
+import { ScreenFooter, ScreenHeader } from '../../components/ui';
 import FundboxMarkerView from '../../components/fundbox/FundboxMarkerView';
 import ProgressDots from '../../components/ui/ProgressDots';
 import RouteStat from '../../components/fundbox/RouteStat';
@@ -94,13 +94,11 @@ export default function FundboxRouteScreen() {
         </View>
       </View>
 
-      <View style={styles.bottom}>
-        <Button
-          label={t('fundbox.route.arrivedCta')}
-          color={colors.finderPrimary}
-          onPress={() => nav.navigate('DropOff', { fundboxId: fundbox.id })}
-        />
-      </View>
+      <ScreenFooter
+        label={t('fundbox.route.arrivedCta')}
+        color={colors.finderPrimary}
+        onPress={() => nav.navigate('DropOff', { fundboxId: fundbox.id })}
+      />
     </View>
   );
 }
@@ -118,13 +116,5 @@ const styles = StyleSheet.create({
     top: spacing.md,
     left: spacing.screenMargin,
     right: spacing.screenMargin,
-  },
-  bottom: {
-    paddingHorizontal: spacing.screenMargin,
-    paddingTop: spacing.md,
-    paddingBottom: spacing.lg,
-    backgroundColor: colors.background,
-    borderTopWidth: 1.5,
-    borderTopColor: colors.border,
   },
 });

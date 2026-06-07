@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import CategoryTile from '../../components/location/CategoryTile';
 import DescriptionField from '../../components/location/DescriptionField';
-import { Button, ProgressDots, ScreenHeader } from '../../components/ui';
+import { Button, ProgressDots, ScreenFooter, ScreenHeader } from '../../components/ui';
 import { categories } from '../../constants/categories';
 import { useLocalization } from '../../contexts/LocalizationContext';
 import { useLoserReport } from '../../contexts/LoserReportContext';
@@ -124,14 +124,12 @@ export default function CategoryScreen() {
         </View>
       </ScrollView>
 
-      <View style={styles.cta}>
-        <Button
-          label={t('loser.category.cta')}
-          color={colors.loserPrimary}
-          disabled={!canContinue}
-          onPress={handleContinue}
-        />
-      </View>
+      <ScreenFooter
+        label={t('loser.category.cta')}
+        color={colors.loserPrimary}
+        disabled={!canContinue}
+        onPress={handleContinue}
+      />
     </KeyboardAvoidingView>
   );
 }
@@ -167,13 +165,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: spacing.sm,
-  },
-  cta: {
-    paddingHorizontal: spacing.screenMargin,
-    paddingTop: spacing.sm,
-    paddingBottom: spacing.md,
-    backgroundColor: colors.background,
-    borderTopWidth: 1.5,
-    borderTopColor: colors.border,
   },
 });

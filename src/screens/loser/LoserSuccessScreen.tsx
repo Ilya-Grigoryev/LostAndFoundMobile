@@ -44,7 +44,7 @@ export default function LoserSuccessScreen() {
   const goHome = () => nav.getParent()?.goBack();
 
   return (
-    <View style={[styles.root, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
+    <View style={[styles.root, { paddingTop: insets.top, paddingBottom: Math.max(spacing.md, insets.bottom) }]}>
       <Animated.View
         pointerEvents="none"
         style={[styles.bigCircle, { transform: [{ scale: circleScale }] }]}
@@ -111,5 +111,5 @@ const styles = StyleSheet.create({
     opacity: 0.86,
     paddingRight: spacing.xl,
   },
-  ctaWrap: { paddingBottom: spacing.md },
+  ctaWrap: {},
 });

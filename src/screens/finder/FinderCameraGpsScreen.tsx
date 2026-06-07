@@ -83,7 +83,7 @@ export default function FinderCameraGpsScreen() {
   const canContinue = !!photoUri && !!location;
 
   return (
-    <View style={[styles.root, { paddingBottom: insets.bottom }]}>
+    <View style={[styles.root, { paddingBottom: Math.max(spacing.md, insets.bottom) }]}>
       <ScreenHeader
         title={t('finder.camera.title')}
         onBack={() => nav.getParent()?.goBack()}
@@ -372,7 +372,6 @@ const styles = StyleSheet.create({
   ctaWrap: {
     paddingHorizontal: spacing.screenMargin,
     paddingTop: spacing.md,
-    paddingBottom: spacing.sm,
     gap: spacing.xs,
     backgroundColor: colors.background,
   },

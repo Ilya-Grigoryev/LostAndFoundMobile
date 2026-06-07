@@ -5,7 +5,7 @@ import { Animated, Pressable, ScrollView, StyleSheet, Text, View } from 'react-n
 import * as Notifications from 'expo-notifications';
 import CategoryIcon from '../../components/location/CategoryIcon';
 import LocationPreview from '../../components/location/LocationPreview';
-import { Button, ErrorState, ProgressDots, ScreenHeader } from '../../components/ui';
+import { Button, ErrorState, ProgressDots, ScreenFooter, ScreenHeader } from '../../components/ui';
 import { getCategoryMeta } from '../../constants/categories';
 import { useLocalization } from '../../contexts/LocalizationContext';
 import { useLoserReport } from '../../contexts/LoserReportContext';
@@ -151,14 +151,12 @@ export default function LoserConfirmScreen() {
         )}
       </ScrollView>
 
-      <View style={styles.cta}>
-        <Button
-          label={t('loser.confirm.cta')}
-          color={colors.loserPrimary}
-          loading={submitting}
-          onPress={handleSubmit}
-        />
-      </View>
+      <ScreenFooter
+        label={t('loser.confirm.cta')}
+        color={colors.loserPrimary}
+        loading={submitting}
+        onPress={handleSubmit}
+      />
     </View>
   );
 }
@@ -216,12 +214,4 @@ const styles = StyleSheet.create({
     height: 24,
   },
   errorText: { color: colors.error, paddingTop: spacing.sm },
-  cta: {
-    paddingHorizontal: spacing.screenMargin,
-    paddingTop: spacing.sm,
-    paddingBottom: spacing.md,
-    backgroundColor: colors.background,
-    borderTopWidth: 1.5,
-    borderTopColor: colors.border,
-  },
 });

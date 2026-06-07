@@ -25,7 +25,6 @@ P4 and P6 task sections were not completed but added no new findings).
 | [ISSUE-01](#issue-01--fundbox-decision-is-not-explained) | Fundbox decision ("leave & mark" vs "bring to Fundbox") not explained | P1, P3, P5, P7, P8 | Medium | **High** | Open |
 | [ISSUE-02](#issue-02--match-screen-shows-too-few-details-before-confirming-ownership) | Match screen shows too few details before confirming ownership | P5, P7, P8 | High | **High** | Open |
 | [ISSUE-03](#issue-03--cannot-edit-a-report-after-submitting) | Cannot edit a report after submitting | P3, P8 | Medium | **High** | Open |
-| [ISSUE-13](#issue-13--fundbox-custody--code-model-is-incorrect) | Fundbox custody / code model is incorrect (finder gets owner's pickup code) | P5, P8, Arseniy | High | **High** | Open |
 | [ISSUE-04](#issue-04--pickup-code-process-is-unclear) | Pickup-code process is unclear (where/when it appears) | P5, P8, P7 | Medium | Medium | Open |
 | [ISSUE-05](#issue-05--cannot-delete-a-report-or-mark-it-as-resolved) | Cannot delete a report or mark it resolved | P2 | Medium | Medium | Open |
 | [ISSUE-06](#issue-06--inconsistent-color-coding-on-match-cards) | Inconsistent color coding on match cards (yellow) | P5 | Medium | Medium | Open |
@@ -35,6 +34,7 @@ P4 and P6 task sections were not completed but added no new findings).
 | [ISSUE-10](#issue-10--no-free-text-location-note) | No free-text location note ("near the U4 entrance") | P2, P7 | Low | Low | Open |
 | [ISSUE-11](#issue-11--action-button-visually-clipped-on-report-lost-item) | Action button visually clipped on Report Lost Item screen | P1 | Low | Low | Open |
 | [ISSUE-12](#issue-12--route-zeichnen-mode-unclear-whether-optional) | "Route zeichnen" mode — unclear whether optional | P5 | Low | Low | Open |
+| [ISSUE-13](#issue-13--fundbox-custody--code-model-is-incorrect) | Fundbox custody / code model is incorrect (finder gets owner's pickup code) | P5, P8, Arseniy | High | **High** | Open |
 
 ---
 
