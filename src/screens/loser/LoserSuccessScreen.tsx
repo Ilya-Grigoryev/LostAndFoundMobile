@@ -3,7 +3,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useEffect, useRef } from 'react';
 import { Animated, Easing, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Button } from '../../components/ui';
+import { SuccessReturnButton } from '../../components/ui';
 import { GeoBar, GeoCircle, GeoSemicircle } from '../../components/ui/Geo';
 import { useLocalization } from '../../contexts/LocalizationContext';
 import { LoserStackParamList } from '../../navigation/types';
@@ -65,14 +65,12 @@ export default function LoserSuccessScreen() {
         <Text style={[typography.body, styles.hint]}>{t('loser.success.hint')}</Text>
       </Animated.View>
 
-      <Animated.View style={[styles.ctaWrap, { opacity: ctaOpacity }]}>
-        <Button
-          label={t('loser.success.home')}
-          variant="secondary"
-          color={colors.loserPrimary}
-          onPress={goHome}
-        />
-      </Animated.View>
+      <SuccessReturnButton
+        label={t('loser.success.home')}
+        color={colors.loserPrimary}
+        onPress={goHome}
+        opacity={ctaOpacity}
+      />
     </View>
   );
 }
@@ -111,5 +109,4 @@ const styles = StyleSheet.create({
     opacity: 0.86,
     paddingRight: spacing.xl,
   },
-  ctaWrap: {},
 });

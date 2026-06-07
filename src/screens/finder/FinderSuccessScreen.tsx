@@ -3,7 +3,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useEffect, useRef } from 'react';
 import { Animated, Easing, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Button } from '../../components/ui';
+import { SuccessReturnButton } from '../../components/ui';
 import { GeoBar, GeoCircle, GeoSemicircle } from '../../components/ui/Geo';
 import { useLocalization } from '../../contexts/LocalizationContext';
 import { FinderStackParamList } from '../../navigation/types';
@@ -70,14 +70,12 @@ export default function FinderSuccessScreen() {
         <Text style={[typography.body, styles.hint]}>{t('finder.success.hint')}</Text>
       </Animated.View>
 
-      <Animated.View style={[styles.ctaWrap, { opacity: ctaOpacity }]}>
-        <Button
-          label={t('finder.success.home')}
-          variant="secondary"
-          color={colors.finderPrimary}
-          onPress={goHome}
-        />
-      </Animated.View>
+      <SuccessReturnButton
+        label={t('finder.success.home')}
+        color={colors.finderPrimary}
+        onPress={goHome}
+        opacity={ctaOpacity}
+      />
     </View>
   );
 }
@@ -116,5 +114,4 @@ const styles = StyleSheet.create({
     opacity: 0.82,
     paddingRight: spacing.xl,
   },
-  ctaWrap: {},
 });

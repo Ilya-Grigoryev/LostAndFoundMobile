@@ -2,7 +2,7 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useEffect, useRef } from 'react';
 import { Animated, Easing, StyleSheet, Text, View } from 'react-native';
-import { Button } from '../../components/ui';
+import { SuccessReturnButton } from '../../components/ui';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { GeoBar, GeoCircle, GeoSquare } from '../../components/ui/Geo';
 import { useLocalization } from '../../contexts/LocalizationContext';
@@ -85,14 +85,12 @@ export default function DropOffSuccessScreen() {
         </Text>
       </Animated.View>
 
-      <Animated.View style={[styles.ctaWrap, { opacity: ctaOpacity }]}>
-        <Button
-          label={t('fundbox.success.home')}
-          variant="secondary"
-          color={colors.finderPrimary}
-          onPress={goHome}
-        />
-      </Animated.View>
+      <SuccessReturnButton
+        label={t('fundbox.success.home')}
+        color={colors.finderPrimary}
+        onPress={goHome}
+        opacity={ctaOpacity}
+      />
     </View>
   );
 }
@@ -140,9 +138,6 @@ const styles = StyleSheet.create({
     lineHeight: 52,
     letterSpacing: 1,
     color: colors.accent,
-  },
-  ctaWrap: {
-    gap: spacing.sm,
   },
   codeHint: {
     color: colors.accent,
