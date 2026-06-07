@@ -119,7 +119,7 @@ export default function ActivityDetailModal({
             {possibleMatch ? (
               <View style={styles.matchButton}>
                 <Button
-                  label={matchIsOnMap ? t('activity.detail.openMapMatch') : t('activity.detail.openFundboxMatch')}
+                  label={t('activity.detail.showReport')}
                   color={accentColor}
                   onPress={openMatchPlace}
                 />
