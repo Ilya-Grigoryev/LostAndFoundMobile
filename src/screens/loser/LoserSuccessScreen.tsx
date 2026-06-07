@@ -11,6 +11,8 @@ import { colors, fontFamily, spacing, typography } from '../../theme';
 
 type Nav = NativeStackNavigationProp<LoserStackParamList, 'Success'>;
 
+const AUTO_RETURN_MS = 2800;
+
 export default function LoserSuccessScreen() {
   const nav = useNavigation<Nav>();
   const insets = useSafeAreaInsets();
@@ -39,7 +41,10 @@ export default function LoserSuccessScreen() {
         useNativeDriver: true,
       }),
     ]).start();
-  }, [circleScale, heroOpacity, ctaOpacity]);
+
+    const timer = setTimeout(() => nav.getParent()?.goBack(), AUTO_RETURN_MS);
+    return () => clearTimeout(timer);
+  }, [circleScale, heroOpacity, ctaOpacity, nav]);
 
   const goHome = () => nav.getParent()?.goBack();
 
