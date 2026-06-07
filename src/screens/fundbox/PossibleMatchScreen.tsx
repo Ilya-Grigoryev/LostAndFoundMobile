@@ -62,24 +62,26 @@ export default function PossibleMatchScreen() {
       />
 
       <ScrollView contentContainerStyle={styles.body}>
-        {/* Real finder photo when available, otherwise a clearly labelled placeholder. */}
-        <View style={styles.photo}>
-          {photoUri ? (
-            <>
-              <Image source={{ uri: photoUri }} style={styles.photoImage} resizeMode="cover" />
-              <Text style={[typography.label, styles.photoCaption]}>
-                {t('possibleMatch.photoCaption')}
-              </Text>
-            </>
-          ) : (
-            <View style={styles.photoPlaceholder}>
-              <GeoSquare size={42} color={colors.loserPrimary} />
-              <Text style={[typography.caption, styles.photoMissing]}>
-                {t('possibleMatch.photoMissing')}
-              </Text>
-            </View>
-          )}
-        </View>
+        {/* Photo is only shown for street finds — Fundbox items require a verification survey first. */}
+        {matchPlace === 'city' && (
+          <View style={styles.photo}>
+            {photoUri ? (
+              <>
+                <Image source={{ uri: photoUri }} style={styles.photoImage} resizeMode="cover" />
+                <Text style={[typography.label, styles.photoCaption]}>
+                  {t('possibleMatch.photoCaption')}
+                </Text>
+              </>
+            ) : (
+              <View style={styles.photoPlaceholder}>
+                <GeoSquare size={42} color={colors.loserPrimary} />
+                <Text style={[typography.caption, styles.photoMissing]}>
+                  {t('possibleMatch.photoMissing')}
+                </Text>
+              </View>
+            )}
+          </View>
+        )}
 
         <View style={styles.card}>
           <Text style={[typography.label, styles.eyebrow]}>{t('possibleMatch.eyebrow')}</Text>
