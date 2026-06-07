@@ -1,4 +1,5 @@
-import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Modal, StyleSheet, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useLocalization } from '../../contexts/LocalizationContext';
@@ -12,8 +13,6 @@ type ActivityDetailNav = NativeStackNavigationProp<MainStackParamList, 'Activity
 type ActivityDetailModalProps = {
   item: ActivityItem;
   onClose: () => void;
-  // Set for the user's own still-open reports to reopen the form pre-filled (ISSUE-03).
-  onEdit?: () => void;
   // Resolve/delete actions for the user's own history entries (ISSUE-05).
   onResolve?: () => void;
   onDelete?: () => void;
@@ -34,12 +33,12 @@ function isPossibleMatch(item: ActivityItem) {
 export default function ActivityDetailModal({
   item,
   onClose,
-  onEdit,
   onResolve,
   onDelete,
 }: ActivityDetailModalProps) {
   const nav = useNavigation<ActivityDetailNav>();
   const { t } = useLocalization();
+  const insets = useSafeAreaInsets();
   const completed = isCompleted(item);
   const possibleMatch = isPossibleMatch(item);
   const accentColor = item.type === 'found' ? colors.finderPrimary : colors.loserPrimary;
@@ -134,44 +133,37 @@ export default function ActivityDetailModal({
             <DetailLine label={t('activity.detail.date')} value={item.dateLabel} />
           </View>
 
-          <View style={styles.footer}>
-            {onEdit ? (
-              <Button
-                label={t('activity.edit.action')}
-                variant="secondary"
-                color={colors.loserPrimary}
-                onPress={onEdit}
-              />
-            ) : null}
-
+          <View style={[styles.footer, { paddingBottom: Math.max(spacing.md, insets.bottom) }]}>
             {onResolve ? (
-              <Button
-                label={t('activity.action.resolve')}
-                variant="secondary"
-                color={colors.success}
-                withArrow={false}
-                onPress={onResolve}
-              />
+              <View style={styles.actionRow}>
+                <View style={[styles.actionStripe, { backgroundColor: colors.success }]} />
+                <View style={styles.actionBtn}>
+                  <Button
+                    label={t('activity.action.resolve')}
+                    variant="secondary"
+                    color={colors.success}
+                    withArrow={false}
+                    onPress={onResolve}
+                  />
+                </View>
+              </View>
             ) : null}
 
             {onDelete ? (
-              <Button
-                label={t('activity.action.delete')}
-                variant="secondary"
-                color={colors.error}
-                withArrow={false}
-                onPress={onDelete}
-              />
+              <View style={styles.actionRow}>
+                <View style={[styles.actionStripe, { backgroundColor: colors.error }]} />
+                <View style={styles.actionBtn}>
+                  <Button
+                    label={t('activity.action.delete')}
+                    variant="secondary"
+                    color={colors.error}
+                    withArrow={false}
+                    onPress={onDelete}
+                  />
+                </View>
+              </View>
             ) : null}
 
-            <Pressable
-              onPress={onClose}
-              style={({ pressed }) => [styles.closeButton, pressed && styles.pressed]}
-              accessibilityRole="button"
-              accessibilityLabel={t('activity.detail.close')}
-            >
-              <Text style={styles.closeText}>{t('activity.detail.close')}</Text>
-            </Pressable>
           </View>
         </View>
       </View>
@@ -292,19 +284,14 @@ const styles = StyleSheet.create({
     marginTop: 'auto',
     gap: spacing.sm,
   },
-  closeButton: {
-    minHeight: 52,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.accent,
-    borderWidth: 1.5,
-    borderColor: colors.accent,
+  actionRow: {
+    flexDirection: 'row',
+    alignItems: 'stretch',
   },
-  closeText: {
-    ...typography.button,
-    color: colors.textOnPrimary,
+  actionStripe: {
+    width: 6,
   },
-  pressed: {
-    opacity: 0.55,
+  actionBtn: {
+    flex: 1,
   },
 });

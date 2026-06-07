@@ -137,12 +137,15 @@ export default function ActivityHistoryScreen() {
     item.statusKind === 'closed' ||
     item.statusKind === 'returned';
 
-  // A still-open lost report the user owns can be reopened pre-filled for editing (ISSUE-03).
   const isEditable = (item: ActivityItem) =>
     item.type === 'lost' && item.categoryId != null && !isCompletedStatus(item);
 
-  // Only entries that are not already finished can be marked resolved (ISSUE-05).
-  const isResolvable = (item: ActivityItem) => !isCompletedStatus(item);
+  const canDelete = (item: ActivityItem) =>
+    (item.type === 'found' && item.statusKind === 'marked') ||
+    (item.type === 'lost' && item.statusKind === 'active');
+
+  const canResolve = (item: ActivityItem) =>
+    item.type === 'lost' && item.statusKind === 'possibleMatch';
 
   const resolveItem = (item: ActivityItem) => {
     setResolvedIds(prev => (prev.includes(item.id) ? prev : [...prev, item.id]));
@@ -217,9 +220,8 @@ export default function ActivityHistoryScreen() {
         <ActivityDetailModal
           item={selectedItem}
           onClose={() => setSelectedItem(null)}
-          onEdit={isEditable(selectedItem) ? () => startEdit(selectedItem) : undefined}
-          onResolve={isResolvable(selectedItem) ? () => resolveItem(selectedItem) : undefined}
-          onDelete={() => deleteItem(selectedItem)}
+          onResolve={canResolve(selectedItem) ? () => resolveItem(selectedItem) : undefined}
+          onDelete={canDelete(selectedItem) ? () => deleteItem(selectedItem) : undefined}
         />
       ) : null}
     </View>
