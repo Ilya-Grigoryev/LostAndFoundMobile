@@ -58,7 +58,7 @@ export default function PossibleMatchScreen() {
       <ScreenHeader
         title={t('possibleMatch.title')}
         onBack={() => nav.goBack()}
-        accentColor={colors.finderPrimary}
+        accentColor={colors.loserPrimary}
       />
 
       <ScrollView contentContainerStyle={styles.body}>
@@ -73,7 +73,7 @@ export default function PossibleMatchScreen() {
             </>
           ) : (
             <View style={styles.photoPlaceholder}>
-              <GeoSquare size={42} color={colors.finderPrimary} />
+              <GeoSquare size={42} color={colors.loserPrimary} />
               <Text style={[typography.caption, styles.photoMissing]}>
                 {t('possibleMatch.photoMissing')}
               </Text>
@@ -145,9 +145,9 @@ const styles = StyleSheet.create({
     gap: spacing.md,
   },
   card: {
-    backgroundColor: colors.finderLight,
+    backgroundColor: colors.loserLight,
     borderWidth: 1.5,
-    borderColor: colors.finderPrimary,
+    borderColor: colors.loserPrimary,
     padding: spacing.md,
     gap: spacing.xs,
   },
@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
     borderTopColor: colors.borderSubtle,
   },
   eyebrow: {
-    color: colors.finderPressed,
+    color: colors.loserPressed,
   },
   title: {
     color: colors.textPrimary,

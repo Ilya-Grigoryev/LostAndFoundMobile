@@ -120,7 +120,7 @@ export default function ActivityDetailModal({
               <View style={styles.matchButton}>
                 <Button
                   label={matchIsOnMap ? t('activity.detail.openMapMatch') : t('activity.detail.openFundboxMatch')}
-                  color={matchIsOnMap ? colors.loserPrimary : colors.finderPrimary}
+                  color={accentColor}
                   onPress={openMatchPlace}
                 />
               </View>
