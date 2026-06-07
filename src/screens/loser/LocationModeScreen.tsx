@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useRef } from 'react';
 import { Animated, Pressable, StyleSheet, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ProgressDots, ScreenHeader } from '../../components/ui';
 import { GeoBar, GeoCircle, GeoDotRow } from '../../components/ui/Geo';
 import { useLocalization } from '../../contexts/LocalizationContext';
@@ -18,9 +19,10 @@ interface BlockProps {
   bg: string;
   geo: React.ReactNode;
   onPress: () => void;
+  bottomInset?: number;
 }
 
-function ModeBlock({ index, titleKey, hintKey, bg, geo, onPress }: BlockProps) {
+function ModeBlock({ index, titleKey, hintKey, bg, geo, onPress, bottomInset = 0 }: BlockProps) {
   const { t } = useLocalization();
   const scale = useRef(new Animated.Value(1)).current;
 
@@ -47,7 +49,7 @@ function ModeBlock({ index, titleKey, hintKey, bg, geo, onPress }: BlockProps) {
           <Text style={[typography.caption, styles.hint]}>{t(hintKey)}</Text>
         </View>
 
-        <View style={styles.arrowBox}>
+        <View style={[styles.arrowBox, { bottom: spacing.md + bottomInset }]}>
           <Text style={styles.arrowText}>→</Text>
         </View>
       </Pressable>
@@ -57,6 +59,7 @@ function ModeBlock({ index, titleKey, hintKey, bg, geo, onPress }: BlockProps) {
 
 export default function LocationModeScreen() {
   const nav = useNavigation<Nav>();
+  const insets = useSafeAreaInsets();
   const { t } = useLocalization();
 
   return (
@@ -103,6 +106,7 @@ export default function LocationModeScreen() {
             </View>
           }
           onPress={() => nav.navigate('LocationAddress')}
+          bottomInset={insets.bottom}
         />
       </View>
     </View>
@@ -164,7 +168,6 @@ const styles = StyleSheet.create({
   },
   arrowBox: {
     position: 'absolute',
-    bottom: spacing.md,
     right: spacing.md,
     width: 44,
     height: 44,

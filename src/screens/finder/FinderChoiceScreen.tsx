@@ -25,9 +25,10 @@ interface ChoiceBlockProps {
   disabled?: boolean;
   // Optional element rendered under the hint (e.g. the "What is a Fundbox?" link).
   extra?: React.ReactNode;
+  bottomInset?: number;
 }
 
-function ChoiceBlock({ symbol, heading, hint, bgColor, textColor, geoAccent, onPress, disabled, extra }: ChoiceBlockProps) {
+function ChoiceBlock({ symbol, heading, hint, bgColor, textColor, geoAccent, onPress, disabled, extra, bottomInset = 0 }: ChoiceBlockProps) {
   const scale = useRef(new Animated.Value(1)).current;
 
   const pressIn = () =>
@@ -53,7 +54,7 @@ function ChoiceBlock({ symbol, heading, hint, bgColor, textColor, geoAccent, onP
           <Text style={[typography.caption, { color: textColor, opacity: 0.72 }]}>{hint}</Text>
           {extra}
         </View>
-        <View style={[styles.arrowBox, { borderColor: textColor + '40' }]}>
+        <View style={[styles.arrowBox, { borderColor: textColor + '40', bottom: spacing.md + bottomInset }]}>
           <Text style={[styles.arrowText, { color: textColor }]}>→</Text>
         </View>
       </Pressable>
@@ -89,7 +90,7 @@ export default function FinderChoiceScreen() {
   };
 
   return (
-    <View style={[styles.root, { paddingBottom: insets.bottom }]}>
+    <View style={styles.root}>
       <ScreenHeader
         title={t('finder.choice.title')}
         onBack={() => nav.goBack()}
@@ -118,6 +119,7 @@ export default function FinderChoiceScreen() {
           textColor={colors.textOnFinder}
           geoAccent={<GeoSquare size={44} color="rgba(20,19,15,0.10)" />}
           onPress={handleFundbox}
+          bottomInset={insets.bottom}
           extra={
             <Pressable
               onPress={() => setShowFundboxInfo(true)}
@@ -189,7 +191,6 @@ const styles = StyleSheet.create({
   heading: { marginBottom: spacing.xs },
   arrowBox: {
     position: 'absolute',
-    bottom: spacing.md,
     right: spacing.md,
     width: 44,
     height: 44,

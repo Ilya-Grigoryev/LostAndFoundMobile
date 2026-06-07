@@ -437,6 +437,7 @@ export const strings = {
     'activity.detail.noNewsBody': 'Dieser Eintrag ist aktiv. Updates erscheinen hier, sobald sich etwas ändert.',
     'activity.detail.matchTitle': 'Mögliche Treffer',
     'activity.detail.matchBody': 'Ein passender Fund ist bereit.',
+    'activity.detail.showReport': 'Bericht anzeigen',
     'activity.detail.openMapMatch': 'Route anzeigen',
     'activity.detail.openFundboxMatch': 'Fundbox öffnen',
     'activity.detail.completedTitle': 'Abgeschlossener Eintrag',

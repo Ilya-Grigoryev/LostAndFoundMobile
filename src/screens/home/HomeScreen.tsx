@@ -25,9 +25,10 @@ interface BlockProps {
   textColor: string;
   geoAccent: React.ReactNode;
   onPress: () => void;
+  bottomInset?: number;
 }
 
-function ActionBlock({ symbol, heading, hint, bgColor, textColor, geoAccent, onPress }: BlockProps) {
+function ActionBlock({ symbol, heading, hint, bgColor, textColor, geoAccent, onPress, bottomInset = 0 }: BlockProps) {
   const scale = useRef(new Animated.Value(1)).current;
 
   const pressIn = () =>
@@ -53,7 +54,7 @@ function ActionBlock({ symbol, heading, hint, bgColor, textColor, geoAccent, onP
           <Text style={[typography.caption, { color: textColor, opacity: 0.72 }]}>{hint}</Text>
         </View>
 
-        <View style={[styles.arrowBox, { borderColor: textColor + '40' }]}>
+        <View style={[styles.arrowBox, { borderColor: textColor + '40', bottom: spacing.md + bottomInset }]}>
           <Text style={[styles.arrowText, { color: textColor }]}>→</Text>
         </View>
       </Pressable>
@@ -118,6 +119,7 @@ export default function HomeScreen() {
           textColor={colors.textOnFinder}
           geoAccent={<GeoSquare size={48} color="rgba(20,19,15,0.10)" />}
           onPress={() => nav.navigate('Finder')}
+          bottomInset={insets.bottom}
         />
       </View>
     </View>
@@ -207,7 +209,6 @@ const styles = StyleSheet.create({
   },
   arrowBox: {
     position: 'absolute',
-    bottom: spacing.md,
     right: spacing.md,
     width: 44,
     height: 44,
